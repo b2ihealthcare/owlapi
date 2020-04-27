@@ -52,7 +52,7 @@
 
 	<issueManagement>
 		<system>GitHub</system>
-		<url>https://github.com/owlcs/owlapi/issues</url>
+		<url>https://github.com/b2ihealthcare/owlapi/issues</url>
 	</issueManagement>
 
 
@@ -450,8 +450,17 @@
 
 	<!-- Parameters for the Source Code Management system. -->
 	<scm>
-		<connection>scm:git:git://github.com/owlcs/owlapi.git</connection>
-		<developerConnection>scm:git:git@github.com:owlcs/owlapi.git</developerConnection>
-		<url>https://github.com/owlcs/owlapi</url>
+		<connection>scm:git:git://github.com/b2ihealthcare/owlapi.git</connection>
+		<developerConnection>scm:git:git@github.com:b2ihealthcare/owlapi.git</developerConnection>
+		<url>https://github.com/b2ihealthcare/owlapi</url>
 	</scm>
+	
+	<distributionManagement>
+	   <repository>
+	     <id>github</id>
+	     <name>GitHub B2i Healthcare Apache Maven Packages</name>
+	     <url>https://maven.pkg.github.com/b2ihealthcare/owlapi</url>
+	   </repository>
+	</distributionManagement>
+	
 </project>
