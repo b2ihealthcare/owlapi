@@ -6,7 +6,7 @@
 	<name>OWLAPI :: Distribution</name>
 
 	<parent>
-		<groupId>net.sourceforge.owlapi</groupId>
+		<groupId>com.b2international</groupId>
 		<artifactId>owlapi-parent</artifactId>
 		<version>4.5.16</version>
 	</parent>
@@ -102,14 +102,14 @@
 						<configuration>
 							<artifactSet>
 								<includes>
-									<include>net.sourceforge.owlapi:owlapi-api</include>
-									<include>net.sourceforge.owlapi:owlapi-apibinding</include>
-									<include>net.sourceforge.owlapi:owlapi-fixers</include>
-									<include>net.sourceforge.owlapi:owlapi-impl</include>
-									<include>net.sourceforge.owlapi:owlapi-oboformat</include>
-									<include>net.sourceforge.owlapi:owlapi-parsers</include>
-									<include>net.sourceforge.owlapi:owlapi-rio</include>
-									<include>net.sourceforge.owlapi:owlapi-tools</include>
+									<include>com.b2international:owlapi-api</include>
+									<include>com.b2international:owlapi-apibinding</include>
+									<include>com.b2international:owlapi-fixers</include>
+									<include>com.b2international:owlapi-impl</include>
+									<include>com.b2international:owlapi-oboformat</include>
+									<include>com.b2international:owlapi-parsers</include>
+									<include>com.b2international:owlapi-rio</include>
+									<include>com.b2international:owlapi-tools</include>
 								</includes>
 								<excludes>
 									<exclude>org.apache.felix:org.osgi.core</exclude>
@@ -155,13 +155,13 @@
 							<show>public</show>
 							<includeDependencySources>true</includeDependencySources>
 							<dependencySourceIncludes>
-								<dependencySourceInclude>net.sourceforge.owlapi:owlapi-api</dependencySourceInclude>
-								<dependencySourceInclude>net.sourceforge.owlapi:owlapi-apibinding</dependencySourceInclude>
-								<dependencySourceInclude>net.sourceforge.owlapi:owlapi-parsers</dependencySourceInclude>
-								<dependencySourceInclude>net.sourceforge.owlapi:owlapi-tools</dependencySourceInclude>
-								<dependencySourceInclude>net.sourceforge.owlapi:owlapi-impl</dependencySourceInclude>
-								<dependencySourceInclude>net.sourceforge.owlapi:owlapi-oboformat</dependencySourceInclude>
-								<dependencySourceInclude>net.sourceforge.owlapi:owlapi-fixers</dependencySourceInclude>
+								<dependencySourceInclude>com.b2international:owlapi-api</dependencySourceInclude>
+								<dependencySourceInclude>com.b2international:owlapi-apibinding</dependencySourceInclude>
+								<dependencySourceInclude>com.b2international:owlapi-parsers</dependencySourceInclude>
+								<dependencySourceInclude>com.b2international:owlapi-tools</dependencySourceInclude>
+								<dependencySourceInclude>com.b2international:owlapi-impl</dependencySourceInclude>
+								<dependencySourceInclude>com.b2international:owlapi-oboformat</dependencySourceInclude>
+								<dependencySourceInclude>com.b2international:owlapi-fixers</dependencySourceInclude>
 							</dependencySourceIncludes>
 						</configuration>
 					</execution>

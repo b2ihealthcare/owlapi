@@ -4,7 +4,7 @@
 	<packaging>jar</packaging>
 	<name>tests and tutorials</name>
 	<parent>
-		<groupId>net.sourceforge.owlapi</groupId>
+		<groupId>com.b2international</groupId>
 		<artifactId>owlapi-parent</artifactId>
 		<version>4.5.16</version>
 	</parent>

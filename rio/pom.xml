@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>owlapi-parent</artifactId>
-		<groupId>net.sourceforge.owlapi</groupId>
+		<groupId>com.b2international</groupId>
 		<version>4.5.16</version>
 	</parent>
 	<artifactId>owlapi-rio</artifactId>
