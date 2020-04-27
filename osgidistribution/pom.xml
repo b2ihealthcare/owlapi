@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>com.b2international</groupId>
 		<artifactId>owlapi-parent</artifactId>
-		<version>4.5.19</version>
+		<version>4.5.20</version>
 	</parent>
 
 	<properties>
@@ -239,6 +239,15 @@
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>3.0.1</version>
+				<configuration>
+					<!-- We provide a custom source for this module -->
+					<skipSource>true</skipSource>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
