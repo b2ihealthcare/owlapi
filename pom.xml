@@ -7,12 +7,6 @@
 		<maven>3.0.5</maven>
 	</prerequisites>
 
-	<parent>
-		<groupId>org.sonatype.oss</groupId>
-		<artifactId>oss-parent</artifactId>
-		<version>9</version>
-	</parent>
-
 	<groupId>com.b2international</groupId>
 	<artifactId>owlapi-parent</artifactId>
 	<packaging>pom</packaging>
