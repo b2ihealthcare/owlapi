@@ -10,7 +10,7 @@
 	<groupId>com.b2international</groupId>
 	<artifactId>owlapi-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>4.5.17</version>
+	<version>4.5.18</version>
 	<name>OWLAPI</name>
 	<description>The OWL API is a Java API and reference implementation for creating, manipulating and serialising OWL Ontologies. The latest version of the API is focused towards OWL 2</description>
 	<url>http://owlcs.github.io/owlapi/</url>
@@ -38,7 +38,7 @@
 		<module>apibinding</module>
 		<module>contract</module>
 		<!-- The distribution module is a single-jar build of the whole OWL API. -->
-		<module>distribution</module>
+<!-- 		<module>distribution</module> -->
 		<module>osgidistribution</module>
 		<!-- <module>benchmarks</module>  -->
 	</modules>
