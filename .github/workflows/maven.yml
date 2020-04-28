@@ -29,6 +29,13 @@ jobs:
     - name: Deploy to Staging
       run: mvn -B deploy -DskipTests
 
+    - name: Deploy OWLAPI Parent
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./target/mvn-repo
+        keep_files: true
+
     - name: Deploy OWLAPI OSGi Distribution
       uses: peaceiris/actions-gh-pages@v3
       with:
