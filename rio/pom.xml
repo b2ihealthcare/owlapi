@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>owlapi-parent</artifactId>
-		<groupId>com.b2international</groupId>
+		<groupId>com.b2international.snowowl</groupId>
 		<version>4.5.16-b2i</version>
 	</parent>
 	<artifactId>owlapi-rio</artifactId>

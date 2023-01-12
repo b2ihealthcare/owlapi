@@ -4,7 +4,7 @@
 	<artifactId>owlapi-compatibility</artifactId>
 	<name>compatibility</name>
 	<parent>
-		<groupId>com.b2international</groupId>
+		<groupId>com.b2international.snowowl</groupId>
 		<artifactId>owlapi-parent</artifactId>
 		<version>4.5.16-b2i</version>
 	</parent>

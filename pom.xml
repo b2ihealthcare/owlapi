@@ -7,7 +7,7 @@
 		<maven>3.0.5</maven>
 	</prerequisites>
 
-	<groupId>com.b2international</groupId>
+	<groupId>com.b2international.snowowl</groupId>
 	<artifactId>owlapi-parent</artifactId>
 	<packaging>pom</packaging>
 	<version>4.5.16-b2i</version>
