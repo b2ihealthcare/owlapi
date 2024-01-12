@@ -1,3 +1,110 @@
+## 4.5.26 18 July 2023
+
+### Bug fixes:
+*    Fix violations in declarations not reported #1094 #1046
+*    Allow arbitrary annotation properties as qualifier tags in OBO #1099
+*    Fix Shared class expression causes extra triples in output #1109
+
+## 4.5.25 15 February 2023
+
+### Bug fixes:
+
+*    Add Trix to list of BANNED_PARSERS in OWLAPI 4.X #1088
+*    OBO serialisation illegal axiom annotation #1093
+*    Remove unnecessary log when OBO unsupported axioms are serialized
+
+## 4.5.24 20 January 2023
+
+### Features:
+
+*    Fix OSGI distribution Guava version #1086
+
+## 4.5.23 14 January 2023
+
+### Features:
+
+*    Allow forcing explicit xsd:xstrig type #1063
+
+### Bug fixes:
+
+*    OBO serializer incorrectly quoting IRI property values #1085
+*    Update dependencies for security issues
+*    Check for empty collections on AxiomSubjectProvder #1069
+*    Correct bad default args #1063
+*    Fix OWLEntityRenamer and anonymous individuals #892
+
+## 4.5.22 7 May 2022
+
+### Bug fixes:
+
+*    Do not output xsd:string when unnecessary #640
+
+## 4.5.21 19 February 2022
+
+### Features:
+
+*    Improve MAVEN build Performance
+*    Extend messages for OWL exceptions #1020
+
+### Bug fixes:
+
+*    Fix OWLDifferentIndividuals with two ops rendered with one triple #1031
+*    Fix Abbreviated IRI as OntologyIRI in Manchester syntax #1041
+*    Fix Individuals: anonymous individuals in Manchester syntax #1006
+*    Fix UNPARSED TRIPLES ERROR for class assertions #1023
+
+
+## 4.5.20 31 July 2021
+
+### Features:
+
+*    Specify RioSetting values for Rio renderers #614
+
+### Bug fixes:
+
+*    Fix sameAs failure when more than 2 entities included #994
+*    Ordering of literals to be consistent with OWLAPI 5
+*    Fix Trig and rdf/json should include a named graph. #1002
+*    Fix ObjectHasSelf rendered wrongly in manchester syntax #1005
+
+## 4.5.19 7 November 2020
+
+### Bug fixes:
+
+*    Fix OWLParser not ensuring streams are closed on exit #973
+*    Error with undeclared classes in domain axioms #962
+*    Fix Ontology caches should use weak keys #984
+
+
+## 4.5.18 23 October 2020
+
+### Bug fixes:
+
+*    Fix Performance of signature checks during ontology changes #968
+*    Fix Error on RIO renderer when expression has 6000 elements #971
+*    Fix OWLOntology#datatypesInSignature to include ontology header #965
+*    Fix Ontology not loaded in case of multiple HTTP redirects #954
+
+
+## 4.5.17 02 July 2020
+
+### Features:
+
+*    Let OBO parser follow redirects
+*    Allow creation of tautologies for n-ary axioms #776
+*    Configurable fast pruning window size
+
+### Bug fixes:
+
+*    Fix javadoc for OWLObject::nestedClassExpressions #937
+*    Fix classAssertionAxioms with OWLClassExpression fails #930
+*    Fix Include ontology annotations in signature #928
+*    Fix Unable to set base directive for turtle writers #938
+*    Fix OWLAPI accepts IRIs with leading spaces #940
+*    Fix SWRL body reordered when structure shared #936
+*    Fix roundtrip through OBO changes IRI of owl:versionInfo #947
+
+
 ## 4.5.16 18 April 2020
 
 ### Bug fixes:
@@ -85,6 +192,7 @@
 *    Fix Cyclic imports and missing declarations cause parsing error #798
 *    Fix Unescaping characters: OBOFormatParser#handleNextChar() #822
 *    Fix IRI PREFIX_CACHE instance uses too much memory #825
+
 
 ## 4.5.9 1 February 2019
 

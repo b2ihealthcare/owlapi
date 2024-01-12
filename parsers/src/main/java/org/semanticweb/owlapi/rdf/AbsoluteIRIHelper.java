@@ -6,8 +6,6 @@ import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLDocumentFormat;
 import org.semanticweb.owlapi.model.OWLOntology;
 
-import com.google.common.base.Optional;
-
 /** Helper class for absolute and relative IRIs on rendering. */
 public class AbsoluteIRIHelper {
     /**
@@ -15,8 +13,8 @@ public class AbsoluteIRIHelper {
      * @param f format used in rendering
      * @param o ontology being rendered
      * @return absolute version of iri; same as input if the input is absolute, else the prefix is
-     *         taken from the prefix mappings or from the ontology id. If none of thee are
-     *         available, a hardcoded prefix is used.
+     *         taken from the prefix mappings or from the ontology id. If none of there are
+     *         available, a hard coded prefix is used.
      */
     public static IRI verifyAbsolute(IRI iri, @Nullable OWLDocumentFormat f, OWLOntology o) {
         if (iri.isAbsolute()) {
@@ -30,15 +28,13 @@ public class AbsoluteIRIHelper {
             defaultPrefix = f.asPrefixOWLOntologyFormat().getDefaultPrefix();
         }
         if (defaultPrefix == null) {
-            Optional<IRI> ontologyIRI = o.getOntologyID().getOntologyIRI();
-            if (ontologyIRI.isPresent()) {
-                defaultPrefix = ontologyIRI.get().toString();
+            if (o.getOntologyID().getOntologyIRI().isPresent()) {
+                defaultPrefix = o.getOntologyID().getOntologyIRI().get().toString();
             }
         }
         if (defaultPrefix == null) {
-            Optional<IRI> defaultDocumentIRI = o.getOntologyID().getDefaultDocumentIRI();
-            if (defaultDocumentIRI.isPresent()) {
-                defaultPrefix = defaultDocumentIRI.get().toString();
+            if (o.getOntologyID().getDefaultDocumentIRI().isPresent()) {
+                defaultPrefix = o.getOntologyID().getDefaultDocumentIRI().get().toString();
             }
         }
         if (defaultPrefix == null) {

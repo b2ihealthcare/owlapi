@@ -36,6 +36,7 @@ import org.semanticweb.owlapi.model.OWLDataUnionOf;
 import org.semanticweb.owlapi.model.OWLDatatype;
 import org.semanticweb.owlapi.model.OWLDatatypeDefinitionAxiom;
 import org.semanticweb.owlapi.model.OWLDatatypeRestriction;
+import org.semanticweb.owlapi.model.OWLDeclarationAxiom;
 import org.semanticweb.owlapi.model.OWLDifferentIndividualsAxiom;
 import org.semanticweb.owlapi.model.OWLDisjointClassesAxiom;
 import org.semanticweb.owlapi.model.OWLDisjointDataPropertiesAxiom;
@@ -90,10 +91,10 @@ import org.semanticweb.owlapi.util.OWLOntologyWalker;
 public class ProfileVisitor extends ProfileVisitorBase {
 
     /**
-     * @param walker onotlogy walker to use
+     * @param walker ontology walker to use
      * @param violations collection of violations; the collection is modified during the visit
      * @param profiles the profiles to check. An empty collection means OWL 2 FULL will be the
-     *        pofile used.
+     *        profile used.
      */
     public ProfileVisitor(OWLOntologyWalker walker, Collection<OWLProfileViolation> violations,
         Collection<Profiles> profiles) {
@@ -103,6 +104,11 @@ public class ProfileVisitor extends ProfileVisitorBase {
     @Override
     public void visit(IRI iri) {
         relativeIRI(iri);
+    }
+
+    @Override
+    public void visit(OWLDeclarationAxiom declaration) {
+        declaration.getEntity().accept(this);
     }
 
     @Override

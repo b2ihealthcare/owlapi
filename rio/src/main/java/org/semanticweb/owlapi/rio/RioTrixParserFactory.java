@@ -36,17 +36,19 @@
 package org.semanticweb.owlapi.rio;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 
 import javax.annotation.Nonnull;
 
-import org.openrdf.rio.RDFHandler;
-import org.openrdf.rio.RDFHandlerException;
-import org.openrdf.rio.RDFParseException;
-import org.openrdf.rio.RDFParser;
-import org.openrdf.rio.helpers.BasicParserSettings;
+import org.eclipse.rdf4j.rio.RDFHandler;
+import org.eclipse.rdf4j.rio.RDFHandlerException;
+import org.eclipse.rdf4j.rio.RDFParseException;
+import org.eclipse.rdf4j.rio.RDFParser;
+import org.eclipse.rdf4j.rio.helpers.BasicParserSettings;
 import org.semanticweb.owlapi.annotations.HasPriority;
 import org.semanticweb.owlapi.formats.RioRDFDocumentFormatFactory;
 import org.semanticweb.owlapi.formats.TrixDocumentFormatFactory;
@@ -90,13 +92,19 @@ public class RioTrixParserFactory extends AbstractRioParserFactory {
             createParser.setRDFHandler(handler);
             long rioParseStart = System.currentTimeMillis();
             if (owlFormatFactory.isTextual() && documentSource.isReaderAvailable()) {
-                createParser.parse(documentSource.getReader(), baseUri);
+                try (Reader reader = documentSource.getReader()) {
+                    createParser.parse(reader, baseUri);
+                }
             } else if (documentSource.isInputStreamAvailable()) {
-                createParser.parse(documentSource.getInputStream(), baseUri);
+                try (InputStream inputStream = documentSource.getInputStream()) {
+                    createParser.parse(inputStream, baseUri);
+                }
             } else {
                 URL url = URI.create(documentSource.getDocumentIRI().toString()).toURL();
                 URLConnection conn = url.openConnection();
-                createParser.parse(conn.getInputStream(), baseUri);
+                try (InputStream inputStream = conn.getInputStream()) {
+                    createParser.parse(inputStream, baseUri);
+                }
             }
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("rioParse: timing={}",

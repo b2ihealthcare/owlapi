@@ -332,6 +332,7 @@ public class TripleHandlers {
                         consumer.translatorAccessor.translateClassExpression(object);
                     consumer.addAxiom(consumer.getDataFactory().getOWLClassAssertionAxiom(ce, ind,
                         consumer.getPendingAnnotations()));
+                    consumer.consumeTriple(subject, predicate, object);
                 }
             } else {
                 TriplePredicateHandler handler = predicates.get(predicate);
@@ -370,7 +371,7 @@ public class TripleHandlers {
          * map. Other triples which reside in the triples by predicate (single valued) triple aren't
          * "root" triples for axioms. First we translate all system triples and then go for triples
          * whose predicates are not system/reserved vocabulary IRIs to translate these into ABox
-         * assertions or annotationIRIs
+         * assertions or annotation IRIs
          * 
          * @return any remaining triples
          */
@@ -1898,11 +1899,11 @@ public class TripleHandlers {
 
         @Override
         public void handleTriple(IRI subject, IRI predicate, IRI object) {
-            if (consumer.isObjectProperty(subject) && consumer.isClassExpression(object)) {
+            if (consumer.isObjectProperty(subject)) {
                 translateObjectPropertyDomain(subject, predicate, object);
-            } else if (consumer.isDataPropertyOnly(subject) && consumer.isClassExpression(object)) {
+            } else if (consumer.isDataProperty(subject)) {
                 translateDataPropertyDomain(subject, predicate, object);
-            } else if (consumer.isAnnotationProperty(subject) && consumer.isClassExpression(object)
+            } else if (consumer.isAnnotationProperty(subject)
                 && !consumer.isAnonymousNode(object)) {
                 translateAnnotationPropertyDomain(subject, predicate, object);
             } else if (!isStrict()) {
@@ -3016,7 +3017,7 @@ public class TripleHandlers {
 
         @Override
         public void handleTriple(IRI subject, IRI predicate, IRI object) {
-            // TODO: Change to rdfs:Class? (See table 5 in the spec)
+            // TODO: Change to rdfs:Class? (See table 5 in the specification)
             consumer.addClassExpression(subject, false);
             consumeTriple(subject, predicate, object);
             if (!isStrict()) {

@@ -47,7 +47,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This is an implementation of a blackbox debugger. The implementation is based on the description
+ * This is an implementation of a black box debugger. The implementation is based on the description
  * of a black box debugger as described in Aditya Kalyanpur's PhD Thesis : "Debugging and Repair of
  * OWL Ontologies".
  * 
@@ -77,19 +77,35 @@ public class BlackBoxOWLDebugger extends AbstractOWLDebugger {
     private final int initialExpansionLimit = DEFAULT_INITIAL_EXPANSION_LIMIT;
     private int expansionLimit = initialExpansionLimit;
     private static final int DEFAULT_FAST_PRUNING_WINDOW_SIZE = 10;
-    private int fastPruningWindowSize = 0;
+    private final int fastPruningWindowSize;
 
     /**
      * Instantiates a new black box owl debugger.
-     * 
+     *
      * @param owlOntologyManager manager to use
      * @param ontology ontology to debug
      * @param reasonerFactory factory to use
      */
-    public BlackBoxOWLDebugger(@Nonnull OWLOntologyManager owlOntologyManager,
-        @Nonnull OWLOntology ontology, @Nonnull OWLReasonerFactory reasonerFactory) {
+    public BlackBoxOWLDebugger(OWLOntologyManager owlOntologyManager, OWLOntology ontology,
+        OWLReasonerFactory reasonerFactory) {
+        this(owlOntologyManager, ontology, reasonerFactory,
+            Math.max(ontology.getLogicalAxiomCount() / 100, DEFAULT_FAST_PRUNING_WINDOW_SIZE));
+    }
+
+    /**
+     * Instantiates a new black box owl debugger.
+     *
+     * @param owlOntologyManager manager to use
+     * @param ontology ontology to debug
+     * @param reasonerFactory factory to use
+     * @param fastPruningWindowSize size of the pruning window, defaults to 1% of axiom number or
+     *        10, whichever is larger
+     */
+    public BlackBoxOWLDebugger(OWLOntologyManager owlOntologyManager, OWLOntology ontology,
+        OWLReasonerFactory reasonerFactory, int fastPruningWindowSize) {
         super(owlOntologyManager, ontology);
         this.reasonerFactory = checkNotNull(reasonerFactory, "reasonerFactory cannot be null");
+        this.fastPruningWindowSize = fastPruningWindowSize;
     }
 
     @Override
@@ -121,8 +137,8 @@ public class BlackBoxOWLDebugger extends AbstractOWLDebugger {
     /**
      * Setup debugging class.
      * 
-     * @param cls the cls
-     * @return the oWL class
+     * @param cls the class expression
+     * @return the OWL class
      */
     @Nonnull
     private OWLClass setupDebuggingClass(@Nonnull OWLClassExpression cls) {
@@ -263,14 +279,14 @@ public class BlackBoxOWLDebugger extends AbstractOWLDebugger {
     }
 
     /**
-     * A utility method. Adds axioms from one set to another set upto a specified limit. Annotation
+     * A utility method. Adds axioms from one set to another set up to a specified limit. Annotation
      * axioms are stripped out
      * 
      * @param <N> the number type
      * @param source The source set. Objects from this set will be added to the destination set
      * @param dest The destination set. Objects will be added to this set
      * @param limit The maximum number of objects to be added.
-     * @return The number of objects that were actuall added.
+     * @return The number of objects that were actually added.
      */
     private static <N extends OWLAxiom> int addMax(@Nonnull Set<N> source, @Nonnull Set<N> dest,
         int limit) {
@@ -352,7 +368,7 @@ public class BlackBoxOWLDebugger extends AbstractOWLDebugger {
      * performed.
      * 
      * @return true, if is satisfiable
-     * @throws OWLException the oWL exception
+     * @throws OWLException any exception
      */
     private boolean isSatisfiable() throws OWLException {
         createDebuggingOntology();
@@ -419,7 +435,6 @@ public class BlackBoxOWLDebugger extends AbstractOWLDebugger {
         LOGGER.info("FOUND CLASH! Pruning {} axioms...", Integer.valueOf(debuggingAxioms.size()));
         resetSatisfiabilityTestCounter();
         LOGGER.info("Fast pruning...");
-        fastPruningWindowSize = DEFAULT_FAST_PRUNING_WINDOW_SIZE;
         performFastPruning();
         LOGGER.info("... end of fast pruning. Axioms remaining: {}",
             Integer.valueOf(debuggingAxioms.size()));

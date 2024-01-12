@@ -13,6 +13,7 @@
 package org.semanticweb.owlapi.model;
 
 import static org.semanticweb.owlapi.model.parameters.ConfigurationOptions.ACCEPT_HTTP_COMPRESSION;
+import static org.semanticweb.owlapi.model.parameters.ConfigurationOptions.ALLOW_DUPLICATES_IN_CONSTRUCT_SETS;
 import static org.semanticweb.owlapi.model.parameters.ConfigurationOptions.AUTHORIZATION_VALUE;
 import static org.semanticweb.owlapi.model.parameters.ConfigurationOptions.BANNED_PARSERS;
 import static org.semanticweb.owlapi.model.parameters.ConfigurationOptions.CONNECTION_TIMEOUT;
@@ -21,6 +22,7 @@ import static org.semanticweb.owlapi.model.parameters.ConfigurationOptions.FOLLO
 import static org.semanticweb.owlapi.model.parameters.ConfigurationOptions.LOAD_ANNOTATIONS;
 import static org.semanticweb.owlapi.model.parameters.ConfigurationOptions.MISSING_IMPORT_HANDLING_STRATEGY;
 import static org.semanticweb.owlapi.model.parameters.ConfigurationOptions.MISSING_ONTOLOGY_HEADER_STRATEGY;
+import static org.semanticweb.owlapi.model.parameters.ConfigurationOptions.OUTPUT_NAMED_GRAPH_IRI;
 import static org.semanticweb.owlapi.model.parameters.ConfigurationOptions.PARSE_WITH_STRICT_CONFIGURATION;
 import static org.semanticweb.owlapi.model.parameters.ConfigurationOptions.PRIORITY_COLLECTION_SORTING;
 import static org.semanticweb.owlapi.model.parameters.ConfigurationOptions.REPAIR_ILLEGAL_PUNNINGS;
@@ -41,9 +43,9 @@ import org.semanticweb.owlapi.model.parameters.ConfigurationOptions;
 import org.semanticweb.owlapi.vocab.Namespaces;
 
 /**
- * A configuration object that specifies options and hints to objects that load OWLOntologies. Every
- * {@code OWLOntologyLoaderConfiguration} is immutable. Changing a setting results in the creation
- * of a new {@code OWLOntologyLoaderConfiguration} with that setting. For example,
+ * A configuration object that specifies options and hints to objects that load {@code OWLOntology}
+ * instances. Every {@code OWLOntologyLoaderConfiguration} is immutable. Changing a setting results
+ * in the creation of a new {@code OWLOntologyLoaderConfiguration} with that setting. For example,
  * 
  * <pre>
  * OWLOntologyLoaderConfiguration config = new OWLOntologyLoaderConfiguration();
@@ -124,7 +126,7 @@ public class OWLOntologyLoaderConfiguration implements Serializable {
     }
 
     /**
-     * Internally copies this configuaration object.
+     * Internally copies this configuration object.
      * 
      * @return The copied configuration
      */
@@ -138,7 +140,7 @@ public class OWLOntologyLoaderConfiguration implements Serializable {
     }
 
     /**
-     * Set the priorty collection sorting option.
+     * Set the priority collection sorting option.
      * 
      * @param sorting the sorting option to be used.
      * @return An {@code OWLOntologyLoaderConfiguration} with the new sorting option set.
@@ -254,7 +256,7 @@ public class OWLOntologyLoaderConfiguration implements Serializable {
      * 
      * @return {@code true} if the Dublin Core Vocabulary should be treated as built in vocabulary
      *         and Dublin Core properties are interpreted as annotation properties, otherwise
-     *         {@code false}. The defaut is {@code true}.
+     *         {@code false}. The default is {@code true}.
      */
     public boolean isTreatDublinCoreAsBuiltIn() {
         return TREAT_DUBLINCORE_AS_BUILTIN.getValue(Boolean.class, overrides).booleanValue();
@@ -320,7 +322,7 @@ public class OWLOntologyLoaderConfiguration implements Serializable {
 
     /**
      * @param value true if redirects should be followed across protocols, false otherwise.
-     * @return a copy of the current object with followRedirects set to the new value.
+     * @return a copy of the current object with the follow redirects flag set to the new value.
      */
     @Nonnull
     public OWLOntologyLoaderConfiguration setFollowRedirects(boolean value) {
@@ -439,7 +441,8 @@ public class OWLOntologyLoaderConfiguration implements Serializable {
 
     /**
      * @param value true if Dublin Core vocabulary should be treated as built in.
-     * @return a copy of the current object with treatDublinCoreAsBuiltIn set to the new value.
+     * @return a copy of the current object with the treat Dublin Core as builtIn set to the new
+     *         value.
      */
     @Nonnull
     public OWLOntologyLoaderConfiguration setTreatDublinCoreAsBuiltIn(boolean value) {
@@ -538,5 +541,48 @@ public class OWLOntologyLoaderConfiguration implements Serializable {
         OWLOntologyLoaderConfiguration configuration = copyConfiguration();
         configuration.overrides.put(SKIP_MODULE_ANNOTATIONS, Boolean.valueOf(value));
         return configuration;
+    }
+
+    /**
+     * @return false if collections used in constructs such as equivalent classes and properties
+     *         should be duplicate free. Some systems might need to allow this, e.g., reasoners
+     *         which require the creation of a tautology like {@code Equivalent(A, A)}.
+     */
+    public boolean shouldAllowDuplicatesInConstructSets() {
+        return ALLOW_DUPLICATES_IN_CONSTRUCT_SETS.getValue(Boolean.class, overrides).booleanValue();
+    }
+
+    /**
+     * @param value false if collections used in constructs such as equivalent classes and
+     *        properties should be duplicate free.
+     * @return A {@code OWLOntologyLoaderConfiguration} with the allow duplicates flag set to the
+     *         new value.
+     */
+    public OWLOntologyLoaderConfiguration withAllowDuplicatesInConstructSets(boolean value) {
+        if (shouldAllowDuplicatesInConstructSets() == value) {
+            return this;
+        }
+        OWLOntologyLoaderConfiguration configuration = copyConfiguration();
+        configuration.overrides.put(ALLOW_DUPLICATES_IN_CONSTRUCT_SETS, Boolean.valueOf(value));
+        return configuration;
+    }
+
+    /**
+     * @param label True if named graph IRIs comments should be enabled.
+     * @return new config object
+     */
+    public OWLOntologyLoaderConfiguration withNamedGraphIRIEnabled(boolean label) {
+        if (shouldOutputNamedGraphIRI() == label) {
+            return this;
+        }
+        overrides.put(OUTPUT_NAMED_GRAPH_IRI, Boolean.valueOf(label));
+        return this;
+    }
+
+    /**
+     * @return should output named graph IRIs
+     */
+    public boolean shouldOutputNamedGraphIRI() {
+        return OUTPUT_NAMED_GRAPH_IRI.getValue(Boolean.class, overrides).booleanValue();
     }
 }

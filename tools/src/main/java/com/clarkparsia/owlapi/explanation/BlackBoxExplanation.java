@@ -97,8 +97,24 @@ public class BlackBoxExplanation extends SingleExplanationGeneratorImpl
      */
     public BlackBoxExplanation(@Nonnull OWLOntology ontology,
         @Nonnull OWLReasonerFactory reasonerFactory, @Nonnull OWLReasoner reasoner) {
+        this(ontology, reasonerFactory, reasoner,
+            Math.max(ontology.getLogicalAxiomCount() / 100, DEFAULT_FAST_PRUNING_WINDOW_SIZE));
+    }
+
+    /**
+     * Instantiates a new black box explanation.
+     *
+     * @param ontology the ontology
+     * @param reasonerFactory the reasoner factory
+     * @param reasoner the reasoner
+     * @param fastPruningWindowSize the window size for fast pruning (default to 1% of axioms, or 10
+     *        - whichever is larger)
+     */
+    public BlackBoxExplanation(OWLOntology ontology, OWLReasonerFactory reasonerFactory,
+        OWLReasoner reasoner, int fastPruningWindowSize) {
         super(ontology, reasonerFactory, reasoner);
         owlOntologyManager = ontology.getOWLOntologyManager();
+        this.fastPruningWindowSize = fastPruningWindowSize;
     }
 
     @Override
@@ -255,7 +271,7 @@ public class BlackBoxExplanation extends SingleExplanationGeneratorImpl
     }
 
     /**
-     * A utility method. Adds axioms from one set to another set upto a specified limit. Annotation
+     * A utility method. Adds axioms from one set to another set up to a specified limit. Annotation
      * axioms are stripped out
      * 
      * @param <N> the number type
@@ -335,9 +351,9 @@ public class BlackBoxExplanation extends SingleExplanationGeneratorImpl
      * Tests the satisfiability of the test class. The ontology is recreated before the test is
      * performed.
      * 
-     * @param unsatClass the unsat class
+     * @param unsatClass the unsatisfiable class
      * @return true, if is satisfiable
-     * @throws OWLException the oWL exception
+     * @throws OWLException any exception
      */
     private boolean isSatisfiable(@Nonnull OWLClassExpression unsatClass) throws OWLException {
         try {
@@ -414,8 +430,8 @@ public class BlackBoxExplanation extends SingleExplanationGeneratorImpl
     /**
      * Prune until minimal.
      * 
-     * @param unsatClass the unsat class
-     * @throws OWLException the oWL exception
+     * @param unsatClass the unsatisfiable class
+     * @throws OWLException any exception
      */
     protected void pruneUntilMinimal(@Nonnull OWLClassExpression unsatClass) throws OWLException {
         LOGGER.info("FOUND CLASH! Pruning {} axioms...", Integer.valueOf(debuggingAxioms.size()));

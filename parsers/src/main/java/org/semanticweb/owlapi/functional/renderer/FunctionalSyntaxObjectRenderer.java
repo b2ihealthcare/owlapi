@@ -112,6 +112,7 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 
 import org.semanticweb.owlapi.formats.PrefixDocumentFormat;
+import org.semanticweb.owlapi.io.XMLUtils;
 import org.semanticweb.owlapi.model.AxiomType;
 import org.semanticweb.owlapi.model.HasAnnotations;
 import org.semanticweb.owlapi.model.IRI;
@@ -220,14 +221,11 @@ import org.semanticweb.owlapi.model.SWRLObjectPropertyAtom;
 import org.semanticweb.owlapi.model.SWRLRule;
 import org.semanticweb.owlapi.model.SWRLSameIndividualAtom;
 import org.semanticweb.owlapi.model.SWRLVariable;
-import org.semanticweb.owlapi.model.parameters.Imports;
 import org.semanticweb.owlapi.util.AnnotationValueShortFormProvider;
-import org.semanticweb.owlapi.util.CollectionFactory;
 import org.semanticweb.owlapi.util.DefaultPrefixManager;
 import org.semanticweb.owlapi.util.EscapeUtils;
+import org.semanticweb.owlapi.vocab.OWL2Datatype;
 import org.semanticweb.owlapi.vocab.OWLXMLVocabulary;
-
-import com.google.common.base.Optional;
 
 /**
  * The Class OWLObjectRenderer.
@@ -245,6 +243,7 @@ public class FunctionalSyntaxObjectRenderer implements OWLObjectVisitor {
     private boolean writeEntitiesAsURIs = true;
     private OWLObject focusedObject;
     private boolean addMissingDeclarations = true;
+    private boolean explicitXsdString = false;
     protected AnnotationValueShortFormProvider labelMaker = null;
 
     /**
@@ -252,14 +251,24 @@ public class FunctionalSyntaxObjectRenderer implements OWLObjectVisitor {
      * @param writer the writer
      */
     public FunctionalSyntaxObjectRenderer(@Nonnull OWLOntology ontology, Writer writer) {
+        this(ontology, ontology.getOWLOntologyManager().getOntologyFormat(ontology), writer);
+    }
+
+    /**
+     * @param ontology the ontology
+     * @param ontologyFormat format
+     * @param writer the writer
+     */
+    public FunctionalSyntaxObjectRenderer(@Nonnull OWLOntology ontology,
+        OWLDocumentFormat ontologyFormat, Writer writer) {
         ont = ontology;
         this.writer = writer;
         prefixManager = defaultPrefixManager;
-        OWLDocumentFormat ontologyFormat =
-            ontology.getOWLOntologyManager().getOntologyFormat(ontology);
         // reuse the setting on the existing format, if there is one
         if (ontologyFormat != null) {
             addMissingDeclarations = ontologyFormat.isAddMissingTypes();
+            explicitXsdString = ((Boolean) ontologyFormat
+                .getParameter("force xsd:string on literals", Boolean.FALSE)).booleanValue();
         }
         if (ontologyFormat instanceof PrefixDocumentFormat) {
             prefixManager.copyPrefixesFrom((PrefixDocumentFormat) ontologyFormat);
@@ -267,15 +276,8 @@ public class FunctionalSyntaxObjectRenderer implements OWLObjectVisitor {
                 .setPrefixComparator(((PrefixDocumentFormat) ontologyFormat).getPrefixComparator());
         }
         if (!ontology.isAnonymous() && prefixManager.getDefaultPrefix() == null) {
-            String existingDefault = prefixManager.getDefaultPrefix();
-            String ontologyIRIString = ontology.getOntologyID().getOntologyIRI().get().toString();
-            if (existingDefault == null || !existingDefault.startsWith(ontologyIRIString)) {
-                String defaultPrefix = ontologyIRIString;
-                if (!ontologyIRIString.endsWith("/") && !ontologyIRIString.endsWith("#")) {
-                    defaultPrefix = ontologyIRIString + '#';
-                }
-                prefixManager.setDefaultPrefix(defaultPrefix);
-            }
+            prefixManager.setDefaultPrefix(XMLUtils.iriWithTerminatingHash(
+                ontology.getOntologyID().getOntologyIRI().get().toString()));
         }
         Map<OWLAnnotationProperty, List<String>> prefLangMap = new HashMap<>();
         OWLOntologyManager manager = ontology.getOWLOntologyManager();
@@ -377,10 +379,9 @@ public class FunctionalSyntaxObjectRenderer implements OWLObjectVisitor {
         writeOpenBracket();
         if (!ontology.isAnonymous()) {
             writeFullIRI(ontology.getOntologyID().getOntologyIRI().get());
-            Optional<IRI> versionIRI = ontology.getOntologyID().getVersionIRI();
-            if (versionIRI.isPresent()) {
+            if (ontology.getOntologyID().getVersionIRI().isPresent()) {
                 writeReturn();
-                writeFullIRI(versionIRI.get());
+                writeFullIRI(ontology.getOntologyID().getVersionIRI().get());
             }
             writeReturn();
         }
@@ -611,10 +612,9 @@ public class FunctionalSyntaxObjectRenderer implements OWLObjectVisitor {
             }
         }
         // if multiple illegal declarations already exist, they have already
-        // been outputted
-        // the renderer cannot take responsibility for removing them
-        // It should not add declarations for illegally punned entities here,
-        // though
+        // been output; the renderer cannot take responsibility for removing
+        // them. It should not add declarations for illegally punned entities
+        // here, though
         if (addMissingDeclarations && axioms.isEmpty()) {
             // if declarations should be added, check if the IRI is illegally
             // punned
@@ -1270,7 +1270,8 @@ public class FunctionalSyntaxObjectRenderer implements OWLObjectVisitor {
         if (node.hasLang()) {
             write("@");
             write(node.getLang());
-        } else if (!node.isRDFPlainLiteral()) {
+        } else if (!node.isRDFPlainLiteral() && (explicitXsdString
+            || !OWL2Datatype.XSD_STRING.getIRI().equals(node.getDatatype().getIRI()))) {
             write("^^");
             write(node.getDatatype().getIRI());
         }

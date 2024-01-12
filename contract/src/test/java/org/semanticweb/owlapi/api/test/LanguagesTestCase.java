@@ -1,6 +1,6 @@
 package org.semanticweb.owlapi.api.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.semanticweb.owlapi.util.Construct.*;
 import static org.semanticweb.owlapi.util.Languages.*;
 
@@ -9,12 +9,11 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.semanticweb.owlapi.util.Construct;
 import org.semanticweb.owlapi.util.Languages;
 
-@SuppressWarnings("javadoc")
-public class LanguagesTestCase {
+class LanguagesTestCase {
     private static EnumSet<Construct> set(Construct... constructs) {
         return EnumSet.copyOf(Arrays.asList(constructs));
     }
@@ -24,7 +23,7 @@ public class LanguagesTestCase {
     }
 
     @Test
-    public void shouldFindExpectedConstructs() {
+    void shouldFindExpectedConstructs() {
         same(FL0, CONCEPT_INTERSECTION, UNIVERSAL_RESTRICTION);
         same(FLMINUS, CONCEPT_INTERSECTION, UNIVERSAL_RESTRICTION, LIMITED_EXISTENTIAL);
         same(FL, ROLE_DOMAIN_RANGE, CONCEPT_INTERSECTION, UNIVERSAL_RESTRICTION, LIMITED_EXISTENTIAL);
@@ -259,7 +258,7 @@ public class LanguagesTestCase {
     }
 
     // utility to write the enum declarations for variations of construct combinations
-    public static void dump() {
+    static void dump() {
         // ALC || S (ALC + TRAN)
         // H \subset R
         // O

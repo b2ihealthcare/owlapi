@@ -43,6 +43,7 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -277,7 +278,7 @@ public abstract class RDFRendererBase {
         throws IOException;
 
     /**
-     * @throws IOException io error
+     * @throws IOException if there was a problem writing to the output stream
      */
     public void render() throws IOException {
         graph = new RDFGraph();
@@ -335,14 +336,19 @@ public abstract class RDFRendererBase {
                     }
                 }
                 renderEntity(entity);
+                Iterator<OWLEntity> it = graph.getRootIRIs(entity).iterator();
+                while (it.hasNext()) {
+                    renderEntity(it.next());
+                }
             }
         }
     }
 
     private void renderEntity(@Nonnull OWLEntity entity) throws IOException {
+        RDFResourceIRI subjectNode = new RDFResourceIRI(verifyAbsolute(entity.getIRI()));
         beginObject();
         writeEntityComment(entity);
-        render(new RDFResourceIRI(verifyAbsolute(entity.getIRI())), true);
+        render(subjectNode, true);
         renderAnonRoots();
         endObject();
     }
@@ -393,6 +399,16 @@ public abstract class RDFRendererBase {
         }
     }
 
+    protected static boolean includeInSingleTriple(OWLAxiom ax, OWLIndividual possibleSubject) {
+        if (ax instanceof OWLDifferentIndividualsAxiom) {
+            OWLDifferentIndividualsAxiom d = (OWLDifferentIndividualsAxiom) ax;
+            List<OWLIndividual> individualsAsList = d.getIndividualsAsList();
+            return individualsAsList.size() == 2
+                && possibleSubject.equals(individualsAsList.get(0));
+        }
+        return true;
+    }
+
     private void renderAnonymousIndividuals() throws IOException {
         for (OWLAnonymousIndividual anonInd : sortOptionally(
             ontology.getReferencedAnonymousIndividuals(EXCLUDED))) {
@@ -400,7 +416,7 @@ public abstract class RDFRendererBase {
             boolean anonRoot = true;
             Set<OWLAxiom> axioms = new TreeSet<>();
             for (OWLAxiom ax : sortOptionally(ontology.getReferencingAxioms(anonInd, EXCLUDED))) {
-                if (!(ax instanceof OWLDifferentIndividualsAxiom)) {
+                if (includeInSingleTriple(ax, anonInd)) {
                     assert ax != null;
                     AxiomSubjectProvider subjectProvider = new AxiomSubjectProvider();
                     OWLObject obj = subjectProvider.getSubject(ax);
@@ -630,7 +646,7 @@ public abstract class RDFRendererBase {
     }
 
     /**
-     * @throws IOException io error
+     * @throws IOException if there was a problem writing to the output stream
      */
     public void renderAnonRoots() throws IOException {
         Set<RDFResourceBlankNode> rootAnonymousNodes = new TreeSet<>(graph.getRootAnonymousNodes());
@@ -646,7 +662,7 @@ public abstract class RDFRendererBase {
      * 
      * @param node The main node to be rendered
      * @param root true if root
-     * @throws IOException io error
+     * @throws IOException if there was a problem writing to the output stream
      */
     public abstract void render(@Nonnull RDFResource node, boolean root) throws IOException;
 
@@ -687,7 +703,6 @@ public abstract class RDFRendererBase {
                         if (triple.getObject() instanceof RDFResource) {
                             // Should be another list
                             currentNode = triple.getObject();
-                            // toJavaList(triple.getObject(), list);
                         }
                     }
                 }
@@ -807,7 +822,7 @@ public abstract class RDFRendererBase {
         @Override
         public void visit(OWLNamedIndividual individual) {
             for (OWLAxiom ax : sortOptionally(ontology.getAxioms(individual, EXCLUDED))) {
-                if (!(ax instanceof OWLDifferentIndividualsAxiom) && same(ax, individual)
+                if (includeInSingleTriple(ax, individual) && same(ax, individual)
                     && inverseFirst(ax, individual)) {
                     axioms.add(ax);
                 }

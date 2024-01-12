@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
  */
 public enum ConfigurationOptions {
     //@formatter:off
-    /** True if http compression 
+    /** True if HTTP compression 
      * should be used. */
     ACCEPT_HTTP_COMPRESSION             (Boolean.TRUE),
     /** Timeout for connections. */
@@ -86,11 +86,11 @@ public enum ConfigurationOptions {
     LABELS_AS_BANNER                    (Boolean.FALSE),
     /** True if banners for ontology 
      * sections and entity comments 
-     * should be outputted. */
+     * should be output. */
     BANNERS_ENABLED                     (Boolean.TRUE),
     /** List of banned 
      * parsers keys. */
-    BANNED_PARSERS                      (""),
+    BANNED_PARSERS                      ("org.semanticweb.owlapi.rio.RioTrixParserFactory"),
     /** Entity expansion limit for 
      * XML parsing. */
     ENTITY_EXPANSION_LIMIT              ("100000000"),
@@ -110,8 +110,28 @@ public enum ConfigurationOptions {
      * skipped. By default annotations 
      * are included.*/
     SKIP_MODULE_ANNOTATIONS             (Boolean.FALSE),
+    /** False if collections used in 
+     * constructs such as equivalent 
+     * classes and properties should be 
+     * duplicate free. Some systems 
+     * might need to allow this, e.g.,
+     * reasoners which require the creation 
+     * of a tautology like 
+     * {@code Equivalent(A, A)}.*/
+    ALLOW_DUPLICATES_IN_CONSTRUCT_SETS  (Boolean.FALSE),
     /**Max number of elements for caches.*/
-    CACHE_SIZE                        (Integer.valueOf(2048));
+    CACHE_SIZE                        (Integer.valueOf(2048)),
+    /** False if named graph IRIs should
+     * not be created for formats like
+     * TriG and RDF/JSON. This is the 
+     * historic behaviour of the API.
+     * Switch to true to always use the
+     * ontology IRI as graph IRI for
+     * named ontologies. The named 
+     * graph IRI can be set independently
+     * or overridden with 
+     * {@code OWLDocumentFormat::setParameter("namedGraphOverride", "desired value")}.*/
+    OUTPUT_NAMED_GRAPH_IRI              (Boolean.FALSE);
     //@formatter:on
     private static final String PREFIX =
         "org.semanticweb.owlapi.model.parameters.ConfigurationOptions.";
@@ -146,7 +166,7 @@ public enum ConfigurationOptions {
     /**
      * @param parameterName parameter name - by default the full name of this enumeration plus the
      *        enum member name
-     * @return ,atching ConfigurationOptions member, or null if none found
+     * @return matching ConfigurationOptions member, or null if none found
      */
     @Nullable
     public static ConfigurationOptions find(String parameterName) {

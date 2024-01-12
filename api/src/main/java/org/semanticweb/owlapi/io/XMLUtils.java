@@ -79,7 +79,7 @@ public final class XMLUtils {
     }
 
     /**
-     * Deterimines if a character is an NCName (Non-Colonised Name) start character.
+     * Determines if a character is an NCName (Non-Colonised Name) start character.
      * 
      * @param codePoint The code point of the character to be tested. For UTF-8 and UTF-16
      *        characters the code point corresponds to the value of the char that represents the
@@ -92,7 +92,7 @@ public final class XMLUtils {
     }
 
     /**
-     * Deterimines if a character is an NCName (Non-Colonised Name) character.
+     * Determines if a character is an NCName (Non-Colonised Name) character.
      * 
      * @param codePoint The code point of the character to be tested. For UTF-8 and UTF-16
      *        characters the code point corresponds to the value of the char that represents the
@@ -246,22 +246,41 @@ public final class XMLUtils {
     }
 
     /**
-     * utility to get the part of a charsequence that is not the NCName fragment.
+     * @param s string
+     * @return true if the input is null, empty or blank, i.e., only containing whitespace
+     *         characters
+     */
+    public static boolean isEmpty(@Nullable CharSequence s) {
+        if (s == null || s.length() == 0) {
+            return true;
+        }
+        return s.chars().allMatch(Character::isWhitespace);
+    }
+
+    /**
+     * utility to get the part of a char sequence that is not the NCName fragment.
      * 
-     * @param s the charsequence to split
+     * @param s the char sequence to split
      * @return the prefix split at the last non-ncname character, or the whole input if no ncname is
      *         found
      */
     @Nonnull
     public static String getNCNamePrefix(CharSequence s) {
+        if (isEmpty(s)) {
+            return "";
+        }
         if (s.length() > 1 && s.charAt(0) == '_' && s.charAt(1) == ':') {
             return s.toString();
         }
         int localPartStartIndex = getNCNameSuffixIndex(s);
+        int firstNonBlank = 0;
+        while (Character.isWhitespace(s.charAt(firstNonBlank))) {
+            firstNonBlank++;
+        }
         if (localPartStartIndex > -1) {
-            return s.toString().substring(0, localPartStartIndex);
+            return s.toString().substring(firstNonBlank, localPartStartIndex);
         } else {
-            return s.toString();
+            return s.toString().substring(firstNonBlank);
         }
     }
 
@@ -379,5 +398,25 @@ public final class XMLUtils {
      */
     public static boolean isNullOrEmpty(CharSequence s) {
         return s == null || s.length() == 0;
+    }
+
+    /**
+     * @param iri input to check and terminate with a hash
+     * @return input plus a hash if the input does not terminate with hash or slash; if the input
+     *         contains a hash in a position aside from the last character, it is returned
+     *         unchanged. If null is received, return {@code "#"}.
+     */
+    public static String iriWithTerminatingHash(@Nullable String iri) {
+        if (iri == null) {
+            return "#";
+        }
+        char c = iri.charAt(iri.length() - 1);
+        if (c == '/' || c == '#') {
+            return iri;
+        }
+        if (iri.indexOf('#') > -1) {
+            return iri;
+        }
+        return iri + '#';
     }
 }

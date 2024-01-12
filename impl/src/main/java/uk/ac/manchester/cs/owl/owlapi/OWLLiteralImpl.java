@@ -76,8 +76,8 @@ public class OWLLiteralImpl extends OWLObjectImplWithoutEntityAndAnonCaching imp
 
     /**
      * @param literal the lexical form
-     * @param lang the language; can be null or an empty string, in which case datatype can be any
-     *        datatype but not null
+     * @param lang the language tag; can be null or an empty string, in which case datatype can be
+     *        any datatype but not null
      * @param datatype the datatype; if lang is null or the empty string, it can be null or it MUST
      *        be RDFPlainLiteral
      */
@@ -280,11 +280,11 @@ public class OWLLiteralImpl extends OWLObjectImplWithoutEntityAndAnonCaching imp
     @Override
     protected int compareObjectOfSameType(OWLObject object) {
         OWLLiteral other = (OWLLiteral) object;
-        int diff = literal.get().compareTo(other.getLiteral());
+        int diff = datatype.compareTo(other.getDatatype());
         if (diff != 0) {
             return diff;
         }
-        diff = datatype.compareTo(other.getDatatype());
+        diff = literal.get().compareTo(other.getLiteral());
         if (diff != 0) {
             return diff;
         }

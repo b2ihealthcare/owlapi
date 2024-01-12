@@ -23,7 +23,8 @@ public class Obo2OWLConstants {
     public static final String DEFAULT_IRI_PREFIX = "http://purl.obolibrary.org/obo/";
     /** OIO vocabulary prefix */
     @Nonnull
-    public static final String OIOVOCAB_IRI_PREFIX = "http://www.geneontology.org/formats/oboInOwl#";
+    public static final String OIOVOCAB_IRI_PREFIX =
+        "http://www.geneontology.org/formats/oboInOwl#";
     /** IRI for the 'has obsolescence reason' annotation property */
     @Nonnull
     public static final IRI IRI_IAO_0000231 = IRI.create(DEFAULT_IRI_PREFIX + "IAO_0000231");
@@ -32,8 +33,7 @@ public class Obo2OWLConstants {
     public static final IRI IRI_IAO_0000227 = IRI.create(DEFAULT_IRI_PREFIX + "IAO_0000227");
 
     /**
-     * @param d
-     *        date to format
+     * @param d date to format
      * @return formatted string
      */
     @Nonnull
@@ -41,7 +41,8 @@ public class Obo2OWLConstants {
         return FORMATTER.format(d);
     }
 
-    private static final SimpleDateFormat FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+    private static final SimpleDateFormat FORMATTER =
+        new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
     /** obo to owl vocabulary */
     public enum Obo2OWLVocabulary implements HasIRI {
@@ -54,6 +55,9 @@ public class Obo2OWLConstants {
         /**IRI_IAO_0100001*/    IRI_IAO_0100001(DEFAULT_IRI_PREFIX, "IAO_0100001", "term replaced by", OboFormatTag.TAG_REPLACED_BY.getTag()),
         /**IRI_OIO_shorthand*/  IRI_OIO_shorthand(OIOVOCAB_IRI_PREFIX, "shorthand", "shorthand", "shorthand"),
         /**IRI_OIO_consider*/   IRI_OIO_consider(OIOVOCAB_IRI_PREFIX, "consider", "consider", OboFormatTag.TAG_CONSIDER.getTag()),
+        /**IRI_OIO_id*/   IRI_OIO_id(OIOVOCAB_IRI_PREFIX, "id", "id", OboFormatTag.TAG_ID.getTag()),
+        /**IRI_OIO_created_by*/   IRI_OIO_created_by(OIOVOCAB_IRI_PREFIX, "created_by", "created by", OboFormatTag.TAG_CREATED_BY.getTag()),
+        /**IRI_OIO_creation_date*/   IRI_OIO_creation_date(OIOVOCAB_IRI_PREFIX, "creation_date", "creation date", OboFormatTag.TAG_CREATION_DATE.getTag()),
         /**IRI_OIO_hasOBOFormatVersion*/        IRI_OIO_hasOBOFormatVersion(OIOVOCAB_IRI_PREFIX, "hasOBOFormatVersion", "has_obo_format_version", OboFormatTag.TAG_FORMAT_VERSION.getTag()),
         /**IRI_OIO_treatXrefsAsIsA*/            IRI_OIO_treatXrefsAsIsA(OIOVOCAB_IRI_PREFIX, "treat-xrefs-as-is_a", "treat-xrefs-as-is_a", OboFormatTag.TAG_TREAT_XREFS_AS_IS_A.getTag()),
         /**IRI_OIO_treatXrefsAsHasSubClass*/    IRI_OIO_treatXrefsAsHasSubClass(OIOVOCAB_IRI_PREFIX, "treat-xrefs-as-has-subclass", "treat-xrefs-as-has-subclass", OboFormatTag.TAG_TREAT_XREFS_AS_HAS_SUBCLASS.getTag()),
@@ -87,8 +91,8 @@ public class Obo2OWLConstants {
         @Nonnull
         final String mappedTag;
 
-        Obo2OWLVocabulary(@Nonnull String namespce, @Nonnull String shortName, @Nonnull String label,
-            @Nonnull String mappedTag) {
+        Obo2OWLVocabulary(@Nonnull String namespce, @Nonnull String shortName,
+            @Nonnull String label, @Nonnull String mappedTag) {
             iri = IRI.create(namespce + shortName);
             this.shortName = shortName;
             namespace = namespce;
@@ -134,10 +138,9 @@ public class Obo2OWLConstants {
         }
 
         /**
-         * @param e
-         *        entity to check
-         * @return true if e has the same iri as the enum value, false if e is
-         *         null or has a different iri
+         * @param e entity to check
+         * @return true if e has the same iri as the enum value, false if e is null or has a
+         *         different iri
          */
         public boolean sameIRI(@Nullable OWLEntity e) {
             // if a null value is passed in, then no match
@@ -159,9 +162,8 @@ public class Obo2OWLConstants {
     }
 
     /**
-     * @param tag
-     *        tag
-     * @return obj for tag
+     * @param tag tag
+     * @return Obo2OWLVocabulary for tag
      */
     public static Obo2OWLVocabulary getVocabularyObj(String tag) {
         return TAGSTOVOCAB.get(tag);

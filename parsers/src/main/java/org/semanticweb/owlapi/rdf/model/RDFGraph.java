@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -36,6 +37,7 @@ import org.semanticweb.owlapi.io.RDFResource;
 import org.semanticweb.owlapi.io.RDFResourceBlankNode;
 import org.semanticweb.owlapi.io.RDFTriple;
 import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLEntity;
 import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 
 /**
@@ -50,6 +52,7 @@ public class RDFGraph implements Serializable {
     private static final long serialVersionUID = 40000L;
     private final Map<RDFResource, Set<RDFTriple>> triplesBySubject = new HashMap<>();
     private final Set<RDFResourceBlankNode> rootAnonymousNodes = new HashSet<>();
+    private final Set<OWLEntity> rootIRIs = new HashSet<>();
     private final Set<RDFTriple> triples = new HashSet<>();
     private final Map<RDFNode, RDFNode> remappedNodes = new HashMap<>();
     @Nullable
@@ -99,9 +102,9 @@ public class RDFGraph implements Serializable {
         return set;
     }
 
-    /** Ensure ids are outputted for reused individuals and annotated expressions. */
+    /** Ensure ids are output for reused individuals and annotated expressions. */
     public void forceIdOutput() {
-        // Some individuals might need to appear in mutliple triples although they do not appear in
+        // Some individuals might need to appear in multiple triples although they do not appear in
         // multiple positions in the axioms.
         // An example of such a situation is an anonymous individual as object of an annotated
         // annotation - in the RDF graph, this individual will appear in two places because of
@@ -127,7 +130,7 @@ public class RDFGraph implements Serializable {
         for (Map.Entry<RDFResourceBlankNode, List<RDFResourceBlankNode>> e : anonIndividualsInMultipleTriples
             .entrySet()) {
             if (e.getValue().size() > 1) {
-                // individuals that need their id outputted
+                // individuals that need their id output
                 e.getValue().forEach(o -> o.setIdRequired(true));
             }
         }
@@ -231,5 +234,24 @@ public class RDFGraph implements Serializable {
     @Nullable
     public RDFResource getOntology() {
         return ontology;
+    }
+
+    /**
+     * Some graphs have multiple root entities, i.e., sameAs(a1, a2, a3) axioms are turned to
+     * {@code (a1 sameAs a2), (a2 sameAs a3)} because of RDF limitations. To render all triples, a1
+     * and a2 must be rendered; usual process would render only a1, and so a3 would be lost.
+     * 
+     * @param i root IRI for this graph
+     */
+    public void addRootIRIs(OWLEntity i) {
+        rootIRIs.add(i);
+    }
+
+    /**
+     * @param toSkip entity to skip
+     * @return root entities, minus the one to be skipped, sorted
+     */
+    public Stream<OWLEntity> getRootIRIs(OWLEntity toSkip) {
+        return rootIRIs.stream().filter(x -> !toSkip.equals(x)).sorted();
     }
 }

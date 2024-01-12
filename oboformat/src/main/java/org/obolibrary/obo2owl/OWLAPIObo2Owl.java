@@ -1,6 +1,7 @@
 package org.obolibrary.obo2owl;
 
 import static org.obolibrary.obo2owl.Obo2OWLConstants.DEFAULT_IRI_PREFIX;
+import static org.obolibrary.obo2owl.Obo2OWLConstants.OIOVOCAB_IRI_PREFIX;
 import static org.semanticweb.owlapi.util.OWLAPIPreconditions.verifyNotNull;
 
 import java.io.File;
@@ -8,6 +9,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -72,50 +74,40 @@ import org.semanticweb.owlapi.util.CollectionFactory;
 import org.semanticweb.owlapi.vocab.Namespaces;
 import org.semanticweb.owlapi.vocab.OWL2Datatype;
 import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
+import org.semanticweb.owlapi.vocab.OWLXMLVocabulary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.base.Optional;
-import com.google.common.collect.Sets;
 
 /** The Class OWLAPIObo2Owl. */
 public class OWLAPIObo2Owl {
 
     private static final String TRUE = "true";
     private static final String CANNOT_TRANSLATE = "Cannot translate: {}";
-    /** The log. */
     private static final Logger LOG = LoggerFactory.getLogger(OWLAPIObo2Owl.class);
     /** The Constant IRI_PROP_isReversiblePropertyChain. */
     public static final String IRI_PROP_ISREVERSIBLEPROPERTYCHAIN =
         DEFAULT_IRI_PREFIX + "IAO_isReversiblePropertyChain";
-    /** The default id space. */
     @Nonnull
     protected String defaultIDSpace = "";
-    /** The manager. */
     protected OWLOntologyManager manager;
-    /** The owl ontology. */
     protected OWLOntology owlOntology;
-    /** The fac. */
     protected OWLDataFactory fac;
-    /** The obodoc. */
     protected OBODoc obodoc;
-    /** The id space map. */
     @Nonnull
     protected final Map<String, String> idSpaceMap;
     /** The annotation property map. */
     @Nonnull
     public static final Map<String, IRI> ANNOTATIONPROPERTYMAP = initAnnotationPropertyMap();
-    /** The ap to declare. */
     @Nonnull
     protected final Set<OWLAnnotationProperty> apToDeclare;
-    /** The cls to declar. */
     @Nonnull
     protected final Map<String, OWLClass> clsToDeclare;
     /** The typedef to annotation property. */
     @Nonnull
     protected final Map<String, OWLAnnotationProperty> typedefToAnnotationProperty;
-    private static final Set<String> SKIPPED_QUALIFIERS = Sets.newHashSet("gci_relation",
-        "gci_filler", "cardinality", "minCardinality", "maxCardinality", "all_some", "all_only");
+    private static final Set<String> SKIPPED_QUALIFIERS =
+        new HashSet<>(Arrays.asList("gci_relation", "gci_filler", "cardinality", "minCardinality",
+            "maxCardinality", "all_some", "all_only"));
     /**
      * Cache for the id to IRI conversion. This cannot be replaced with a Caffeine cache - the
      * loading of keys is recursive, and a bug in ConcurrentHashMap implementation causes livelocks
@@ -129,8 +121,6 @@ public class OWLAPIObo2Owl {
     };
 
     /**
-     * Instantiates a new oWLAPI obo2 owl.
-     * 
      * @param manager the manager
      */
     public OWLAPIObo2Owl(OWLOntologyManager manager) {
@@ -165,9 +155,9 @@ public class OWLAPIObo2Owl {
      * @param outFile the out file
      * @param manager manager to use
      * @throws IOException Signals that an I/O exception has occurred.
-     * @throws OWLOntologyCreationException the oWL ontology creation exception
-     * @throws OWLOntologyStorageException the oWL ontology storage exception
-     * @throws OBOFormatParserException the oBO format parser exception
+     * @throws OWLOntologyCreationException the OWL ontology creation exception
+     * @throws OWLOntologyStorageException the OWL ontology storage exception
+     * @throws OBOFormatParserException the OBO format parser exception
      */
     public static void convertURL(@Nonnull String iri, @Nonnull String outFile,
         @Nonnull OWLOntologyManager manager)
@@ -191,9 +181,9 @@ public class OWLAPIObo2Owl {
      *        added
      * @param manager the manager to be used
      * @throws IOException Signals that an I/O exception has occurred.
-     * @throws OWLOntologyCreationException the oWL ontology creation exception
-     * @throws OWLOntologyStorageException the oWL ontology storage exception
-     * @throws OBOFormatParserException the oBO format parser exception
+     * @throws OWLOntologyCreationException the OWL ontology creation exception
+     * @throws OWLOntologyStorageException the OWL ontology storage exception
+     * @throws OBOFormatParserException the OBO format parser exception
      *         {@link #convertURL(String iri, String outFile, OWLOntologyManager manager)}
      */
     public static void convertURL(String iri, @Nonnull String outFile, String defaultOnt,
@@ -288,7 +278,7 @@ public class OWLAPIObo2Owl {
      * 
      * @param oboFile the obo file
      * @return ontology
-     * @throws OWLOntologyCreationException the oWL ontology creation exception
+     * @throws OWLOntologyCreationException the OWL ontology creation exception
      */
     public OWLOntology convert(@Nonnull String oboFile) throws OWLOntologyCreationException {
         try {
@@ -308,7 +298,7 @@ public class OWLAPIObo2Owl {
      * 
      * @param doc the obodoc
      * @return ontology
-     * @throws OWLOntologyCreationException the oWL ontology creation exception
+     * @throws OWLOntologyCreationException the OWL ontology creation exception
      */
     @Nonnull
     public OWLOntology convert(OBODoc doc) throws OWLOntologyCreationException {
@@ -322,7 +312,7 @@ public class OWLAPIObo2Owl {
      * 
      * @param doc the obodoc
      * @param in the in
-     * @return the oWL ontology
+     * @return the OWL ontology
      */
     public OWLOntology convert(OBODoc doc, @Nonnull OWLOntology in) {
         obodoc = doc;
@@ -331,10 +321,10 @@ public class OWLAPIObo2Owl {
     }
 
     /**
-     * Tr.
+     * Translate document to ontology.
      * 
-     * @param in the in
-     * @return the oWL ontology
+     * @param in the ontology to update
+     * @return the OWL ontology
      */
     @SuppressWarnings("null")
     @Nonnull
@@ -356,7 +346,7 @@ public class OWLAPIObo2Owl {
                 String dv = dvclause.getValue().toString();
                 IRI vIRI =
                     IRI.create(DEFAULT_IRI_PREFIX + ontOboId + '/' + dv + '/' + ontOboId + ".owl");
-                OWLOntologyID oid = new OWLOntologyID(Optional.of(ontIRI), Optional.of(vIRI));
+                OWLOntologyID oid = new OWLOntologyID(ontIRI, vIRI);
                 // if the ontology being read has a differet id from the one
                 // that was passed in, update it
                 // when parsing, the original ontology is likely an anonymous,
@@ -370,15 +360,13 @@ public class OWLAPIObo2Owl {
                 // when parsing, the original ontology is likely an anonymous,
                 // empty one
                 if (!ontIRI.equals(in.getOntologyID().getOntologyIRI().orNull())) {
-                    manager.applyChange(new SetOntologyID(in,
-                        new OWLOntologyID(Optional.of(ontIRI), Optional.<IRI>absent())));
+                    manager.applyChange(new SetOntologyID(in, new OWLOntologyID(ontIRI, null)));
                 }
             }
         } else {
             defaultIDSpace = "TEMP";
             manager.applyChange(new SetOntologyID(in,
-                new OWLOntologyID(Optional.of(IRI.create(DEFAULT_IRI_PREFIX + defaultIDSpace)),
-                    Optional.<IRI>absent())));
+                new OWLOntologyID(IRI.create(DEFAULT_IRI_PREFIX + defaultIDSpace), null)));
             // TODO - warn
         }
         trHeaderFrame(hf);
@@ -455,10 +443,8 @@ public class OWLAPIObo2Owl {
     }
 
     /**
-     * Gets the uri.
-     * 
      * @param path the path
-     * @return the uri
+     * @return the URI string
      */
     protected static String getURI(@Nonnull String path) {
         if (path.startsWith("http://") || path.startsWith("https://") || path.startsWith("file:")) {
@@ -469,7 +455,7 @@ public class OWLAPIObo2Owl {
     }
 
     /**
-     * Tr header frame.
+     * Translate header frame.
      * 
      * @param headerFrame the header frame
      */
@@ -649,10 +635,10 @@ public class OWLAPIObo2Owl {
     }
 
     /**
-     * Tr term frame.
+     * Translate term frame.
      * 
      * @param termFrame the term frame
-     * @return the oWL class expression
+     * @return the OWL class expression
      */
     public OWLClassExpression trTermFrame(@Nonnull Frame termFrame) {
         OWLClass cls = trClass(termFrame.getId());
@@ -721,7 +707,7 @@ public class OWLAPIObo2Owl {
     }
 
     /**
-     * Tr term frame clauses.
+     * Translate term frame clauses.
      * 
      * @param cls the cls
      * @param clauses the clauses
@@ -747,10 +733,10 @@ public class OWLAPIObo2Owl {
     }
 
     /**
-     * Tr typedef to annotation property.
+     * Translate typedef to annotation property.
      * 
      * @param typedefFrame the typedef frame
-     * @return the oWL named object
+     * @return the OWL named object
      */
     @Nullable
     protected OWLNamedObject trTypedefToAnnotationProperty(@Nonnull Frame typedefFrame) {
@@ -788,10 +774,10 @@ public class OWLAPIObo2Owl {
     }
 
     /**
-     * Tr typedef frame.
+     * Translate typedef frame.
      * 
      * @param typedefFrame the typedef frame
-     * @return the oWL named object
+     * @return the OWL named object
      */
     @Nullable
     public OWLNamedObject trTypedefFrame(@Nonnull Frame typedefFrame) {
@@ -848,12 +834,12 @@ public class OWLAPIObo2Owl {
     }
 
     /**
-     * Tr relation union of.
+     * Translate relation union of.
      * 
      * @param id the id
      * @param p the p
      * @param clauses the clauses
-     * @return the oWL axiom
+     * @return the OWL axiom
      */
     @Nullable
     @SuppressWarnings("unused")
@@ -867,12 +853,12 @@ public class OWLAPIObo2Owl {
     }
 
     /**
-     * Tr relation intersection of.
+     * Translate relation intersection of.
      * 
      * @param id the id
      * @param p the p
      * @param clauses the clauses
-     * @return the oWL axiom
+     * @return the OWL axiom
      */
     @Nullable
     @SuppressWarnings("unused")
@@ -886,11 +872,11 @@ public class OWLAPIObo2Owl {
     }
 
     /**
-     * Tr union of.
+     * Translate union of.
      * 
      * @param cls the cls
      * @param clauses the clauses
-     * @return the oWL axiom
+     * @return the OWL axiom
      */
     @SuppressWarnings("null")
     @Nonnull
@@ -922,11 +908,11 @@ public class OWLAPIObo2Owl {
     }
 
     /**
-     * Tr intersection of.
+     * Translate intersection of.
      * 
      * @param cls the cls
      * @param clauses the clauses
-     * @return the oWL axiom
+     * @return the OWL axiom
      */
     @SuppressWarnings("null")
     protected OWLAxiom trIntersectionOf(OWLClass cls, @Nonnull Collection<Clause> clauses) {
@@ -953,9 +939,7 @@ public class OWLAPIObo2Owl {
     }
 
     /**
-     * Adds the.
-     * 
-     * @param axiom the axiom
+     * @param axiom the axiom to add
      */
     protected void add(@Nullable OWLAxiom axiom) {
         if (axiom == null) {
@@ -966,9 +950,7 @@ public class OWLAPIObo2Owl {
     }
 
     /**
-     * Adds the.
-     * 
-     * @param axioms the axioms
+     * @param axioms the axioms to add
      */
     protected void add(@Nullable Set<OWLAxiom> axioms) {
         if (axioms == null || axioms.isEmpty()) {
@@ -1055,12 +1037,12 @@ public class OWLAPIObo2Owl {
 
     // no data properties in obo
     /**
-     * Tr typedef clause.
+     * Translate typedef clause.
      * 
      * @param p the p
      * @param tag the tag
      * @param clause the clause
-     * @return the oWL axiom
+     * @return the OWL axiom
      */
     @SuppressWarnings("null")
     @Nullable
@@ -1143,12 +1125,12 @@ public class OWLAPIObo2Owl {
     }
 
     /**
-     * Tr generic clause.
+     * Translate generic clause.
      * 
      * @param e the e
      * @param tag the tag
      * @param clause the clause
-     * @return the oWL axiom
+     * @return the OWL axiom
      */
     protected OWLAxiom trGenericClause(@Nonnull OWLNamedObject e, @Nonnull String tag,
         @Nonnull Clause clause) {
@@ -1169,12 +1151,12 @@ public class OWLAPIObo2Owl {
     }
 
     /**
-     * Tr generic clause.
+     * Translate generic clause.
      * 
      * @param sub the sub
      * @param tag the tag
      * @param clause the clause
-     * @return the oWL axiom
+     * @return the OWL axiom
      */
     @SuppressWarnings("null")
     @Nullable
@@ -1272,10 +1254,10 @@ public class OWLAPIObo2Owl {
     }
 
     /**
-     * Tr synonym type.
+     * Translate synonym type.
      * 
      * @param type the type
-     * @return the oWL annotation property
+     * @return the OWL annotation property
      */
     protected OWLAnnotationProperty trSynonymType(@Nonnull String type) {
         if (type.equals(OboFormatTag.TAG_RELATED.getTag())
@@ -1288,7 +1270,7 @@ public class OWLAPIObo2Owl {
     }
 
     /**
-     * Tr annotations.
+     * Translate annotations.
      * 
      * @param clause the clause
      * @return the sets the
@@ -1304,7 +1286,7 @@ public class OWLAPIObo2Owl {
     }
 
     /**
-     * Tr annotations.
+     * Translate annotations.
      * 
      * @param clause the clause
      * @param anns the anns
@@ -1332,7 +1314,7 @@ public class OWLAPIObo2Owl {
     }
 
     /**
-     * Tr annotations.
+     * Translate annotations.
      * 
      * @param clauses the clauses
      * @return the set of annotations
@@ -1348,12 +1330,12 @@ public class OWLAPIObo2Owl {
     }
 
     /**
-     * Tr rel.
+     * Translate rel.
      * 
      * @param relId the rel id
      * @param classId the class id
      * @param quals the quals
-     * @return the oWL class expression
+     * @return the OWL class expression
      */
     public OWLClassExpression trRel(@Nonnull String relId, @Nonnull String classId,
         @Nonnull Collection<QualifierValue> quals) {
@@ -1406,11 +1388,11 @@ public class OWLAPIObo2Owl {
     }
 
     /**
-     * Gets the qV string.
+     * Gets the qualifier value string.
      * 
-     * @param q the q
-     * @param quals the quals
-     * @return the qV string
+     * @param q the qualifier value
+     * @param quals the qualifier values
+     * @return the qualifier value string
      */
     @Nullable
     protected static String getQVString(String q, @Nonnull Collection<QualifierValue> quals) {
@@ -1423,11 +1405,11 @@ public class OWLAPIObo2Owl {
     }
 
     /**
-     * Gets the qV boolean.
+     * Gets the qualifier value boolean.
      * 
-     * @param q the q
-     * @param quals the quals
-     * @return the qV boolean
+     * @param q the qualifier value
+     * @param quals the qualifier values
+     * @return the qualifier value boolean
      */
     protected static boolean getQVBoolean(String q, @Nonnull Collection<QualifierValue> quals) {
         for (QualifierValue qv : quals) {
@@ -1440,11 +1422,11 @@ public class OWLAPIObo2Owl {
     }
 
     /**
-     * Gets the qV int.
+     * Gets the qualifier value int.
      * 
-     * @param q the q
-     * @param quals the quals
-     * @return the qV int
+     * @param q the qualifier value
+     * @param quals the qualifier values
+     * @return the qualifier value int
      */
     @Nullable
     protected static Integer getQVInt(String q, @Nonnull Collection<QualifierValue> quals) {
@@ -1458,10 +1440,10 @@ public class OWLAPIObo2Owl {
     }
 
     /**
-     * Tr class.
+     * Translate class.
      * 
      * @param classId the class id
-     * @return the oWL class
+     * @return the OWL class
      */
     protected OWLClass trClass(@Nonnull String classId) {
         IRI iri = oboIdToIRI(classId);
@@ -1469,10 +1451,10 @@ public class OWLAPIObo2Owl {
     }
 
     /**
-     * Tr class.
+     * Translate class.
      * 
      * @param v the v
-     * @return the oWL class expression
+     * @return the OWL class expression
      */
     protected OWLClassExpression trClass(@Nonnull Object v) {
         return trClass((String) v);
@@ -1511,10 +1493,10 @@ public class OWLAPIObo2Owl {
     }
 
     /**
-     * Tr individual.
+     * Translate individual.
      * 
-     * @param instId the inst id
-     * @return the oWL individual
+     * @param instId the individual id
+     * @return the OWL individual
      */
     @Nonnull
     protected OWLIndividual trIndividual(@Nonnull String instId) {
@@ -1523,7 +1505,7 @@ public class OWLAPIObo2Owl {
     }
 
     /**
-     * Tr tag to iri.
+     * Translate tag to iri.
      * 
      * @param tag the tag
      * @return the iri
@@ -1537,15 +1519,24 @@ public class OWLAPIObo2Owl {
         return iri;
     }
 
+    @Nonnull
+    private IRI trTagToIRIIncludingTypedefs(String tag) {
+        IRI iri = ANNOTATIONPROPERTYMAP.get(tag);
+        if (iri == null) {
+            iri = oboIdToIRI(tag, true);
+        }
+        return iri;
+    }
+
     /**
-     * Tr tag to annotation prop.
+     * Translate tag to annotation prop.
      * 
      * @param tag the tag
-     * @return the oWL annotation property
+     * @return the OWL annotation property
      */
     @Nonnull
     protected OWLAnnotationProperty trTagToAnnotationProp(@Nonnull String tag) {
-        IRI iri = trTagToIRI(tag);
+        IRI iri = trTagToIRIIncludingTypedefs(tag);
         OWLAnnotationProperty ap = fac.getOWLAnnotationProperty(iri);
         if (!apToDeclare.contains(ap)) {
             apToDeclare.add(ap);
@@ -1572,10 +1563,10 @@ public class OWLAPIObo2Owl {
     }
 
     /**
-     * Tr annotation prop.
+     * Translate annotation prop.
      * 
-     * @param relId the rel id
-     * @return the oWL annotation property
+     * @param relId the relation id
+     * @return the OWL annotation property
      */
     @Nonnull
     protected OWLAnnotationProperty trAnnotationProp(@Nonnull String relId) {
@@ -1584,10 +1575,10 @@ public class OWLAPIObo2Owl {
     }
 
     /**
-     * Tr object prop.
+     * Translate object prop.
      * 
-     * @param relId the rel id
-     * @return the oWL object property
+     * @param relId the relation id
+     * @return the OWL object property
      */
     @Nonnull
     protected OWLObjectProperty trObjectProp(@Nonnull String relId) {
@@ -1596,10 +1587,10 @@ public class OWLAPIObo2Owl {
     }
 
     /**
-     * Tr object prop.
+     * Translate object prop.
      * 
      * @param v the v
-     * @return the oWL object property expression
+     * @return the OWL object property expression
      */
     @Nonnull
     protected OWLObjectPropertyExpression trObjectProp(@Nonnull Object v) {
@@ -1608,10 +1599,10 @@ public class OWLAPIObo2Owl {
     }
 
     /**
-     * Tr literal.
+     * Translate literal.
      * 
      * @param inputValue the value
-     * @return the oWL annotation value
+     * @return the OWL annotation value
      */
     @Nonnull
     protected OWLAnnotationValue trLiteral(@Nonnull Object inputValue) {
@@ -1643,12 +1634,21 @@ public class OWLAPIObo2Owl {
      */
     @Nonnull
     public IRI oboIdToIRI(@Nonnull String id) {
+        return oboIdToIRI(id, false);
+    }
+
+    private IRI oboIdToIRI(@Nonnull String id, boolean oboInOwlDefault) {
         IRI iri = idToIRICache.get(id);
         if (iri == null) {
-            iri = oboIdToIRI_load(id);
+            iri = oboIdToIRI_load(id, oboInOwlDefault);
             idToIRICache.put(id, iri);
         }
         return iri;
+    }
+
+    @Nonnull
+    public IRI oboIdToIRI_load(@Nonnull String id) {
+        return oboIdToIRI_load(id, false);
     }
 
     /**
@@ -1658,7 +1658,7 @@ public class OWLAPIObo2Owl {
      * @return the iri
      */
     @Nonnull
-    public IRI oboIdToIRI_load(@Nonnull String id) {
+    public IRI oboIdToIRI_load(@Nonnull String id, boolean oboInOwlDefault) {
         if (id.contains(" ")) {
             LOG.error("id contains space: \"{}\"", id);
             throw new OWLParserException("spaces not allowed: '" + id + '\'');
@@ -1676,6 +1676,23 @@ public class OWLAPIObo2Owl {
         } else if (id.startsWith("urn:")) {
             // TODO - roundtrip from other schemes
             return IRI.create(id);
+        } else if (id.startsWith("owl:") || id.startsWith("xsd:") || id.startsWith("rdf:")
+            || id.startsWith("rdfs:")) {
+            for (OWL2Datatype d : OWL2Datatype.values()) {
+                if (d.getPrefixedName().equals(id)) {
+                    return d.getIRI();
+                }
+            }
+            for (OWLRDFVocabulary d : OWLRDFVocabulary.values()) {
+                if (d.getPrefixedName().equals(id)) {
+                    return d.getIRI();
+                }
+            }
+            for (OWLXMLVocabulary d : OWLXMLVocabulary.values()) {
+                if (d.getPrefixedName().equals(id)) {
+                    return d.getIRI();
+                }
+            }
         }
         // TODO - treat_xrefs_as_equivalent
         // special case rule for relation xrefs:
@@ -1706,10 +1723,16 @@ public class OWLAPIObo2Owl {
             // if(id.contains("_"))
             // db += "_";
             localId = idParts[0];// Unprefixed-ID
+
         }
-        String uriPrefix = DEFAULT_IRI_PREFIX + db;
-        if (idSpaceMap.containsKey(db)) {
-            uriPrefix = idSpaceMap.get(db);
+        String uriPrefix;
+        if (oboInOwlDefault) {
+            uriPrefix = OIOVOCAB_IRI_PREFIX;
+        } else {
+            uriPrefix = DEFAULT_IRI_PREFIX + db;
+            if (idSpaceMap.containsKey(db)) {
+                uriPrefix = idSpaceMap.get(db);
+            }
         }
         String safeId;
         try {

@@ -49,76 +49,30 @@ import org.semanticweb.owlapi.model.OWLAnnotationProperty;
 import org.semanticweb.owlapi.model.OWLAnnotationPropertyDomainAxiom;
 import org.semanticweb.owlapi.model.OWLAnnotationPropertyRangeAxiom;
 import org.semanticweb.owlapi.model.OWLAnonymousIndividual;
-import org.semanticweb.owlapi.model.OWLAsymmetricObjectPropertyAxiom;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLClassAxiom;
-import org.semanticweb.owlapi.model.OWLDataAllValuesFrom;
-import org.semanticweb.owlapi.model.OWLDataComplementOf;
-import org.semanticweb.owlapi.model.OWLDataExactCardinality;
-import org.semanticweb.owlapi.model.OWLDataHasValue;
-import org.semanticweb.owlapi.model.OWLDataIntersectionOf;
-import org.semanticweb.owlapi.model.OWLDataMaxCardinality;
-import org.semanticweb.owlapi.model.OWLDataMinCardinality;
-import org.semanticweb.owlapi.model.OWLDataOneOf;
+import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLDataProperty;
 import org.semanticweb.owlapi.model.OWLDataPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLDataPropertyAxiom;
-import org.semanticweb.owlapi.model.OWLDataPropertyDomainAxiom;
-import org.semanticweb.owlapi.model.OWLDataPropertyRangeAxiom;
-import org.semanticweb.owlapi.model.OWLDataSomeValuesFrom;
-import org.semanticweb.owlapi.model.OWLDataUnionOf;
 import org.semanticweb.owlapi.model.OWLDatatype;
 import org.semanticweb.owlapi.model.OWLDatatypeDefinitionAxiom;
-import org.semanticweb.owlapi.model.OWLDatatypeRestriction;
-import org.semanticweb.owlapi.model.OWLDeclarationAxiom;
-import org.semanticweb.owlapi.model.OWLDifferentIndividualsAxiom;
-import org.semanticweb.owlapi.model.OWLDisjointClassesAxiom;
-import org.semanticweb.owlapi.model.OWLDisjointDataPropertiesAxiom;
-import org.semanticweb.owlapi.model.OWLDisjointObjectPropertiesAxiom;
-import org.semanticweb.owlapi.model.OWLDisjointUnionAxiom;
 import org.semanticweb.owlapi.model.OWLDocumentFormat;
 import org.semanticweb.owlapi.model.OWLEntity;
-import org.semanticweb.owlapi.model.OWLEquivalentClassesAxiom;
-import org.semanticweb.owlapi.model.OWLEquivalentDataPropertiesAxiom;
-import org.semanticweb.owlapi.model.OWLEquivalentObjectPropertiesAxiom;
-import org.semanticweb.owlapi.model.OWLFacetRestriction;
-import org.semanticweb.owlapi.model.OWLFunctionalDataPropertyAxiom;
-import org.semanticweb.owlapi.model.OWLFunctionalObjectPropertyAxiom;
-import org.semanticweb.owlapi.model.OWLHasKeyAxiom;
 import org.semanticweb.owlapi.model.OWLImportsDeclaration;
 import org.semanticweb.owlapi.model.OWLIndividual;
 import org.semanticweb.owlapi.model.OWLIndividualAxiom;
-import org.semanticweb.owlapi.model.OWLInverseFunctionalObjectPropertyAxiom;
-import org.semanticweb.owlapi.model.OWLInverseObjectPropertiesAxiom;
-import org.semanticweb.owlapi.model.OWLIrreflexiveObjectPropertyAxiom;
 import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.model.OWLLogicalAxiom;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLNamedObjectVisitor;
 import org.semanticweb.owlapi.model.OWLNamedObjectVisitorEx;
-import org.semanticweb.owlapi.model.OWLNegativeDataPropertyAssertionAxiom;
-import org.semanticweb.owlapi.model.OWLNegativeObjectPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLObject;
-import org.semanticweb.owlapi.model.OWLObjectAllValuesFrom;
-import org.semanticweb.owlapi.model.OWLObjectComplementOf;
-import org.semanticweb.owlapi.model.OWLObjectExactCardinality;
-import org.semanticweb.owlapi.model.OWLObjectHasSelf;
-import org.semanticweb.owlapi.model.OWLObjectHasValue;
-import org.semanticweb.owlapi.model.OWLObjectIntersectionOf;
-import org.semanticweb.owlapi.model.OWLObjectInverseOf;
-import org.semanticweb.owlapi.model.OWLObjectMaxCardinality;
-import org.semanticweb.owlapi.model.OWLObjectMinCardinality;
-import org.semanticweb.owlapi.model.OWLObjectOneOf;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
-import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLObjectPropertyAxiom;
-import org.semanticweb.owlapi.model.OWLObjectPropertyDomainAxiom;
 import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
-import org.semanticweb.owlapi.model.OWLObjectPropertyRangeAxiom;
-import org.semanticweb.owlapi.model.OWLObjectSomeValuesFrom;
-import org.semanticweb.owlapi.model.OWLObjectUnionOf;
 import org.semanticweb.owlapi.model.OWLObjectVisitor;
 import org.semanticweb.owlapi.model.OWLObjectVisitorEx;
 import org.semanticweb.owlapi.model.OWLOntology;
@@ -126,26 +80,7 @@ import org.semanticweb.owlapi.model.OWLOntologyID;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 import org.semanticweb.owlapi.model.OWLPrimitive;
-import org.semanticweb.owlapi.model.OWLReflexiveObjectPropertyAxiom;
-import org.semanticweb.owlapi.model.OWLSameIndividualAxiom;
 import org.semanticweb.owlapi.model.OWLSubAnnotationPropertyOfAxiom;
-import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
-import org.semanticweb.owlapi.model.OWLSubDataPropertyOfAxiom;
-import org.semanticweb.owlapi.model.OWLSubObjectPropertyOfAxiom;
-import org.semanticweb.owlapi.model.OWLSubPropertyChainOfAxiom;
-import org.semanticweb.owlapi.model.OWLSymmetricObjectPropertyAxiom;
-import org.semanticweb.owlapi.model.OWLTransitiveObjectPropertyAxiom;
-import org.semanticweb.owlapi.model.SWRLBuiltInAtom;
-import org.semanticweb.owlapi.model.SWRLClassAtom;
-import org.semanticweb.owlapi.model.SWRLDataPropertyAtom;
-import org.semanticweb.owlapi.model.SWRLDataRangeAtom;
-import org.semanticweb.owlapi.model.SWRLDifferentIndividualsAtom;
-import org.semanticweb.owlapi.model.SWRLIndividualArgument;
-import org.semanticweb.owlapi.model.SWRLLiteralArgument;
-import org.semanticweb.owlapi.model.SWRLObjectPropertyAtom;
-import org.semanticweb.owlapi.model.SWRLRule;
-import org.semanticweb.owlapi.model.SWRLSameIndividualAtom;
-import org.semanticweb.owlapi.model.SWRLVariable;
 import org.semanticweb.owlapi.model.parameters.AxiomAnnotations;
 import org.semanticweb.owlapi.model.parameters.ConfigurationOptions;
 import org.semanticweb.owlapi.model.parameters.Imports;
@@ -158,8 +93,6 @@ import org.semanticweb.owlapi.vocab.OWL2Datatype;
 import com.github.benmanes.caffeine.cache.CacheLoader;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
-import com.google.common.base.Optional;
-import com.google.common.collect.Iterables;
 
 /**
  * @author Matthew Horridge, The University Of Manchester, Bio-Health Informatics Group
@@ -176,15 +109,21 @@ public class OWLImmutableOntologyImpl extends OWLAxiomIndexImpl
     protected static LoadingCache<OWLImmutableOntologyImpl, Set<OWLClass>>              ontclassesSignatures =              build(key -> asCacheable(key.ints.get(OWLClass.class,               OWLAxiom.class).get().keySet()));
     protected static LoadingCache<OWLImmutableOntologyImpl, Set<OWLDataProperty>>       ontdataPropertySignatures =         build(key -> asCacheable(key.ints.get(OWLDataProperty.class,        OWLAxiom.class).get().keySet()));
     protected static LoadingCache<OWLImmutableOntologyImpl, Set<OWLObjectProperty>>     ontobjectPropertySignatures =       build(key -> asCacheable(key.ints.get(OWLObjectProperty.class,      OWLAxiom.class).get().keySet()));
-    protected static LoadingCache<OWLImmutableOntologyImpl, Set<OWLDatatype>>           ontdatatypeSignatures =             build(key -> asCacheable(key.ints.get(OWLDatatype.class,            OWLAxiom.class).get().keySet()));
+    protected static LoadingCache<OWLImmutableOntologyImpl, Set<OWLDatatype>>           ontdatatypeSignatures =             build(key -> asCacheable(Stream.concat(
+        key.ints.get(OWLDatatype.class, OWLAxiom.class).get().keySet().stream(), 
+        key.ints.getOntologyAnnotations(false).stream().flatMap(x->x.getDatatypesInSignature().stream())).collect(Collectors.toSet())));
     protected static LoadingCache<OWLImmutableOntologyImpl, Set<OWLNamedIndividual>>    ontindividualSignatures =           build(key -> asCacheable(key.ints.get(OWLNamedIndividual.class,     OWLAxiom.class).get().keySet()));
-    protected static LoadingCache<OWLImmutableOntologyImpl, Set<OWLAnnotationProperty>> ontannotationPropertiesSignatures = build(key -> asCacheable(Iterables.concat(
-        key.ints.get(OWLAnnotationProperty.class, OWLAxiom.class, Navigation.IN_SUB_POSITION).get().keySet(),
-        key.ints.getOntologyAnnotations(false).stream().flatMap(a->a.getAnnotationPropertiesInSignature().stream()).collect(Collectors.toSet()))));
+    protected static LoadingCache<OWLImmutableOntologyImpl, Set<OWLAnnotationProperty>> ontannotationPropertiesSignatures = build(key -> asCacheable(Stream.concat(
+        key.ints.get(OWLAnnotationProperty.class, OWLAxiom.class, Navigation.IN_SUB_POSITION).get().keySet().stream(),
+        key.ints.getOntologyAnnotations(false).stream().flatMap(a->a.getAnnotationPropertiesInSignature().stream())).collect(Collectors.toSet())));
     // @formatter:on
     static <Q, T> LoadingCache<Q, T> build(CacheLoader<Q, T> c) {
-        return Caffeine.newBuilder().maximumSize(ConfigurationOptions.CACHE_SIZE
-            .getValue(Integer.class, Collections.emptyMap()).longValue()).build(c);
+        return Caffeine.newBuilder().weakKeys().maximumSize(size()).build(c);
+    }
+
+    protected static long size() {
+        return ConfigurationOptions.CACHE_SIZE.getValue(Integer.class, Collections.emptyMap())
+            .longValue();
     }
 
     protected static void invalidateOntologyCaches(OWLImmutableOntologyImpl o) {
@@ -205,12 +144,13 @@ public class OWLImmutableOntologyImpl extends OWLAxiomIndexImpl
 
     private static Set<OWLEntity> build(OWLImmutableOntologyImpl key) {
         List<OWLEntity> stream = new ArrayList<>();
-        Iterables.addAll(stream, key.classesInSignature());
-        Iterables.addAll(stream, key.objectPropertiesInSignature());
-        Iterables.addAll(stream, key.dataPropertiesInSignature());
-        Iterables.addAll(stream, key.individualsInSignature());
-        Iterables.addAll(stream, key.datatypesInSignature());
-        Iterables.addAll(stream, key.annotationPropertiesInSignature());
+        key.classesInSignature().forEach(stream::add);
+        key.objectPropertiesInSignature().forEach(stream::add);
+        key.dataPropertiesInSignature().forEach(stream::add);
+        key.individualsInSignature().forEach(stream::add);
+        key.datatypesInSignature().forEach(stream::add);
+        key.annotationPropertiesInSignature().forEach(stream::add);
+        key.getAnnotations().stream().flatMap(x -> x.getSignature().stream()).forEach(stream::add);
         stream.sort(null);
         return new LinkedHashSet<>(stream);
     }
@@ -236,7 +176,7 @@ public class OWLImmutableOntologyImpl extends OWLAxiomIndexImpl
     }
 
     /**
-     * @param manager    ontology manager
+     * @param manager ontology manager
      * @param ontologyID ontology id
      */
     public OWLImmutableOntologyImpl(@Nonnull OWLOntologyManager manager,
@@ -256,9 +196,8 @@ public class OWLImmutableOntologyImpl extends OWLAxiomIndexImpl
         sb.append(" Logical Axioms: ");
         sb.append(ints.getLogicalAxiomCount());
         sb.append("] First 20 axioms: {");
-        for (OWLAxiom ax : Iterables.limit(ints.getAxioms(), 20)) {
-            sb.append(ax).append(' ');
-        }
+        sb.append(ints.getAxioms().stream().limit(20).map(Object::toString)
+            .collect(Collectors.joining(" ")));
         sb.append('}');
         return sb.toString();
     }
@@ -808,7 +747,18 @@ public class OWLImmutableOntologyImpl extends OWLAxiomIndexImpl
     public boolean containsEntityInSignature(@Nonnull OWLEntity owlEntity,
         Imports includeImportsClosure) {
         if (includeImportsClosure != INCLUDED) {
-            return ontsignatures.get(this).contains(owlEntity);
+            // Do not use the cached signature if it has not been created already.
+            // Creating the cache while this method is called during updates leads to very expensive
+            // lookups.
+            Set<OWLEntity> set = ontsignatures.getIfPresent(this);
+            if (set == null) {
+                if (ints.containsReference(owlEntity)) {
+                    return true;
+                }
+                return getAnnotations().stream()
+                    .anyMatch(a -> a.getSignature().contains(owlEntity));
+            }
+            return set.contains(owlEntity);
         }
         for (OWLOntology o : getImportsClosure()) {
             if (o.containsEntityInSignature(owlEntity, EXCLUDED)) {
@@ -870,20 +820,25 @@ public class OWLImmutableOntologyImpl extends OWLAxiomIndexImpl
         if (i instanceof Set) {
             // in this case we can use a list for the defensive copy
             List<T> list = new ArrayList<>();
-            Iterables.addAll(list, i);
+            i.forEach(list::add);
             return CollectionFactory.getCopyOnRequestSetFromImmutableCollection(list);
         }
         // if the input is not a set, we need to make sure there are no
         // duplicates
         Set<T> set = new HashSet<>();
-        Iterables.addAll(set, i);
+        i.forEach(set::add);
         return set;
     }
 
     @Nonnull
     private static <T> Set<T> asCacheable(Iterable<T> i) {
+        if (i instanceof List) {
+            List<T> list = (List<T>) i;
+            list.sort(null);
+            return CollectionFactory.getCopyOnRequestSetFromImmutableCollection(list);
+        }
         List<T> list = new ArrayList<>();
-        Iterables.addAll(list, i);
+        i.forEach(list::add);
         list.sort(null);
         if (i instanceof Set) {
             // in this case we can use a list for the defensive copy
@@ -892,7 +847,7 @@ public class OWLImmutableOntologyImpl extends OWLAxiomIndexImpl
         // if the input is not a set, we need to make sure there are no
         // duplicates
         Set<T> set = new LinkedHashSet<>();
-        Iterables.addAll(set, list);
+        list.forEach(set::add);
         return set;
     }
 
@@ -1321,7 +1276,7 @@ public class OWLImmutableOntologyImpl extends OWLAxiomIndexImpl
         @Nonnull Class<? extends OWLObject> explicitClass, @Nonnull OWLObject entity,
         @Nonnull Imports includeImports, @Nonnull Navigation forSubPosition) {
         if (includeImports == EXCLUDED) {
-            Optional<MapPointer<OWLObject, A>> optional =
+            java.util.Optional<MapPointer<OWLObject, A>> optional =
                 ints.get((Class<OWLObject>) explicitClass, type, forSubPosition);
             if (optional.isPresent()) {
                 return asSet(optional.get().getValues(entity));
@@ -1479,6 +1434,15 @@ public class OWLImmutableOntologyImpl extends OWLAxiomIndexImpl
     public void saveOntology(OWLDocumentFormat ontologyFormat,
         OWLOntologyDocumentTarget documentTarget) throws OWLOntologyStorageException {
         getOWLOntologyManager().saveOntology(this, ontologyFormat, documentTarget);
+    }
+
+    @Override
+    public Set<OWLClassAssertionAxiom> getClassAssertionAxioms(OWLClassExpression ce) {
+        if (ce.isAnonymous()) {
+            getAxioms(AxiomType.CLASS_ASSERTION).stream()
+                .filter(x -> x.getClassExpression().equals(ce)).collect(Collectors.toSet());
+        }
+        return super.getClassAssertionAxioms(ce);
     }
 
     @Override

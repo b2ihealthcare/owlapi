@@ -35,6 +35,7 @@ import org.semanticweb.owlapi.io.RDFNode;
 import org.semanticweb.owlapi.io.RDFResource;
 import org.semanticweb.owlapi.io.RDFResourceIRI;
 import org.semanticweb.owlapi.io.RDFTriple;
+import org.semanticweb.owlapi.io.XMLUtils;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.NodeID;
 import org.semanticweb.owlapi.model.OWLAnnotationProperty;
@@ -51,6 +52,7 @@ import org.semanticweb.owlapi.util.DefaultPrefixManager;
 import org.semanticweb.owlapi.util.EscapeUtils;
 import org.semanticweb.owlapi.util.VersionInfo;
 import org.semanticweb.owlapi.vocab.Namespaces;
+import org.semanticweb.owlapi.vocab.OWL2Datatype;
 import org.semanticweb.owlapi.vocab.XSDVocabulary;
 
 /**
@@ -67,6 +69,7 @@ public class TurtleRenderer extends RDFRendererBase {
     int bufferLength = 0;
     int lastNewLineIndex = 0;
     int level = 0;
+    private boolean explicitXsdString;
 
     /**
      * @param ontology ontology
@@ -76,15 +79,14 @@ public class TurtleRenderer extends RDFRendererBase {
     public TurtleRenderer(@Nonnull OWLOntology ontology, Writer writer, OWLDocumentFormat format) {
         super(ontology, format);
         this.format = checkNotNull(format, "format cannot be null");
+        explicitXsdString =
+            ((Boolean) format.getParameter("force xsd:string on literals", Boolean.FALSE))
+                .booleanValue();
         this.writer = new PrintWriter(writer);
         pm = new DefaultPrefixManager();
-        if (!ontology.isAnonymous()) {
-            String ontologyIRIString = ontology.getOntologyID().getOntologyIRI().get().toString();
-            String defaultPrefix = ontologyIRIString;
-            if (!ontologyIRIString.endsWith("/") && !ontologyIRIString.endsWith("#")) {
-                defaultPrefix = ontologyIRIString + '#';
-            }
-            pm.setDefaultPrefix(defaultPrefix);
+        if (!ontology.isAnonymous() && pm.getDefaultPrefix() == null) {
+            pm.setDefaultPrefix(XMLUtils.iriWithTerminatingHash(
+                ontology.getOntologyID().getOntologyIRI().get().toString()));
         }
         if (format instanceof PrefixDocumentFormat) {
             PrefixDocumentFormat prefixFormat = (PrefixDocumentFormat) format;
@@ -232,8 +234,14 @@ public class TurtleRenderer extends RDFRendererBase {
                 write(node.getLexicalValue());
             } else {
                 writeStringLiteral(node.getLexicalValue());
-                write("^^");
-                write(node.getDatatype());
+                if (node.hasLang()) {
+                    writeAt();
+                    write(node.getLang());
+                } else if (explicitXsdString
+                    || !OWL2Datatype.XSD_STRING.getIRI().equals(node.getDatatype())) {
+                    write("^^");
+                    write(node.getDatatype());
+                }
             }
         } else {
             writeStringLiteral(node.getLexicalValue());
@@ -273,7 +281,7 @@ public class TurtleRenderer extends RDFRendererBase {
                 writeSpace();
                 pushTab();
                 for (Iterator<RDFNode> it = list.iterator(); it.hasNext();) {
-                    write(verifyNotNull(it.next()));
+                    renderObject(verifyNotNull(it.next()));
                     if (it.hasNext()) {
                         writeNewLine();
                     }
@@ -293,11 +301,17 @@ public class TurtleRenderer extends RDFRendererBase {
         writeNamespaces();
         write("@base ");
         write("<");
+        String b = Namespaces.OWL.toString();
         if (!ontology.isAnonymous()) {
-            write(ontology.getOntologyID().getOntologyIRI().get().toString());
-        } else {
-            write(Namespaces.OWL.toString());
+            b = ontology.getOntologyID().getOntologyIRI().get().toString();
         }
+        if (format.isPrefixOWLOntologyFormat()) {
+            String prefix = format.asPrefixOWLOntologyFormat().getDefaultPrefix();
+            if (prefix != null) {
+                b = prefix;
+            }
+        }
+        write(b);
         write("> .\n\n");
         // Ontology URI
     }

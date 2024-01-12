@@ -126,8 +126,6 @@ public class MapPointer<K, V extends OWLAxiom> {
     }
 
     /**
-     * init the map pointer
-     * 
      * @return the map pointer
      */
     @SuppressWarnings({"unchecked", "null"})
@@ -166,10 +164,10 @@ public class MapPointer<K, V extends OWLAxiom> {
     }
 
     /**
-     * @return keyset
+     * @return key set
      */
     @Nonnull
-    public synchronized Iterable<K> keySet() {
+    public synchronized List<K> keySet() {
         init();
         List<K> keySet = new ArrayList<>();
         ObjectProcedure<K> predicate = keySet::add;
@@ -272,7 +270,7 @@ public class MapPointer<K, V extends OWLAxiom> {
      * @return all values contained
      */
     @Nonnull
-    public synchronized Iterable<V> getAllValues() {
+    public synchronized List<V> getAllValues() {
         init();
         return values();
     }
@@ -361,7 +359,7 @@ public class MapPointer<K, V extends OWLAxiom> {
     }
 
     @Nonnull
-    private Iterable<V> values() {
+    private List<V> values() {
         List<V> values = new ArrayList<>();
         ObjectProcedure<? super Collection<V>> p = values::addAll;
         map.values().forEach(p);

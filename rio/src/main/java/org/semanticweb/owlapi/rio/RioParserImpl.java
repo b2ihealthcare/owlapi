@@ -38,10 +38,14 @@ package org.semanticweb.owlapi.rio;
 import static org.semanticweb.owlapi.util.OWLAPIPreconditions.checkNotNull;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -50,19 +54,21 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
-import org.openrdf.model.Resource;
-import org.openrdf.model.Statement;
-import org.openrdf.model.ValueFactory;
-import org.openrdf.model.impl.ValueFactoryImpl;
-import org.openrdf.model.vocabulary.RDF;
-import org.openrdf.rio.RDFHandler;
-import org.openrdf.rio.RDFHandlerException;
-import org.openrdf.rio.RDFParseException;
-import org.openrdf.rio.RDFParser;
-import org.openrdf.rio.Rio;
-import org.openrdf.rio.UnsupportedRDFormatException;
-import org.openrdf.rio.helpers.BasicParserSettings;
-import org.openrdf.rio.helpers.StatementCollector;
+import org.eclipse.rdf4j.model.Resource;
+import org.eclipse.rdf4j.model.Statement;
+import org.eclipse.rdf4j.model.ValueFactory;
+import org.eclipse.rdf4j.model.impl.ValueFactoryImpl;
+import org.eclipse.rdf4j.model.vocabulary.RDF;
+import org.eclipse.rdf4j.rio.RDFHandler;
+import org.eclipse.rdf4j.rio.RDFHandlerException;
+import org.eclipse.rdf4j.rio.RDFParseException;
+import org.eclipse.rdf4j.rio.RDFParser;
+import org.eclipse.rdf4j.rio.Rio;
+import org.eclipse.rdf4j.rio.RioSetting;
+import org.eclipse.rdf4j.rio.UnsupportedRDFormatException;
+import org.eclipse.rdf4j.rio.helpers.BasicParserSettings;
+import org.eclipse.rdf4j.rio.helpers.StatementCollector;
+import org.eclipse.rdf4j.rio.helpers.XMLParserSettings;
 import org.semanticweb.owlapi.annotations.HasPriority;
 import org.semanticweb.owlapi.formats.RioRDFDocumentFormatFactory;
 import org.semanticweb.owlapi.io.AbstractOWLParser;
@@ -203,7 +209,7 @@ public class RioParserImpl extends AbstractOWLParser implements RioParser {
      * 
      * @param documentSource An {@link OWLOntologyDocumentSource} containing RDF statements.
      * @param baseUri The base URI to use when parsing the document source.
-     * @param handler rdf handler
+     * @param handler RDF handler
      * @throws UnsupportedRDFormatException If the document contains a format which is currently
      *         unsupported, based on the parsers that are currently available.
      * @throws IOException If there is an input/output exception while accessing the document
@@ -219,20 +225,45 @@ public class RioParserImpl extends AbstractOWLParser implements RioParser {
         final RDFParser createParser = Rio.createParser(owlFormatFactory.getRioFormat());
         createParser.getParserConfig().addNonFatalError(BasicParserSettings.VERIFY_DATATYPE_VALUES);
         createParser.getParserConfig().addNonFatalError(BasicParserSettings.VERIFY_LANGUAGE_TAGS);
+        createParser.getParserConfig().addNonFatalError(XMLParserSettings.DISALLOW_DOCTYPE_DECL);
+        createParser.getParserConfig().set(XMLParserSettings.DISALLOW_DOCTYPE_DECL, Boolean.FALSE);
+        addParametersIfPresent(documentSource, createParser);
         createParser.setRDFHandler(handler);
         long rioParseStart = System.currentTimeMillis();
         if (owlFormatFactory.isTextual() && documentSource.isReaderAvailable()) {
-            createParser.parse(documentSource.getReader(), baseUri);
+            try (Reader reader = documentSource.getReader()) {
+                createParser.parse(reader, baseUri);
+            }
         } else if (documentSource.isInputStreamAvailable()) {
-            createParser.parse(documentSource.getInputStream(), baseUri);
+            try (InputStream inputStream = documentSource.getInputStream()) {
+                createParser.parse(inputStream, baseUri);
+            }
         } else {
             URL url = URI.create(documentSource.getDocumentIRI().toString()).toURL();
             URLConnection conn = url.openConnection();
-            createParser.parse(conn.getInputStream(), baseUri);
+            try (InputStream inputStream = conn.getInputStream()) {
+                createParser.parse(inputStream, baseUri);
+            }
         }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("rioParse: timing={}",
                 Long.valueOf(System.currentTimeMillis() - rioParseStart));
+        }
+    }
+
+    // These warnings are suppressed because the types cannot be easily determined here without
+    // forcing constraints that might need to be updated when Rio introduces new settings.
+    @SuppressWarnings({"null", "rawtypes", "unchecked"})
+    protected void addParametersIfPresent(OWLOntologyDocumentSource documentSource,
+        RDFParser createParser) {
+        Collection<RioSetting<?>> supportedSettings = createParser.getSupportedSettings();
+        if (documentSource.getFormat() != null && !supportedSettings.isEmpty()) {
+            for (RioSetting r : supportedSettings) {
+                Serializable v = documentSource.getFormat().getParameter(r, null);
+                if (v != null) {
+                    createParser.getParserConfig().set(r, v);
+                }
+            }
         }
     }
 

@@ -6,6 +6,7 @@ import static org.semanticweb.owlapi.util.OWLAPIPreconditions.verifyNotNull;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -13,6 +14,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -81,14 +83,12 @@ import org.semanticweb.owlapi.model.OWLSubObjectPropertyOfAxiom;
 import org.semanticweb.owlapi.model.OWLSubPropertyChainOfAxiom;
 import org.semanticweb.owlapi.model.OWLSymmetricObjectPropertyAxiom;
 import org.semanticweb.owlapi.model.OWLTransitiveObjectPropertyAxiom;
+import org.semanticweb.owlapi.rdf.rdfxml.parser.RDFConstants;
 import org.semanticweb.owlapi.vocab.Namespaces;
 import org.semanticweb.owlapi.vocab.OWL2Datatype;
 import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.base.Optional;
-import com.google.common.collect.Sets;
 
 /**
  * The Class OWLAPIOwl2Obo.
@@ -112,8 +112,12 @@ public class OWLAPIOwl2Obo {
      * The absoulte url pattern.
      */
     protected final Pattern absoulteURLPattern = Pattern.compile("<\\s*http.*?>");
-    private static final Set<String> SKIPPED_QUALIFIERS = Sets.newHashSet("gci_relation",
-        "gci_filler", "cardinality", MIN_CARDINALITY, MAX_CARDINALITY, "all_some", "all_only");
+	// RDF_TYPE added to guard against scenario when a syntactic triple is
+	// accidentally interpreted as an annotation.
+	// See https://github.com/ontodev/robot/issues/1089 for context
+    private static final Set<String> SKIPPED_QUALIFIERS =
+        new HashSet<>(Arrays.asList("gci_relation", "gci_filler", "cardinality", MIN_CARDINALITY,
+            MAX_CARDINALITY, "all_some", "all_only", RDFConstants.RDF_TYPE));
     /**
      * The manager.
      */
@@ -174,7 +178,7 @@ public class OWLAPIOwl2Obo {
     }
 
     /**
-     * Instantiates a new oWLAPI owl2 obo.
+     * Instantiates a new OWLAPI owl2 obo.
      * 
      * @param translationManager the translation manager
      */
@@ -220,7 +224,7 @@ public class OWLAPIOwl2Obo {
     /**
      * Checks if is discard untranslatable.
      * 
-     * @return the discardUntranslatable
+     * @return the discard untranslatable flag
      */
     public boolean isDiscardUntranslatable() {
         return discardUntranslatable;
@@ -229,7 +233,7 @@ public class OWLAPIOwl2Obo {
     /**
      * Sets the discard untranslatable.
      * 
-     * @param discardUntranslatable the discardUntranslatable to set
+     * @param discardUntranslatable the value for discard untranslatable to set
      */
     public void setDiscardUntranslatable(boolean discardUntranslatable) {
         this.discardUntranslatable = discardUntranslatable;
@@ -275,8 +279,8 @@ public class OWLAPIOwl2Obo {
     /**
      * Convert.
      * 
-     * @param ont the ont
-     * @return the oBO doc
+     * @param ont the ontology
+     * @return the OBO doc
      */
     @Nonnull
     public OBODoc convert(@Nonnull OWLOntology ont) {
@@ -294,16 +298,14 @@ public class OWLAPIOwl2Obo {
     /**
      * Gets the untranslatable axioms.
      * 
-     * @return the untranslatableAxioms
+     * @return the untranslatable axioms
      */
     public Collection<OWLAxiom> getUntranslatableAxioms() {
         return untranslatableAxioms;
     }
 
     /**
-     * Tr.
-     * 
-     * @return the oBO doc
+     * @return the OBO doc
      */
     @Nonnull
     protected OBODoc tr() {
@@ -385,7 +387,7 @@ public class OWLAPIOwl2Obo {
     }
 
     /**
-     * Pre process.
+     * Preprocess.
      */
     @SuppressWarnings("null")
     protected void preProcess() {
@@ -450,7 +452,7 @@ public class OWLAPIOwl2Obo {
     }
 
     /**
-     * Tr object property.
+     * Translate object property.
      * 
      * @param prop the prop
      * @param tag the tag
@@ -483,7 +485,7 @@ public class OWLAPIOwl2Obo {
     }
 
     /**
-     * Tr object property.
+     * Translate object property.
      * 
      * @param prop the prop
      * @param tag the tag
@@ -505,7 +507,7 @@ public class OWLAPIOwl2Obo {
     }
 
     /**
-     * Tr nary property axiom.
+     * Translate nary property axiom.
      * 
      * @param ax the ax
      * @param tag the tag
@@ -540,7 +542,7 @@ public class OWLAPIOwl2Obo {
     }
 
     /**
-     * Tr.
+     * Translate axiom.
      * 
      * @param ax the ax
      */
@@ -601,7 +603,7 @@ public class OWLAPIOwl2Obo {
     }
 
     /**
-     * Tr.
+     * Translate axiom.
      * 
      * @param ax the ax
      */
@@ -610,7 +612,7 @@ public class OWLAPIOwl2Obo {
     }
 
     /**
-     * Tr.
+     * Translate axiom.
      * 
      * @param ax the ax
      */
@@ -624,7 +626,7 @@ public class OWLAPIOwl2Obo {
     }
 
     /**
-     * Tr.
+     * Translate axiom.
      * 
      * @param ax the ax
      */
@@ -633,7 +635,7 @@ public class OWLAPIOwl2Obo {
     }
 
     /**
-     * Tr.
+     * Translate axiom.
      * 
      * @param ax the ax
      */
@@ -647,7 +649,7 @@ public class OWLAPIOwl2Obo {
     }
 
     /**
-     * Tr.
+     * Translate axiom.
      * 
      * @param ax the ax
      */
@@ -661,7 +663,7 @@ public class OWLAPIOwl2Obo {
     }
 
     /**
-     * Tr.
+     * Translate axiom.
      * 
      * @param ax the ax
      */
@@ -677,7 +679,7 @@ public class OWLAPIOwl2Obo {
     }
 
     /**
-     * Tr.
+     * Translate axiom.
      * 
      * @param ax the ax
      */
@@ -710,7 +712,7 @@ public class OWLAPIOwl2Obo {
     }
 
     /**
-     * Tr.
+     * Translate axiom.
      * 
      * @param ax the ax
      */
@@ -724,7 +726,7 @@ public class OWLAPIOwl2Obo {
     }
 
     /**
-     * Tr.
+     * Translate axiom.
      * 
      * @param ax the ax
      */
@@ -738,7 +740,7 @@ public class OWLAPIOwl2Obo {
     }
 
     /**
-     * Tr.
+     * Translate axiom.
      * 
      * @param ax the ax
      */
@@ -752,7 +754,7 @@ public class OWLAPIOwl2Obo {
     }
 
     /**
-     * Tr.
+     * Translate axiom.
      * 
      * @param ax the ax
      */
@@ -875,23 +877,23 @@ public class OWLAPIOwl2Obo {
     }
 
     /**
-     * Tr.
+     * Translate axiom.
      * 
-     * @param aanAx the aan ax
+     * @param ax annotation assertion axiom
      * @param frame the frame
      */
-    protected void tr(@Nonnull OWLAnnotationAssertionAxiom aanAx, @Nonnull Frame frame) {
-        boolean success = tr(aanAx.getProperty(), aanAx.getValue(), aanAx.getAnnotations(), frame);
+    protected void tr(@Nonnull OWLAnnotationAssertionAxiom ax, @Nonnull Frame frame) {
+        boolean success = tr(ax.getProperty(), ax.getValue(), ax.getAnnotations(), frame);
         if (!success) {
-            untranslatableAxioms.add(aanAx);
+            untranslatableAxioms.add(ax);
         }
     }
 
     /**
-     * Tr.
+     * Translate annotation.
      * 
      * @param prop the prop
-     * @param annVal the ann val
+     * @param annVal annotation value
      * @param qualifiers the qualifiers
      * @param frame the frame
      * @return true, if successful
@@ -1068,10 +1070,10 @@ public class OWLAPIOwl2Obo {
     }
 
     /**
-     * Tr generic property value.
+     * Translate generic property value.
      * 
      * @param prop the prop
-     * @param annVal the ann val
+     * @param annVal annotation value
      * @param qualifiers the qualifiers
      * @param frame the frame
      * @return true, if successful
@@ -1112,7 +1114,7 @@ public class OWLAPIOwl2Obo {
     /**
      * Gets the value.
      * 
-     * @param annVal the ann val
+     * @param annVal annotation value
      * @param tag the tag
      * @return the value
      */
@@ -1177,21 +1179,19 @@ public class OWLAPIOwl2Obo {
      * @return The OBO ID of the ontology
      */
     public static String getOntologyId(OWLOntology ontology) {
-        Optional<IRI> ontologyIRI = ontology.getOntologyID().getOntologyIRI();
-        if (!ontologyIRI.isPresent()) {
+        if (!ontology.getOntologyID().getOntologyIRI().isPresent()) {
             return "";
         }
-        return getOntologyId(ontologyIRI.get());
+        return getOntologyId(ontology.getOntologyID().getOntologyIRI().get());
     }
 
     /**
      * Gets the ontology id.
      * 
-     * @param iriObj the iri obj
+     * @param iriObj the iri
      * @return the ontology id
      */
     public static String getOntologyId(@Nonnull IRI iriObj) {
-        // String id = getIdentifier(ontology.getOntologyID().getOntologyIRI());
         String iri = iriObj.toString();
         String id;
         if (iri.startsWith("http://purl.obolibrary.org/obo/")) {
@@ -1202,12 +1202,6 @@ public class OWLAPIOwl2Obo {
         } else {
             id = iri;
         }
-        // int index = iri.lastIndexOf("/");
-        // id = iri.substring(index+1);
-        // index = id.lastIndexOf(".owl");
-        // if(index>0){
-        // id = id.substring(0, index);
-        // }
         return id;
     }
 
@@ -1220,9 +1214,9 @@ public class OWLAPIOwl2Obo {
     @Nullable
     public static String getDataVersion(@Nonnull OWLOntology ontology) {
         String oid = getOntologyId(ontology);
-        Optional<IRI> v = ontology.getOntologyID().getVersionIRI();
-        if (v.isPresent()) {
-            String vs = v.get().toString().replace("http://purl.obolibrary.org/obo/", "");
+        if (ontology.getOntologyID().getVersionIRI().isPresent()) {
+            String vs = ontology.getOntologyID().getVersionIRI().get().toString()
+                .replace("http://purl.obolibrary.org/obo/", "");
             vs = vs.replaceFirst(oid + '/', "");
             vs = vs.replace('/' + oid + ".owl", "");
             return vs;
@@ -1231,7 +1225,7 @@ public class OWLAPIOwl2Obo {
     }
 
     /**
-     * Tr.
+     * Translate ontology.
      * 
      * @param ontology the ontology
      */
@@ -1266,7 +1260,7 @@ public class OWLAPIOwl2Obo {
     }
 
     /**
-     * Tr.
+     * Translate axiom.
      * 
      * @param ax the ax
      */
@@ -1455,7 +1449,7 @@ public class OWLAPIOwl2Obo {
     }
 
     /**
-     * Tr.
+     * Translate axiom.
      * 
      * @param ax the ax
      */
@@ -1491,7 +1485,7 @@ public class OWLAPIOwl2Obo {
     }
 
     /**
-     * Tr.
+     * Translate axiom.
      * 
      * @param axiom the axiom
      */
@@ -1568,7 +1562,7 @@ public class OWLAPIOwl2Obo {
     }
 
     /**
-     * Helper class: allow to return two values for the alt id check.
+     * Helper class: allow to return two values for the alternate id check.
      */
     private static class OboAltIdCheckResult {
 
@@ -1603,23 +1597,20 @@ public class OWLAPIOwl2Obo {
                 isDeprecated = true;
             } else if (Obo2OWLConstants.IRI_IAO_0000231.equals(prop.getIRI())) {
                 OWLAnnotationValue value = axiom.getValue();
-                Optional<IRI> asIRI = value.asIRI();
-                if (asIRI.isPresent()) {
-                    isMerged = Obo2OWLConstants.IRI_IAO_0000227.equals(asIRI.get());
+                if (value.asIRI().isPresent()) {
+                    isMerged = Obo2OWLConstants.IRI_IAO_0000227.equals(value.asIRI().get());
                 } else {
                     unrelatedAxioms.add(axiom);
                 }
             } else if (Obo2OWLVocabulary.IRI_IAO_0100001.iri.equals(prop.getIRI())) {
                 OWLAnnotationValue value = axiom.getValue();
-                Optional<OWLLiteral> asLiteral = value.asLiteral();
-                if (asLiteral.isPresent()) {
-                    replacedBy = asLiteral.get().getLiteral();
+                if (value.asLiteral().isPresent()) {
+                    replacedBy = value.asLiteral().get().getLiteral();
                 } else {
                     // fallback: also check for an IRI
-                    Optional<IRI> asIRI = value.asIRI();
-                    if (asIRI.isPresent()) {
+                    if (value.asIRI().isPresent()) {
                         // translate IRI to OBO style ID
-                        replacedBy = getIdentifier(asIRI.get());
+                        replacedBy = getIdentifier(value.asIRI().get());
                     } else {
                         unrelatedAxioms.add(axiom);
                     }
@@ -1632,7 +1623,7 @@ public class OWLAPIOwl2Obo {
         if (replacedBy != null && isMerged && isDeprecated) {
             result = Optional.of(new OboAltIdCheckResult(replacedBy, unrelatedAxioms));
         } else {
-            result = Optional.absent();
+            result = Optional.empty();
         }
         return result;
     }
@@ -1640,7 +1631,7 @@ public class OWLAPIOwl2Obo {
     /**
      * Gets the identifier.
      * 
-     * @param obj the obj
+     * @param obj the object
      * @return the identifier
      */
     @Nullable
@@ -1845,7 +1836,7 @@ public class OWLAPIOwl2Obo {
     /**
      * Owl object to tag.
      * 
-     * @param obj the obj
+     * @param obj the object
      * @return the string
      */
     @Nullable
@@ -1862,7 +1853,7 @@ public class OWLAPIOwl2Obo {
         String iri = iriObj.toString();
         String tag = ANNOTATIONPROPERTYMAP.get(iri);
         if (tag == null) {
-            // hardcoded values for legacy annotation properties: (TEMPORARY)
+            // hard coded values for legacy annotation properties: (TEMPORARY)
             if (iri.startsWith(Obo2OWLConstants.DEFAULT_IRI_PREFIX + "IAO_")) {
                 String legacyId = iri.replace(Obo2OWLConstants.DEFAULT_IRI_PREFIX, "");
                 if (legacyId.equals("IAO_xref")) {
@@ -1878,6 +1869,8 @@ public class OWLAPIOwl2Obo {
             String prefix = Obo2OWLConstants.OIOVOCAB_IRI_PREFIX;
             if (iri.startsWith(prefix)) {
                 tag = iri.substring(prefix.length());
+            } else {
+                tag = getIdentifier(iriObj);
             }
         }
         return tag;
@@ -1928,7 +1921,7 @@ public class OWLAPIOwl2Obo {
     }
 
     /**
-     * Tr.
+     * Translate axiom.
      * 
      * @param ax the ax
      */
@@ -1997,7 +1990,7 @@ public class OWLAPIOwl2Obo {
     }
 
     /**
-     * Tr.
+     * Translate axiom.
      * 
      * @param ax the ax
      */

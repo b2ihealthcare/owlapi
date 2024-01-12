@@ -25,6 +25,12 @@ treat-xrefs-as-genus-differentia: CL part_of NCBITaxon:33090
 treat-xrefs-as-is_a: CARO
 import: http://purl.obolibrary.org/obo/po/imports/ncbitaxon_import.owl
 ontology: po
+property_value: dc-contributor https://orcid.org/0000-0001-5889-4463
+property_value: dc-description "This is a sample ontology." xsd:string
+property_value: dc-publisher http://po.org
+property_value: dc-source "aggregates AAO from 13:04:2012" xsd:string
+property_value: dc-source http://dbpedia.org
+property_value: has_ontology_root_term UBERON:0000104
 
 [Term]
 id: PO:0000001
@@ -36,6 +42,12 @@ synonym: "embri&#243foro (Spanish, exact)" EXACT Spanish [POC:Maria_Alejandra_Ga
 synonym: "胚本体 (Japanese, exact)" EXACT Japanese [NIG:Yukiko_Yamazaki]
 xref: PO_GIT:246
 customTag: custom value
+property_value: dc-source http://purl.obolibrary.org/obo/aao.owl
+property_value: dc-source "ISBN:0030229073 Invertebrate Zoology, Barnes" xsd:string
+property_value: depicted_by http://upload.wikimedia.org/wikipedia/commons/4/41/Parts_of_feather_modified.jpg
+property_value: has_ontology_root_term UBERON:0000104
+property_value: seeAlso http://xkcd.com/1104/
+property_value: structure_notes "Some notes" xsd:string
 
 [Term]
 id: PO:0000002

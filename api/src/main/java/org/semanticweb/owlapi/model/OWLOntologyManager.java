@@ -31,7 +31,7 @@ import org.semanticweb.owlapi.util.PriorityCollection;
 /**
  * An {@code OWLOntologyManager} manages a set of ontologies. It is the main point for creating,
  * loading and accessing ontologies. <br>
- * An {@code OWLOntologyManager} also manages the mapping betweem an ontology and its ontology
+ * An {@code OWLOntologyManager} also manages the mapping between an ontology and its ontology
  * document.
  * 
  * @author Matthew Horridge, The University Of Manchester, Bio-Health Informatics Group
@@ -153,10 +153,11 @@ public interface OWLOntologyManager extends OWLOntologySetProvider, HasDataFacto
      * relation.
      * 
      * @param ontology The ontology whose imports are to be retrieved.
-     * @return A set of {@code OWLOntology}ies that are in the transitive closure of the directly
-     *         imports relation of this ontology. If, for what ever reason, an imported ontology
-     *         could not be loaded, then it will not be contained in the returned set of ontologies.
-     *         If the ontology is not managed by this manager then the empty set will be returned.
+     * @return A set of {@code OWLOntology} instances that are in the transitive closure of the
+     *         directly imports relation of this ontology. If, for what ever reason, an imported
+     *         ontology could not be loaded, then it will not be contained in the returned set of
+     *         ontologies. If the ontology is not managed by this manager then the empty set will be
+     *         returned.
      */
     @Nonnull
     Set<OWLOntology> getImports(@Nonnull OWLOntology ontology);
@@ -335,14 +336,14 @@ public interface OWLOntologyManager extends OWLOntologySetProvider, HasDataFacto
 
     /**
      * Copy an ontology from another manager to this one. The returned OWLOntology will return this
-     * manager when getOWLOntologyManager() is invoked. The copy mode is defined by the OntologyCopy
-     * parameter: SHALLOW for simply creating a new ontology containing the same axioms and same id,
-     * DEEP for copying actoss format and document IRI, MOVE to remove the ontology from its
-     * previous manager.
+     * manager when {@link OWLOntology#getOWLOntologyManager()} is invoked. The copy mode is defined
+     * by the {@link OntologyCopy} parameter: SHALLOW for simply creating a new ontology containing
+     * the same axioms and same id, DEEP for copying across format and document IRI, MOVE to remove
+     * the ontology from its previous manager.
      * 
      * @param toCopy ontology to copy
      * @param settings settings for the copy
-     * @return copied ontology. This is the same object as toCopy only for MOVE copies
+     * @return copied ontology. This is the same object as {@code toCopy} only for MOVE copies
      * @throws OWLOntologyCreationException if this manager cannot add the new ontology
      */
     @Nonnull
@@ -376,7 +377,7 @@ public interface OWLOntologyManager extends OWLOntologySetProvider, HasDataFacto
      *         {@code OWLOntologyCreationException} which contains information about why the import
      *         could not be loaded.
      * @throws org.semanticweb.owlapi.io.OWLOntologyCreationIOException if there was an
-     *         {@code IOException} when trying to load the ontology.
+     *         {@link java.io.IOException} when trying to load the ontology.
      * @throws OWLOntologyAlreadyExistsException if the manager already contains an ontology with
      *         the specified {@code ontologyIRI} (where the ontology doesn't have a version IRI).
      * @throws OWLOntologyDocumentAlreadyExistsException if the specified {@code ontologyIRI} is
@@ -405,7 +406,7 @@ public interface OWLOntologyManager extends OWLOntologySetProvider, HasDataFacto
      *         {@code OWLOntologyCreationException} which contains information about why the import
      *         could not be loaded.
      * @throws org.semanticweb.owlapi.io.OWLOntologyCreationIOException if there was an
-     *         {@code IOException} when trying to load the ontology.
+     *         {@link java.io.IOException} when trying to load the ontology.
      * @throws OWLOntologyDocumentAlreadyExistsException if the specified {@code documentIRI} is
      *         already the document IRI for a loaded ontology.
      * @throws OWLOntologyAlreadyExistsException if the manager already contains an ontology whose
@@ -435,7 +436,7 @@ public interface OWLOntologyManager extends OWLOntologySetProvider, HasDataFacto
      *         {@code OWLOntologyCreationException} which contains information about why the import
      *         could not be loaded.
      * @throws org.semanticweb.owlapi.io.OWLOntologyCreationIOException if there was an
-     *         {@code IOException} when trying to load the ontology.
+     *         {@link java.io.IOException} when trying to load the ontology.
      * @throws OWLOntologyDocumentAlreadyExistsException if the IRI of the specified file is already
      *         the document IRI for a loaded ontology.
      * @throws OWLOntologyAlreadyExistsException if the manager already contains an ontology whose
@@ -466,7 +467,7 @@ public interface OWLOntologyManager extends OWLOntologySetProvider, HasDataFacto
      *         {@code OWLOntologyCreationException} which contains information about why the import
      *         could not be loaded.
      * @throws org.semanticweb.owlapi.io.OWLOntologyCreationIOException if there was an
-     *         {@code IOException} when trying to load the ontology.
+     *         {@link java.io.IOException} when trying to load the ontology.
      * @throws OWLOntologyAlreadyExistsException if the manager already contains an ontology whose
      *         ontology IRI and version IRI is the same as the ontology IRI and version IRI of the
      *         ontology obtained from parsing the content of the input stream.
@@ -494,7 +495,7 @@ public interface OWLOntologyManager extends OWLOntologySetProvider, HasDataFacto
      *         {@code OWLOntologyCreationException} which contains information about why the import
      *         could not be loaded.
      * @throws org.semanticweb.owlapi.io.OWLOntologyCreationIOException if there was an
-     *         {@code IOException} when trying to load the ontology.
+     *         {@link java.io.IOException} when trying to load the ontology.
      * @throws OWLOntologyDocumentAlreadyExistsException if the document IRI of the input source is
      *         already the document IRI for a loaded ontology.
      * @throws OWLOntologyAlreadyExistsException if the manager already contains an ontology whose
@@ -525,7 +526,7 @@ public interface OWLOntologyManager extends OWLOntologySetProvider, HasDataFacto
      *         {@code OWLOntologyCreationException} which contains information about why the import
      *         could not be loaded.
      * @throws org.semanticweb.owlapi.io.OWLOntologyCreationIOException if there was an
-     *         {@code IOException} when trying to load the ontology.
+     *         {@link java.io.IOException} when trying to load the ontology.
      * @throws OWLOntologyDocumentAlreadyExistsException if the document IRI of the input source is
      *         already the document IRI for a loaded ontology.
      * @throws OWLOntologyAlreadyExistsException if the manager already contains an ontology whose
@@ -699,7 +700,7 @@ public interface OWLOntologyManager extends OWLOntologySetProvider, HasDataFacto
      * Add an IRI mapper to the manager
      * 
      * @param mapper the mapper to add
-     * @deprecated use getIRIMappers().add() instead
+     * @deprecated use {@code getIRIMappers().add()} instead
      */
     @Deprecated
     void addIRIMapper(@Nonnull OWLOntologyIRIMapper mapper);
@@ -708,7 +709,7 @@ public interface OWLOntologyManager extends OWLOntologySetProvider, HasDataFacto
      * Remove an IRI mapper from the manager
      * 
      * @param mapper the mapper to remove
-     * @deprecated use getIRIMappers().remove() instead
+     * @deprecated use {@code getIRIMappers().remove()} instead
      */
     @Deprecated
     void removeIRIMapper(@Nonnull OWLOntologyIRIMapper mapper);
@@ -716,16 +717,16 @@ public interface OWLOntologyManager extends OWLOntologySetProvider, HasDataFacto
     /**
      * Clear the manager mappers
      * 
-     * @deprecated use getIRIMappers().clear() instead
+     * @deprecated use {@code getIRIMappers().clear()} instead
      */
     @Deprecated
     void clearIRIMappers();
 
     /**
-     * Add astorer to the manager
+     * Add a storer to the manager
      * 
      * @param storer the storer to add
-     * @deprecated use getOntologyStorers().add() instead
+     * @deprecated use {@code getOntologyStorers().add()} instead
      */
     @Deprecated
     void addOntologyStorer(@Nonnull OWLStorerFactory storer);
@@ -734,7 +735,7 @@ public interface OWLOntologyManager extends OWLOntologySetProvider, HasDataFacto
      * Remove a storer from the manager
      * 
      * @param storer the storer to remove
-     * @deprecated use getOntologyStorers().remove() instead
+     * @deprecated use {@code getOntologyStorers().remove()} instead
      */
     @Deprecated
     void removeOntologyStorer(@Nonnull OWLStorerFactory storer);
@@ -742,7 +743,7 @@ public interface OWLOntologyManager extends OWLOntologySetProvider, HasDataFacto
     /**
      * Clear the manager storers
      * 
-     * @deprecated use getOntologyStorers().clear() instead
+     * @deprecated use {@code getOntologyStorers().clear()} instead
      */
     @Deprecated
     void clearOntologyStorers();

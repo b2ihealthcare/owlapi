@@ -46,9 +46,9 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
 
-import org.openrdf.model.ValueFactory;
-import org.openrdf.rio.RDFHandler;
-import org.openrdf.rio.helpers.RDFParserBase;
+import org.eclipse.rdf4j.model.ValueFactory;
+import org.eclipse.rdf4j.rio.RDFHandler;
+import org.eclipse.rdf4j.rio.helpers.RDFParserBase;
 import org.semanticweb.owlapi.io.OWLOntologyDocumentSource;
 import org.semanticweb.owlapi.io.ReaderDocumentSource;
 import org.semanticweb.owlapi.io.StreamDocumentSource;
@@ -103,6 +103,8 @@ public class RioOWLRDFParser extends RDFParserBase {
     @Override
     public void parse(InputStream in, String baseURI) throws IOException {
         OWLDocumentFormat nextFormat = getRDFFormat().getOWLFormat();
+        // input stream closed in the caller
+        @SuppressWarnings("resource")
         StreamDocumentSource source =
             new StreamDocumentSource(checkNotNull(in, "in cannot be null"),
                 IRI.create(checkNotNull(baseURI, "baseURI cannot be null")), nextFormat,
@@ -134,6 +136,8 @@ public class RioOWLRDFParser extends RDFParserBase {
     @Override
     public void parse(Reader reader, String baseURI) throws IOException {
         OWLDocumentFormat nextFormat = getRDFFormat().getOWLFormat();
+        // reader closed in the caller
+        @SuppressWarnings("resource")
         ReaderDocumentSource source =
             new ReaderDocumentSource(checkNotNull(reader, "reader cannot be null"),
                 IRI.create(checkNotNull(baseURI, "baseURI cannot be null")), nextFormat,

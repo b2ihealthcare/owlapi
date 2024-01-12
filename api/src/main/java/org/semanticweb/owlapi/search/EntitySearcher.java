@@ -52,7 +52,6 @@ import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLPropertyExpression;
 import org.semanticweb.owlapi.model.parameters.AxiomAnnotations;
-import org.semanticweb.owlapi.model.parameters.Imports;
 import org.semanticweb.owlapi.util.OWLAxiomSearchFilter;
 
 import com.google.common.collect.LinkedListMultimap;
@@ -60,21 +59,20 @@ import com.google.common.collect.Multimap;
 
 /**
  * Convenience methods moved from OWLEntity and its subinterfaces.
- * 
+ *
  * @author ignazio
  */
 public class EntitySearcher {
 
     /**
-     * Gets the annotations for this entity. These are deemed to be annotations in annotation
-     * assertion axioms that have a subject that is an IRI that is equal to the IRI of this entity,
-     * and it also includes annotations on the annotation assertion axioms whose annotation property
-     * matches
-     * 
+     * Gets the annotations for e. These are deemed to be annotations in annotation assertion axioms
+     * that have a subject that is an IRI that is equal to the IRI of e, and it also includes
+     * annotations on the annotation assertion axioms whose annotation property matches
+     *
      * @param e entity
      * @param ontology The ontology to be examined for annotation assertion axioms
      * @return The annotations that participate directly in an annotation assertion whose subject is
-     *         an IRI corresponding to the IRI of this entity.
+     *         an IRI corresponding to the IRI of e.
      */
     @Nonnull
     public static Collection<OWLAnnotation> getAnnotations(@Nonnull OWLEntity e,
@@ -83,15 +81,14 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the annotations for this entity. These are deemed to be annotations in annotation
-     * assertion axioms that have a subject that is an IRI that is equal to the IRI of this entity,
-     * and it also includes annotations on the annotation assertion axioms whose annotation property
-     * matches.
-     * 
+     * Gets the annotations for e. These are deemed to be annotations in annotation assertion axioms
+     * that have a subject that is an IRI that is equal to the IRI of e, and it also includes
+     * annotations on the annotation assertion axioms whose annotation property matches.
+     *
      * @param e entity
      * @param ontology The ontology to be examined for annotation assertion axioms
      * @return The annotations that participate directly in an annotation assertion whose subject is
-     *         an IRI corresponding to the IRI of this entity.
+     *         an IRI corresponding to the IRI of e.
      */
     @Nonnull
     public static Collection<OWLAnnotation> getAnnotations(@Nonnull OWLAnnotationSubject e,
@@ -100,10 +97,9 @@ public class EntitySearcher {
     }
 
     /**
-     * Obtains the annotations on this entity where the annotation has the specified annotation
-     * property. This includes the annotations on annotation assertion axioms with matching
-     * annotation property.
-     * 
+     * Obtains the annotations on e where the annotation has the specified annotation property. This
+     * includes the annotations on annotation assertion axioms with matching annotation property.
+     *
      * @param e entity
      * @param ontology The ontology to examine for annotation axioms
      * @param annotationProperty The annotation property
@@ -116,10 +112,9 @@ public class EntitySearcher {
     }
 
     /**
-     * Obtains the annotations on this entity where the annotation has the specified annotation
-     * property. This includes the annotations on annotation assertion axioms with matching
-     * annotation property.
-     * 
+     * Obtains the annotations on e where the annotation has the specified annotation property. This
+     * includes the annotations on annotation assertion axioms with matching annotation property.
+     *
      * @param e entity
      * @param ontology The ontology to examine for annotation axioms
      * @param annotationProperty The annotation property
@@ -132,10 +127,9 @@ public class EntitySearcher {
     }
 
     /**
-     * Obtains the annotations on this entity where the annotation has the specified annotation
-     * property. This includes the annotations on annotation assertion axioms with matching
-     * annotation property.
-     * 
+     * Obtains the annotations on e where the annotation has the specified annotation property. This
+     * includes the annotations on annotation assertion axioms with matching annotation property.
+     *
      * @param e entity
      * @param ontologies The ontologies to examine for annotation axioms
      * @param annotationProperty The annotation property
@@ -154,10 +148,9 @@ public class EntitySearcher {
     }
 
     /**
-     * Obtains the annotations on this entity where the annotation has the specified annotation
-     * property. This includes the annotations on annotation assertion axioms with matching
-     * annotation property.
-     * 
+     * Obtains the annotations on e where the annotation has the specified annotation property. This
+     * includes the annotations on annotation assertion axioms with matching annotation property.
+     *
      * @param e entity
      * @param ontologies The ontologies to examine for annotation axioms
      * @param annotationProperty The annotation property
@@ -176,9 +169,9 @@ public class EntitySearcher {
     }
 
     /**
-     * Obtains the annotations on this entity where the annotation has the specified annotation
-     * property; this is restricted to the object of annotation assertion axioms.
-     * 
+     * Obtains the annotations on e where the annotation has the specified annotation property; this
+     * is restricted to the object of annotation assertion axioms.
+     *
      * @param e entity
      * @param ontology The ontology to examine for annotation axioms
      * @param annotationProperty The annotation property
@@ -191,9 +184,9 @@ public class EntitySearcher {
     }
 
     /**
-     * Obtains the annotations on this entity; this is restricted to the object of annotation
-     * assertion axioms.
-     * 
+     * Obtains the annotations on e; this is restricted to the object of annotation assertion
+     * axioms.
+     *
      * @param e entity
      * @param ontology The ontology to examine for annotation axioms
      * @return A set of {@code OWLAnnotation} objects that have the specified URI.
@@ -205,9 +198,9 @@ public class EntitySearcher {
     }
 
     /**
-     * Obtains the annotations on this entity; this is restricted to the object of annotation
-     * assertion axioms.
-     * 
+     * Obtains the annotations on e; this is restricted to the object of annotation assertion
+     * axioms.
+     *
      * @param e entity
      * @param ontologies The ontologies to examine for annotation axioms
      * @return A set of {@code OWLAnnotation} objects that have the specified URI.
@@ -219,12 +212,13 @@ public class EntitySearcher {
     }
 
     /**
-     * Obtains the annotations on this entity where the annotation has the specified annotation
-     * property; this is restricted to the object of annotation assertion axioms.
-     * 
+     * Obtains the annotations on e where the annotation has the specified annotation property; this
+     * is restricted to the object of annotation assertion axioms.
+     *
      * @param e entity
      * @param ontology The ontology to examine for annotation axioms
-     * @param annotationProperty The annotation property
+     * @param annotationProperty The annotation property. If null, any annotation property will
+     *        match.
      * @return A set of {@code OWLAnnotation} objects that have the specified URI.
      */
     @Nonnull
@@ -235,13 +229,13 @@ public class EntitySearcher {
     }
 
     /**
-     * Obtains the annotations on this entity where the annotation has the specified annotation
-     * property; this is restricted to the object of annotation assertion axioms.
-     * 
+     * Obtains the annotations on e where the annotation has the specified annotation property; this
+     * is restricted to the object of annotation assertion axioms.
+     *
      * @param e entity
      * @param ontologies The ontologies to examine for annotation axioms
      * @param annotationProperty The annotation property. If null, any annotation property will
-     *        match
+     *        match.
      * @return A set of {@code OWLAnnotation} objects that have the specified URI.
      */
     @Nonnull
@@ -257,9 +251,9 @@ public class EntitySearcher {
     }
 
     /**
-     * Obtains the annotations on this entity where the annotation has the specified annotation
-     * property; this is restricted to the object of annotation assertion axioms.
-     * 
+     * Obtains the annotations on e where the annotation has the specified annotation property; this
+     * is restricted to the object of annotation assertion axioms.
+     *
      * @param e entity
      * @param ontologies The ontologies to examine for annotation axioms
      * @param annotationProperty The annotation property
@@ -280,7 +274,7 @@ public class EntitySearcher {
     /**
      * @param e entity
      * @param ontology the ontology to use
-     * @return the annotation assertion axioms about this entity in the provided ontology
+     * @return the annotation assertion axioms about e in the provided ontology
      */
     @Nonnull
     public static Collection<OWLAnnotationAssertionAxiom> getAnnotationAssertionAxioms(
@@ -291,7 +285,7 @@ public class EntitySearcher {
     /**
      * @param e entity
      * @param ontology the ontology to use
-     * @return the annotation assertion axioms about this entity in the provided ontology
+     * @return the annotation assertion axioms about e in the provided ontology
      */
     @Nonnull
     public static Collection<OWLAnnotationAssertionAxiom> getAnnotationAssertionAxioms(
@@ -300,14 +294,12 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the properties which are asserted to be sub-properties of this property in the specified
-     * ontology.
-     * 
+     * Gets the properties which are asserted to be sub-properties of e in the specified ontology.
+     *
      * @param e entity
      * @param ontology The ontology to be examined for {@code SubAnnotationPropertyOf} axioms.
-     * @return A set of properties such that for each property {@code p} in the set, it is the case
-     *         that {@code ontology} contains an {@code SubPropertyOf(p, this)} axiom where
-     *         {@code this} refers to this property.
+     * @return A set of properties such that for each property {@code p} the {@code ontology}
+     *         contains an {@code SubPropertyOf(p, e)} axiom.
      * @since 3.2
      */
     @Nonnull
@@ -317,15 +309,13 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the properties which are asserted to be sub-properties of this property in the specified
-     * ontology.
-     * 
+     * Gets the properties which are asserted to be sub-properties of e in the specified ontology.
+     *
      * @param e entity
      * @param ontology The ontology to be examined for {@code SubAnnotationPropertyOf} axioms.
      * @param imports if true include imports closure
-     * @return A set of properties such that for each property {@code p} in the set, it is the case
-     *         that {@code ontology} contains an {@code SubPropertyOf(p, this)} axiom where
-     *         {@code this} refers to this property.
+     * @return A set of properties such that for each property {@code p} one of the ontologies in
+     *         {@code ontologies} contains an {@code SubPropertyOf(p, e)} axiom.
      * @since 3.2
      */
     @Nonnull
@@ -336,14 +326,12 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the properties which are asserted to be sub-properties of this property in the specified
-     * ontology.
-     * 
+     * Gets the properties which are asserted to be sub-properties of e in the specified ontology.
+     *
      * @param e entity
      * @param ontologies The ontologies to be examined for {@code SubAnnotationPropertyOf} axioms.
-     * @return A set of properties such that for each property {@code p} in the set, it is the case
-     *         that {@code ontology} contains an {@code SubPropertyOf(p, this)} axiom where
-     *         {@code this} refers to this property.
+     * @return A set of properties such that for each property {@code p} one of the ontologies in
+     *         {@code ontologies} contains an {@code SubPropertyOf(p, e)} axiom.
      * @since 3.2
      */
     @Nonnull
@@ -358,14 +346,13 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the properties which are asserted to be sub-properties of this property in the specified
-     * ontology.
-     * 
-     * @param e entity
-     * @param ontology The ontology to be examined for {@code SubAnnotationPropertyOf} axioms.
-     * @return A set of properties such that for each property {@code p} in the set, it is the case
-     *         that {@code ontology} contains an {@code SubPropertyOf(p, this)} axiom where
-     *         {@code this} refers to this property.
+     * Gets the annotation properties which are asserted to be super-properties of e in the
+     * specified ontology.
+     *
+     * @param e annotation property
+     * @param ontology The ontology to be examined for SubProperty axioms.
+     * @return A set of properties such that for each property {@code p} {@code ontology} contains
+     *         an {@code SubPropertyOf(p, e)} axiom.
      * @since 3.2
      */
     @Nonnull
@@ -375,15 +362,14 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the properties which are asserted to be sub-properties of this property in the specified
-     * ontology.
-     * 
-     * @param e entity
+     * Gets the annotation properties which are asserted to be super-properties of e in the
+     * specified ontology.
+     *
+     * @param e annotation property
      * @param ontology The ontology to be examined for {@code SubAnnotationPropertyOf} axioms.
      * @param imports if true include imports closure
-     * @return A set of properties such that for each property {@code p} in the set, it is the case
-     *         that {@code ontology} contains an {@code SubPropertyOf(p, this)} axiom where
-     *         {@code this} refers to this property.
+     * @return A set of properties such that for each property {@code p} {@code ontology} or its
+     *         imports closure contains an {@code SubPropertyOf(p, e)} axiom.
      * @since 3.2
      */
     @Nonnull
@@ -394,14 +380,12 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the properties which are asserted to be sub-properties of this property in the specified
-     * ontology.
-     * 
+     * Gets the properties which are asserted to be super-properties of e in the specified ontology.
+     *
      * @param e entity
      * @param ontologies The ontologies to be examined for {@code SubAnnotationPropertyOf} axioms.
-     * @return A set of properties such that for each property {@code p} in the set, it is the case
-     *         that {@code ontology} contains an {@code SubPropertyOf(p, this)} axiom where
-     *         {@code this} refers to this property.
+     * @return A set of properties such that for each property {@code p} one of the ontologies in
+     *         {@code ontologies} contains an {@code SubPropertyOf(p, e)} axiom.
      * @since 3.2
      */
     @Nonnull
@@ -416,14 +400,12 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the properties which are asserted to be sub-properties of this property in the specified
-     * ontology.
-     * 
+     * Gets the properties which are asserted to be sub-properties of e in the specified ontology.
+     *
      * @param e entity
-     * @param ontology The ontology to be examined for {@code SubAnnotationPropertyOf} axioms.
-     * @return A set of properties such that for each property {@code p} in the set, it is the case
-     *         that {@code ontology} contains an {@code SubPropertyOf(p, this)} axiom where
-     *         {@code this} refers to this property.
+     * @param ontology The ontology to be examined for SubProperty axioms.
+     * @return A set of properties such that for each property {@code p} the {@code ontology}
+     *         contains an {@code SubPropertyOf(p, e)} axiom.
      * @since 3.2
      */
     @Nonnull
@@ -433,15 +415,13 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the properties which are asserted to be sub-properties of this property in the specified
-     * ontology.
-     * 
+     * Gets the properties which are asserted to be sub-properties of e in the specified ontology.
+     *
      * @param e entity
-     * @param ontology The ontology to be examined for {@code SubAnnotationPropertyOf} axioms.
      * @param imports if true include imports closure
-     * @return A set of properties such that for each property {@code p} in the set, it is the case
-     *         that {@code ontology} contains an {@code SubPropertyOf(p, this)} axiom where
-     *         {@code this} refers to this property.
+     * @param ontology The ontology to be examined for SubProperty axioms.
+     * @return A set of properties such that for each property {@code p} one of the ontologies in
+     *         {@code ontology} imports closure contains an {@code SubPropertyOf(p, e)} axiom.
      * @since 3.2
      */
     @Nonnull
@@ -452,14 +432,12 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the properties which are asserted to be sub-properties of this property in the specified
-     * ontology.
-     * 
+     * Gets the properties which are asserted to be sub-properties of e in the specified ontology.
+     *
      * @param e entity
-     * @param ontologies The ontologies to be examined for {@code SubAnnotationPropertyOf} axioms.
-     * @return A set of properties such that for each property {@code p} in the set, it is the case
-     *         that {@code ontology} contains an {@code SubPropertyOf(p, this)} axiom where
-     *         {@code this} refers to this property.
+     * @param ontologies The ontologies to be examined for SubProperty axioms.
+     * @return A set of properties such that for each property {@code p} one of the ontologies in
+     *         {@code ontologies} contains an {@code SubPropertyOf(p, e)} axiom.
      * @since 3.2
      */
     @Nonnull
@@ -474,15 +452,13 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the properties which are asserted to be sub-properties of this property in the specified
-     * ontology.
-     * 
+     * Gets the properties which are asserted to be sub-properties of e in the specified ontology.
+     *
      * @param e entity
-     * @param ontology The ontology to be examined for {@code SubAnnotationPropertyOf} axioms.
+     * @param ontology The ontology to be examined for {@code SubPropertyOf} axioms.
      * @param <P> type of property
-     * @return A set of properties such that for each property {@code p} in the set, it is the case
-     *         that {@code ontology} contains an {@code SubPropertyOf(p, this)} axiom where
-     *         {@code this} refers to this property.
+     * @return A set of properties such that for each property {@code p} the {@code ontology}
+     *         contains an {@code SubPropertyOf(p, e)} axiom.
      * @since 3.2
      */
     @Nonnull
@@ -503,16 +479,14 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the properties which are asserted to be sub-properties of this property in the specified
-     * ontology.
-     * 
+     * Gets the properties which are asserted to be sub-properties of e in the specified ontology.
+     *
      * @param e entity
-     * @param ontology The ontology to be examined for {@code SubAnnotationPropertyOf} axioms.
+     * @param ontology The ontology to be examined for {@code SubPropertyOf} axioms.
      * @param imports if true include imports closure
      * @param <P> type of property
-     * @return A set of properties such that for each property {@code p} in the set, it is the case
-     *         that {@code ontology} contains an {@code SubPropertyOf(p, this)} axiom where
-     *         {@code this} refers to this property.
+     * @return A set of properties such that for each property {@code p} one of the ontologies in
+     *         the {@code ontology} imports closure contains an {@code SubPropertyOf(p, e)} axiom.
      * @since 3.2
      */
     @Nonnull
@@ -523,15 +497,14 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the properties which are asserted to be sub-properties of this property in the specified
-     * ontology.
-     * 
+     * Gets the properties which are asserted to be sub-properties of e in the specified ontology.
+     *
      * @param e entity
-     * @param ontologies The ontologies to be examined for {@code SubAnnotationPropertyOf} axioms.
+     * @param ontologies The ontologies to be examined for {@code SubPropertyOf} axioms.
      * @param <P> type of property
      * @return A set of properties such that for each property {@code p} in the set, it is the case
-     *         that {@code ontology} contains an {@code SubPropertyOf(p, this)} axiom where
-     *         {@code this} refers to this property.
+     *         that {@code ontology} contains an {@code SubPropertyOf(p, e)} axiom where {@code e}
+     *         refers to e.
      * @since 3.2
      */
     @Nonnull
@@ -546,15 +519,13 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the properties which are asserted to be sub-properties of this property in the specified
-     * ontology.
-     * 
-     * @param e entity
-     * @param ontology The ontology to be examined for {@code SubAnnotationPropertyOf} axioms.
+     * Gets the properties which are asserted to be super-properties of e in the specified ontology.
+     *
+     * @param e property
+     * @param ontology The ontology to be examined for {@code SubPropertyOf} axioms.
      * @param <P> type of property
-     * @return A set of properties such that for each property {@code p} in the set, it is the case
-     *         that {@code ontology} contains an {@code SubPropertyOf(p, this)} axiom where
-     *         {@code this} refers to this property.
+     * @return A set of properties such that for each property {@code p} {@code ontology} contains
+     *         an {@code SubPropertyOf(p, e)} axiom.
      * @since 3.2
      */
     @Nonnull
@@ -575,16 +546,14 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the properties which are asserted to be sub-properties of this property in the specified
-     * ontology.
-     * 
-     * @param e entity
-     * @param ontology The ontology to be examined for {@code SubAnnotationPropertyOf} axioms.
+     * Gets the properties which are asserted to be super-properties of e in the specified ontology.
+     *
+     * @param e property
+     * @param ontology The ontology to be examined for {@code SubPropertyOf} axioms.
      * @param imports if true include imports closure
      * @param <P> type of property
-     * @return A set of properties such that for each property {@code p} in the set, it is the case
-     *         that {@code ontology} contains an {@code SubPropertyOf(p, this)} axiom where
-     *         {@code this} refers to this property.
+     * @return A set of properties such that for each property {@code p} one of the ontologies in
+     *         {@code ontology} imports closure contains an {@code SubPropertyOf(p, e)} axiom.
      * @since 3.2
      */
     @Nonnull
@@ -595,15 +564,14 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the properties which are asserted to be sub-properties of this property in the specified
-     * ontology.
-     * 
-     * @param e entity
-     * @param ontologies The ontologies to be examined for {@code SubAnnotationPropertyOf} axioms.
+     * Gets the properties which are asserted to be super-properties of e in the specified
+     * ontologies.
+     *
+     * @param e property
+     * @param ontologies The ontologies to be examined for {@code SubPropertyOf} axioms.
      * @param <P> type of property
-     * @return A set of properties such that for each property {@code p} in the set, it is the case
-     *         that {@code ontology} contains an {@code SubPropertyOf(p, this)} axiom where
-     *         {@code this} refers to this property.
+     * @return A set of properties such that for each property {@code p} one of {@code ontologies}
+     *         contains an {@code SubPropertyOf(p, e)} axiom.
      * @since 3.2
      */
     @Nonnull
@@ -618,14 +586,12 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the properties which are asserted to be sub-properties of this property in the specified
-     * ontology.
-     * 
+     * Gets the properties which are asserted to be super-properties of e in the specified ontology.
+     *
      * @param e entity
-     * @param ontology The ontology to be examined for {@code SubAnnotationPropertyOf} axioms.
-     * @return A set of properties such that for each property {@code p} in the set, it is the case
-     *         that {@code ontology} contains an {@code SubPropertyOf(p, this)} axiom where
-     *         {@code this} refers to this property.
+     * @param ontology The ontology to be examined for {@code SubPropertyOf} axioms.
+     * @return A set of properties such that for each property {@code p} {@code ontology} contains
+     *         an {@code SubPropertyOf(p, e)} axiom.
      * @since 3.2
      */
     @Nonnull
@@ -635,15 +601,13 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the properties which are asserted to be sub-properties of this property in the specified
-     * ontology.
-     * 
+     * Gets the properties which are asserted to be super-properties of e in the specified ontology.
+     *
      * @param e entity
-     * @param ontology The ontology to be examined for {@code SubAnnotationPropertyOf} axioms.
+     * @param ontology The ontology to be examined for {@code SubPropertyOf} axioms.
      * @param imports if true include imports closure
-     * @return A set of properties such that for each property {@code p} in the set, it is the case
-     *         that {@code ontology} contains an {@code SubPropertyOf(p, this)} axiom where
-     *         {@code this} refers to this property.
+     * @return A set of properties such that for each property {@code p} one of the ontologies in
+     *         {@code ontology} imports closure contains an {@code SubPropertyOf(p, e)} axiom.
      * @since 3.2
      */
     @Nonnull
@@ -654,14 +618,12 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the properties which are asserted to be sub-properties of this property in the specified
-     * ontology.
-     * 
+     * Gets the properties which are asserted to be super-properties of e in the specified ontology.
+     *
      * @param e entity
-     * @param ontologies The ontologies to be examined for {@code SubAnnotationPropertyOf} axioms.
-     * @return A set of properties such that for each property {@code p} in the set, it is the case
-     *         that {@code ontology} contains an {@code SubPropertyOf(p, this)} axiom where
-     *         {@code this} refers to this property.
+     * @param ontologies The ontologies to be examined for {@code SubPropertyOf} axioms.
+     * @return A set of properties such that for each property {@code p} one of the ontologies in
+     *         {@code ontologies} contains an {@code SubPropertyOf(p, e)} axiom.
      * @since 3.2
      */
     @Nonnull
@@ -676,14 +638,13 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the properties which are asserted to be sub-properties of this property in the specified
-     * ontology.
-     * 
+     * Gets the properties which are asserted to be sub-properties of e in the specified ontology.
+     *
      * @param e entity
      * @param ontology The ontology to be examined for {@code SubAnnotationPropertyOf} axioms.
      * @return A set of properties such that for each property {@code p} in the set, it is the case
-     *         that {@code ontology} contains an {@code SubPropertyOf(p, this)} axiom where
-     *         {@code this} refers to this property.
+     *         that {@code ontology} contains an {@code SubPropertyOf(p, e)} axiom where {@code e}
+     *         refers to e.
      * @since 3.2
      */
     @Nonnull
@@ -693,15 +654,14 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the properties which are asserted to be sub-properties of this property in the specified
-     * ontology.
-     * 
+     * Gets the properties which are asserted to be sub-properties of e in the specified ontology.
+     *
      * @param e entity
      * @param ontology The ontology to be examined for {@code SubAnnotationPropertyOf} axioms.
      * @param imports if true include imports closure
      * @return A set of properties such that for each property {@code p} in the set, it is the case
-     *         that {@code ontology} contains an {@code SubPropertyOf(p, this)} axiom where
-     *         {@code this} refers to this property.
+     *         that {@code ontology} contains an {@code SubPropertyOf(p, e)} axiom where {@code e}
+     *         refers to e.
      * @since 3.2
      */
     @Nonnull
@@ -712,14 +672,13 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the properties which are asserted to be sub-properties of this property in the specified
-     * ontology.
-     * 
+     * Gets the properties which are asserted to be sub-properties of e in the specified ontology.
+     *
      * @param e entity
      * @param ontologies The ontologies to be examined for {@code SubAnnotationPropertyOf} axioms.
      * @return A set of properties such that for each property {@code p} in the set, it is the case
-     *         that {@code ontology} contains an {@code SubPropertyOf(p, this)} axiom where
-     *         {@code this} refers to this property.
+     *         that {@code ontology} contains an {@code SubPropertyOf(p, e)} axiom where {@code e}
+     *         refers to e.
      * @since 3.2
      */
     @Nonnull
@@ -734,14 +693,13 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the properties which are asserted to be sub-properties of this property in the specified
-     * ontology.
-     * 
+     * Gets the properties which are asserted to be sub-properties of e in the specified ontology.
+     *
      * @param e entity
      * @param ontology The ontology to be examined for {@code SubAnnotationPropertyOf} axioms.
      * @return A set of properties such that for each property {@code p} in the set, it is the case
-     *         that {@code ontology} contains an {@code SubPropertyOf(p, this)} axiom where
-     *         {@code this} refers to this property.
+     *         that {@code ontology} contains an {@code SubPropertyOf(p, e)} axiom where {@code e}
+     *         refers to e.
      * @since 3.2
      */
     @Nonnull
@@ -751,15 +709,14 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the properties which are asserted to be sub-properties of this property in the specified
-     * ontology.
-     * 
+     * Gets the properties which are asserted to be sub-properties of e in the specified ontology.
+     *
      * @param e entity
      * @param ontology The ontology to be examined for {@code SubAnnotationPropertyOf} axioms.
      * @param imports if true include imports closure
      * @return A set of properties such that for each property {@code p} in the set, it is the case
-     *         that {@code ontology} contains an {@code SubPropertyOf(p, this)} axiom where
-     *         {@code this} refers to this property.
+     *         that {@code ontology} contains an {@code SubPropertyOf(p, e)} axiom where {@code e}
+     *         refers to e.
      * @since 3.2
      */
     @Nonnull
@@ -770,14 +727,13 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the properties which are asserted to be sub-properties of this property in the specified
-     * ontology.
-     * 
+     * Gets the properties which are asserted to be sub-properties of e in the specified ontology.
+     *
      * @param e entity
      * @param ontologies The ontologies to be examined for {@code SubAnnotationPropertyOf} axioms.
      * @return A set of properties such that for each property {@code p} in the set, it is the case
-     *         that {@code ontology} contains an {@code SubPropertyOf(p, this)} axiom where
-     *         {@code this} refers to this property.
+     *         that {@code ontology} contains an {@code SubPropertyOf(p, e)} axiom where {@code e}
+     *         refers to e.
      * @since 3.2
      */
     @Nonnull
@@ -792,13 +748,13 @@ public class EntitySearcher {
     }
 
     /**
-     * A convenience method that examines the axioms in the specified ontology and return the class
-     * expressions corresponding to super classes of this class.
-     * 
+     * Gets the classes which have been <i>asserted</i> to be superclasses of e in the specified
+     * ontology.
+     *
      * @param e entity
      * @param ontology The ontology to be examined
-     * @return A {@code Set} of {@code OWLClassExpression}s that represent the superclasses of this
-     *         class, which have been asserted in the specified ontology.
+     * @return A {@code Set} of {@code OWLClassExpression}s that represent the superclasses of e,
+     *         which have been asserted in the specified ontology.
      */
     @Nonnull
     public static Collection<OWLClassExpression> getSuperClasses(@Nonnull OWLClass e,
@@ -807,12 +763,12 @@ public class EntitySearcher {
     }
 
     /**
-     * A convenience method that examines the axioms in the specified ontologies and returns the
-     * class expression corresponding to the asserted super classes of this class.
-     * 
+     * Gets the classes which have been <i>asserted</i> to be superclasses of e in the specified
+     * ontologies.
+     *
      * @param e entity
-     * @param ontologies The set of ontologies to be examined.
-     * @return A set of {@code OWLClassExpressions}s that represent the super classes of this class
+     * @param ontologies The ontologies to be examined.
+     * @return A set of {@code OWLClassExpressions}s that represent the super classes of e
      */
     @Nonnull
     public static Collection<OWLClassExpression> getSuperClasses(@Nonnull OWLClass e,
@@ -826,13 +782,13 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the classes which have been <i>asserted</i> to be subclasses of this class in the
-     * specified ontology.
-     * 
+     * Gets the classes which have been <i>asserted</i> to be subclasses of e in the specified
+     * ontology.
+     *
      * @param e entity
      * @param ontology The ontology which should be examined for subclass axioms.
-     * @return A {@code Set} of {@code OWLClassExpression}s that represet the asserted subclasses of
-     *         this class.
+     * @return A {@code Set} of {@code OWLClassExpression}s that represent the asserted subclasses
+     *         of e.
      */
     @Nonnull
     public static Collection<OWLClassExpression> getSubClasses(@Nonnull OWLClass e,
@@ -841,13 +797,13 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the classes which have been <i>asserted</i> to be subclasses of this class in the
-     * specified ontologies.
-     * 
+     * Gets the classes which have been <i>asserted</i> to be subclasses of e in the specified
+     * ontologies.
+     *
      * @param e entity
      * @param ontologies The ontologies which should be examined for subclass axioms.
-     * @return A {@code Set} of {@code OWLClassExpression}s that represet the asserted subclasses of
-     *         this class.
+     * @return A {@code Set} of {@code OWLClassExpression}s that represent the asserted subclasses
+     *         of e.
      */
     @Nonnull
     public static Collection<OWLClassExpression> getSubClasses(@Nonnull OWLClass e,
@@ -861,13 +817,13 @@ public class EntitySearcher {
     }
 
     /**
-     * A convenience method that examines the axioms in the specified ontology and returns the class
-     * expressions corresponding to equivalent classes of this class.
-     * 
+     * Gets the classes which have been asserted to be equivalent with e by axioms in the specified
+     * ontology.
+     *
      * @param e entity
      * @param ontology The ontology to be examined for axioms
      * @return A {@code Set} of {@code OWLClassExpression}s that represent the equivalent classes of
-     *         this class, that have been asserted in the specified ontology.
+     *         e, that have been asserted in the specified ontology.
      */
     @Nonnull
     public static Collection<OWLClassExpression> getEquivalentClasses(@Nonnull OWLClass e,
@@ -879,13 +835,13 @@ public class EntitySearcher {
     }
 
     /**
-     * A convenience method that examines the axioms in the specified ontologies and returns the
-     * class expressions corresponding to equivalent classes of this class.
-     * 
+     * Gets the classes which have been asserted to be equivalent with e by axioms in the specified
+     * ontologies.
+     *
      * @param e entity
      * @param ontologies The ontologies to be examined for axioms
      * @return A {@code Set} of {@code OWLClassExpression}s that represent the equivalent classes of
-     *         this class, that have been asserted in the specified ontologies.
+     *         e, that have been asserted in the specified ontologies.
      */
     @Nonnull
     public static Collection<OWLClassExpression> getEquivalentClasses(@Nonnull OWLClass e,
@@ -899,13 +855,13 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the classes which have been asserted to be disjoint with this class by axioms in the
-     * specified ontology.
-     * 
+     * Gets the classes which have been asserted to be disjoint with e by axioms in the specified
+     * ontology.
+     *
      * @param e entity
      * @param ontology The ontology to search for disjoint class axioms
      * @return A {@code Set} of {@code OWLClassExpression}s that represent the disjoint classes of
-     *         this class.
+     *         e.
      */
     @Nonnull
     public static Collection<OWLClassExpression> getDisjointClasses(@Nonnull OWLClass e,
@@ -914,13 +870,13 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the classes which have been asserted to be disjoint with this class by axioms in the
-     * specified ontologies.
-     * 
+     * Gets the classes which have been asserted to be disjoint with e by axioms in the specified
+     * ontologies.
+     *
      * @param e entity
      * @param ontologies The ontologies to search for disjoint class axioms
      * @return A {@code Set} of {@code OWLClassExpression}s that represent the disjoint classes of
-     *         this class.
+     *         e.
      */
     @Nonnull
     public static Collection<OWLClassExpression> getDisjointClasses(@Nonnull OWLClass e,
@@ -934,8 +890,8 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the different individuals in the specified ontology.
-     * 
+     * Gets the individuals asserted to be different to e in the specified ontology.
+     *
      * @param e individual
      * @param ontology The ontology to search for different individuals
      * @return A {@code Set} of different {@code OWLIndividual}s.
@@ -947,8 +903,8 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the different individuals in the specified ontologies.
-     * 
+     * Gets the individuals asserted to be different to e in the specified ontologies.
+     *
      * @param e individual
      * @param ontologies The ontologies to search for different individuals
      * @return A {@code Set} of different {@code OWLIndividual}s.
@@ -965,8 +921,8 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the same individuals in the specified ontology.
-     * 
+     * Gets the individuals asserted to be same as e in the specified ontology.
+     *
      * @param e individual
      * @param ontology The ontology to search for same individuals
      * @return A {@code Set} of same {@code OWLIndividual}s.
@@ -981,8 +937,8 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the same individuals in the specified ontologies.
-     * 
+     * Gets the individuals asserted to be same as e in the specified ontologies.
+     *
      * @param e individual
      * @param ontologies The ontologies to search for same individuals
      * @return A {@code Set} of same {@code OWLIndividual}s.
@@ -999,13 +955,13 @@ public class EntitySearcher {
     }
 
     /**
-     * A convenience method that examines the axioms in the specified ontology and returns the class
-     * expressions corresponding to equivalent classes of this class.
-     * 
+     * Gets the data properties which have been asserted to be equivalent with e by axioms in the
+     * specified ontology.
+     *
      * @param e entity
      * @param ontology The ontology to be examined for axioms
-     * @return A {@code Set} of {@code OWLClassExpression}s that represent the equivalent classes of
-     *         this class, that have been asserted in the specified ontology.
+     * @return A {@code Set} of {@code OWLDataPropertyExpression}s that represent the data
+     *         properties equivalent to e, that have been asserted in the specified ontology.
      */
     @Nonnull
     public static Collection<OWLDataPropertyExpression> getEquivalentProperties(
@@ -1017,13 +973,13 @@ public class EntitySearcher {
     }
 
     /**
-     * A convenience method that examines the axioms in the specified ontologies and returns the
-     * class expressions corresponding to equivalent classes of this class.
-     * 
+     * Gets the data properties which have been asserted to be equivalent with e by axioms in the
+     * specified ontologies.
+     *
      * @param e entity
      * @param ontologies The ontologies to be examined for axioms
-     * @return A {@code Set} of {@code OWLClassExpression}s that represent the equivalent classes of
-     *         this class, that have been asserted in the specified ontologies.
+     * @return A set of {@code OWLDataPropertyExpression}s that represent the data properties
+     *         equivalent to e, that have been asserted in the specified ontologies.
      */
     @Nonnull
     public static Collection<OWLDataPropertyExpression> getEquivalentProperties(
@@ -1037,14 +993,14 @@ public class EntitySearcher {
     }
 
     /**
-     * A convenience method that examines the axioms in the specified ontology and returns the class
-     * expressions corresponding to equivalent classes of this class.
-     * 
+     * Gets the properties which have been asserted to be equivalent with e by axioms in the
+     * specified ontology.
+     *
      * @param e entity
      * @param ontology The ontology to be examined for axioms
      * @param <P> type of property
-     * @return A {@code Set} of {@code OWLClassExpression}s that represent the equivalent classes of
-     *         this class, that have been asserted in the specified ontology.
+     * @return A {@code Set} of {@code OWLPropertyExpression}s that represent the properties
+     *         equivalent to e, that have been asserted in the specified ontology.
      */
     @Nonnull
     public static <P extends OWLPropertyExpression> Collection<P> getEquivalentProperties(
@@ -1058,14 +1014,14 @@ public class EntitySearcher {
     }
 
     /**
-     * A convenience method that examines the axioms in the specified ontologies and returns the
-     * class expressions corresponding to equivalent classes of this class.
-     * 
+     * Gets the properties which have been asserted to be equivalent with e by axioms in the
+     * specified ontologies.
+     *
      * @param e entity
      * @param ontologies The ontologies to be examined for axioms
      * @param <P> type of property
-     * @return A {@code Set} of {@code OWLClassExpression}s that represent the equivalent classes of
-     *         this class, that have been asserted in the specified ontologies.
+     * @return A {@code Set} of {@code OWLPropertyExpression}s that represent the properties
+     *         equivalent to e, that have been asserted in the specified ontologies.
      */
     @Nonnull
     public static <P extends OWLPropertyExpression> Collection<P> getEquivalentProperties(
@@ -1079,13 +1035,13 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the classes which have been asserted to be disjoint with this class by axioms in the
-     * specified ontology.
-     * 
+     * Gets the data properties which have been asserted to be disjoint with e in the specified
+     * ontology.
+     *
      * @param e entity
-     * @param ontology The ontology to search for disjoint class axioms
-     * @return A {@code Set} of {@code OWLClassExpression}s that represent the disjoint classes of
-     *         this class.
+     * @param ontology The ontology to search for disjoint data properties axioms
+     * @return A {@code Set} of {@code OWLDataPropertyExpression}s that represent the data
+     *         properties disjoint with e.
      */
     @Nonnull
     public static Collection<OWLDataPropertyExpression> getDisjointProperties(
@@ -1094,13 +1050,13 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the classes which have been asserted to be disjoint with this class by axioms in the
-     * specified ontologies.
-     * 
+     * Gets the data properties which have been asserted to be disjoint with e in the specified
+     * ontologies.
+     *
      * @param e entity
-     * @param ontologies The ontologies to search for disjoint class axioms
-     * @return A {@code Set} of {@code OWLClassExpression}s that represent the disjoint classes of
-     *         this class.
+     * @param ontologies The ontologies to search for disjoint axioms
+     * @return A {@code Set} of {@code OWLDataPropertyExpression}s that represent the data
+     *         properties disjoint with e.
      */
     @Nonnull
     public static Collection<OWLDataPropertyExpression> getDisjointProperties(
@@ -1114,14 +1070,13 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the classes which have been asserted to be disjoint with this class by axioms in the
-     * specified ontology.
-     * 
+     * Gets the properties which have been asserted to be disjoint with e in the specified ontology.
+     *
      * @param e entity
-     * @param ontology The ontology to search for disjoint class axioms
+     * @param ontology The ontology to search for disjoint property axioms
      * @param <P> type of property
-     * @return A {@code Set} of {@code OWLClassExpression}s that represent the disjoint classes of
-     *         this class.
+     * @return A {@code Set} of {@code OWLPropertyExpression}s that represent the properties
+     *         disjoint with e.
      */
     @Nonnull
     public static <P extends OWLPropertyExpression> Collection<P> getDisjointProperties(
@@ -1135,14 +1090,14 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the classes which have been asserted to be disjoint with this class by axioms in the
-     * specified ontologies.
-     * 
+     * Gets the properties which have been asserted to be disjoint with e in the specified
+     * ontologies.
+     *
      * @param e entity
-     * @param ontologies The ontologies to search for disjoint class axioms
+     * @param ontologies The ontologies to search for disjoint property axioms
      * @param <P> type of property
-     * @return A {@code Set} of {@code OWLClassExpression}s that represent the disjoint classes of
-     *         this class.
+     * @return A {@code Set} of {@code OWLPropertyExpression}s that represent the properties
+     *         disjoint with e.
      */
     @Nonnull
     public static <P extends OWLPropertyExpression> Collection<P> getDisjointProperties(
@@ -1157,12 +1112,12 @@ public class EntitySearcher {
 
     /**
      * A convenience method that examines the axioms in the specified ontology and returns the class
-     * expressions corresponding to equivalent classes of this class.
-     * 
+     * expressions corresponding to equivalent classes of e.
+     *
      * @param e entity
      * @param ontology The ontology to be examined for axioms
      * @return A {@code Set} of {@code OWLClassExpression}s that represent the equivalent classes of
-     *         this class, that have been asserted in the specified ontology.
+     *         e, that have been asserted in the specified ontology.
      */
     @Nonnull
     public static Collection<OWLObjectPropertyExpression> getEquivalentProperties(
@@ -1175,12 +1130,12 @@ public class EntitySearcher {
 
     /**
      * A convenience method that examines the axioms in the specified ontologies and returns the
-     * class expressions corresponding to equivalent classes of this class.
-     * 
+     * class expressions corresponding to equivalent classes of e.
+     *
      * @param e entity
      * @param ontologies The ontologies to be examined for axioms
      * @return A {@code Set} of {@code OWLClassExpression}s that represent the equivalent classes of
-     *         this class, that have been asserted in the specified ontologies.
+     *         e, that have been asserted in the specified ontologies.
      */
     @Nonnull
     public static Collection<OWLObjectPropertyExpression> getEquivalentProperties(
@@ -1194,13 +1149,13 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the classes which have been asserted to be disjoint with this class by axioms in the
-     * specified ontology.
-     * 
+     * Gets the object properties which have been asserted to be disjoint with e in the specified
+     * ontology.
+     *
      * @param e entity
-     * @param ontology The ontology to search for disjoint class axioms
-     * @return A {@code Set} of {@code OWLClassExpression}s that represent the disjoint classes of
-     *         this class.
+     * @param ontology The ontology to search for disjoint axioms
+     * @return A {@code Set} of {@code OWLObjectPropertyExpression}s that represent the object
+     *         properties disjoint with e.
      */
     @Nonnull
     public static Collection<OWLObjectPropertyExpression> getDisjointProperties(
@@ -1209,13 +1164,13 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the classes which have been asserted to be disjoint with this class by axioms in the
-     * specified ontologies.
-     * 
+     * Gets the object properties which have been asserted to be disjoint with e in the specified
+     * ontologies.
+     *
      * @param e entity
-     * @param ontologies The ontologies to search for disjoint class axioms
-     * @return A {@code Set} of {@code OWLClassExpression}s that represent the disjoint classes of
-     *         this class.
+     * @param ontologies The ontologies to search for disjoint axioms
+     * @return A {@code Set} of {@code OWLObjectPropertyExpression}s that represent the object
+     *         properties disjoint with e.
      */
     @Nonnull
     public static Collection<OWLObjectPropertyExpression> getDisjointProperties(
@@ -1229,14 +1184,14 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the individuals that have been asserted to be an instance of this class by axioms in the
+     * Gets the individuals that have been asserted to be an instance of e by axioms in the
      * specified ontology.
-     * 
+     *
      * @param e entity
      * @param ontology The ontology to be examined for class assertion axioms that assert an
-     *        individual to be an instance of this class.
+     *        individual to be an instance of e.
      * @return A {@code Set} of {@code OWLIndividual}s that represent the individual that have been
-     *         asserted to be an instance of this class.
+     *         asserted to be an instance of e.
      */
     @Nonnull
     public static Collection<OWLIndividual> getIndividuals(@Nonnull OWLClass e,
@@ -1245,14 +1200,14 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the individuals that have been asserted to be an instance of this class by axioms in the
-     * speficied ontologies.
-     * 
+     * Gets the individuals that have been asserted to be an instance of e by axioms in the
+     * specified ontologies.
+     *
      * @param e entity
      * @param ontologies The ontologies to be examined for class assertion axioms that assert an
-     *        individual to be an instance of this class.
+     *        individual to be an instance of e.
      * @return A {@code Set} of {@code OWLIndividual}s that represent the individual that have been
-     *         asserted to be an instance of this class.
+     *         asserted to be an instance of e.
      */
     @Nonnull
     public static Collection<OWLIndividual> getIndividuals(@Nonnull OWLClass e,
@@ -1266,11 +1221,11 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the axioms in the specified ontology that contain this entity in their signature.
-     * 
+     * Gets the axioms in the specified ontology that contain e in their signature.
+     *
      * @param e entity
      * @param ontology The ontology that will be searched for axioms
-     * @return The axioms in the specified ontology whose signature contains this entity.
+     * @return The axioms in the specified ontology whose signature contains e.
      */
     @Nonnull
     public static Collection<OWLAxiom> getReferencingAxioms(@Nonnull OWLEntity e,
@@ -1279,15 +1234,15 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the axioms in the specified ontology and possibly its imports closure that contain this
-     * entity in their signature.
-     * 
+     * Gets the axioms in the specified ontology and possibly its imports closure that contain e in
+     * their signature.
+     *
      * @param e entity
      * @param ontology The ontology that will be searched for axioms
      * @param includeImports If {@code true} then axioms in the imports closure will also be
      *        returned, if {@code false} then only the axioms in the specified ontology will be
      *        returned.
-     * @return The axioms in the specified ontology whose signature contains this entity.
+     * @return The axioms in the specified ontology whose signature contains e.
      */
     @Nonnull
     public static Collection<OWLAxiom> getReferencingAxioms(@Nonnull OWLEntity e,
@@ -1296,14 +1251,12 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the asserted domains of this property.
-     * 
+     * Gets the asserted domains of e.
+     *
      * @param e entity
-     * @param ontology The ontology that should be examined for axioms which assert a domain of this
-     *        property
-     * @return A set of {@code OWLClassExpression}s corresponding to the domains of this property
-     *         (the domain of the property is essentially the intersection of these class
-     *         expressions).
+     * @param ontology The ontology that should be examined for axioms which assert a domain of e
+     * @return A set of {@code OWLClassExpression}s corresponding to the domains of e (the domain of
+     *         e is essentially the intersection of these class expressions).
      */
     @Nonnull
     public static Collection<OWLClassExpression> getDomains(@Nonnull OWLDataProperty e,
@@ -1312,13 +1265,11 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the asserted domains of this property by examining the axioms in the specified
-     * ontologies.
-     * 
+     * Gets the asserted domains of e by examining the axioms in the specified ontologies.
+     *
      * @param e entity
      * @param ontologies The ontologies to be examined.
-     * @return A set of {@code OWLClassExpression}s that represent the asserted domains of this
-     *         property.
+     * @return A set of {@code OWLClassExpression}s that represent the asserted domains of e.
      */
     @Nonnull
     public static Collection<OWLClassExpression> getDomains(@Nonnull OWLDataProperty e,
@@ -1332,14 +1283,12 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the asserted domains of this property.
-     * 
+     * Gets the asserted domains of e.
+     *
      * @param e entity
-     * @param ontology The ontology that should be examined for axioms which assert a domain of this
-     *        property
-     * @return A set of {@code OWLClassExpression}s corresponding to the domains of this property
-     *         (the domain of the property is essentially the intersection of these class
-     *         expressions).
+     * @param ontology The ontology that should be examined for axioms which assert a domain of e
+     * @return A set of {@code OWLClassExpression}s corresponding to the domains of e (the domain of
+     *         e is essentially the intersection of these class expressions).
      */
     @Nonnull
     public static Collection<OWLClassExpression> getDomains(@Nonnull OWLObjectPropertyExpression e,
@@ -1348,12 +1297,11 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the ranges of this property that have been asserted in the specified ontology.
-     * 
+     * Gets the ranges of e that have been asserted in the specified ontology.
+     *
      * @param e entity
-     * @param ontology The ontology to be searched for axioms which assert a range for this
-     *        property.
-     * @return A set of ranges for this property.
+     * @param ontology The ontology to be searched for axioms which assert a range for e.
+     * @return A set of ranges for e.
      */
     @Nonnull
     public static Collection<OWLDataRange> getRanges(@Nonnull OWLDataProperty e,
@@ -1362,13 +1310,12 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the asserted ranges of this property by examining the axioms in the specified
-     * ontologies.
-     * 
+     * Gets the asserted ranges of e by examining the axioms in the specified ontologies.
+     *
      * @param e entity
      * @param ontologies The ontologies to be examined for range axioms.
-     * @return A set of ranges for this property, which have been asserted by axioms in the
-     *         specified ontologies.
+     * @return A set of ranges for e, which have been asserted by axioms in the specified
+     *         ontologies.
      */
     @Nonnull
     public static Collection<OWLDataRange> getRanges(@Nonnull OWLDataProperty e,
@@ -1382,13 +1329,11 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the asserted domains of this property by examining the axioms in the specified
-     * ontologies.
-     * 
+     * Gets the asserted domains of e by examining the axioms in the specified ontologies.
+     *
      * @param e entity
      * @param ontologies The ontologies to be examined.
-     * @return A set of {@code OWLClassExpression}s that represent the asserted domains of this
-     *         property.
+     * @return A set of {@code OWLClassExpression}s that represent the asserted domains of e.
      */
     @Nonnull
     public static Collection<OWLClassExpression> getDomains(@Nonnull OWLObjectPropertyExpression e,
@@ -1402,12 +1347,11 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the ranges of this property that have been asserted in the specified ontology.
-     * 
+     * Gets the ranges of e that have been asserted in the specified ontology.
+     *
      * @param e entity
-     * @param ontology The ontology to be searched for axioms which assert a range for this
-     *        property.
-     * @return A set of ranges for this property.
+     * @param ontology The ontology to be searched for axioms which assert a range for e.
+     * @return A set of ranges for e.
      */
     @Nonnull
     public static Collection<OWLClassExpression> getRanges(@Nonnull OWLObjectPropertyExpression e,
@@ -1416,13 +1360,12 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the asserted ranges of this property by examining the axioms in the specified
-     * ontologies.
-     * 
+     * Gets the asserted ranges of e by examining the axioms in the specified ontologies.
+     *
      * @param e entity
      * @param ontologies The ontologies to be examined for range axioms.
-     * @return A set of ranges for this property, which have been asserted by axioms in the
-     *         specified ontologies.
+     * @return A set of ranges for e, which have been asserted by axioms in the specified
+     *         ontologies.
      */
     @Nonnull
     public static Collection<OWLClassExpression> getRanges(@Nonnull OWLObjectPropertyExpression e,
@@ -1436,14 +1379,12 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the asserted domains of this property.
-     * 
+     * Gets the asserted domains of e.
+     *
      * @param e entity
-     * @param ontology The ontology that should be examined for axioms which assert a domain of this
-     *        property
-     * @return A set of {@code OWLClassExpression}s corresponding to the domains of this property
-     *         (the domain of the property is essentially the intersection of these class
-     *         expressions).
+     * @param ontology The ontology that should be examined for axioms which assert a domain of e
+     * @return A set of {@code IRI}s corresponding to the domains of e (the domain of e is
+     *         essentially the intersection of these IRIs).
      */
     @Nonnull
     public static Collection<IRI> getDomains(@Nonnull OWLAnnotationProperty e,
@@ -1452,13 +1393,11 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the asserted domains of this property by examining the axioms in the specified
-     * ontologies.
-     * 
+     * Gets the asserted domains of e by examining the axioms in the specified ontologies.
+     *
      * @param e entity
      * @param ontologies The ontologies to be examined.
-     * @return A set of {@code OWLClassExpression}s that represent the asserted domains of this
-     *         property.
+     * @return A set of {@code IRI}s that represent the asserted domains of e.
      */
     @Nonnull
     public static Collection<IRI> getDomains(@Nonnull OWLAnnotationProperty e,
@@ -1472,12 +1411,11 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the ranges of this property that have been asserted in the specified ontology.
-     * 
+     * Gets the ranges of e that have been asserted in the specified ontology.
+     *
      * @param e entity
-     * @param ontology The ontology to be searched for axioms which assert a range for this
-     *        property.
-     * @return A set of ranges for this property.
+     * @param ontology The ontology to be searched for axioms which assert a range for e.
+     * @return A set of ranges for e.
      */
     @Nonnull
     public static Collection<IRI> getRanges(@Nonnull OWLAnnotationProperty e,
@@ -1486,13 +1424,12 @@ public class EntitySearcher {
     }
 
     /**
-     * Gets the asserted ranges of this property by examining the axioms in the specified
-     * ontologies.
-     * 
+     * Gets the asserted ranges of e by examining the axioms in the specified ontologies.
+     *
      * @param e entity
      * @param ontologies The ontologies to be examined for range axioms.
-     * @return A set of ranges for this property, which have been asserted by axioms in the
-     *         specified ontologies.
+     * @return A set of ranges for e, which have been asserted by axioms in the specified
+     *         ontologies.
      */
     @Nonnull
     public static Collection<IRI> getRanges(@Nonnull OWLAnnotationProperty e,
@@ -1507,7 +1444,7 @@ public class EntitySearcher {
 
     /**
      * Checks if e is declared transitive in o.
-     * 
+     *
      * @param o ontology
      * @param e property
      * @return true for transitive properties
@@ -1519,7 +1456,7 @@ public class EntitySearcher {
 
     /**
      * Checks if e is declared transitive in a collection of ontologies.
-     * 
+     *
      * @param ontologies ontologies
      * @param e property
      * @return true for transitive properties
@@ -1537,7 +1474,7 @@ public class EntitySearcher {
 
     /**
      * Checks if e is declared symmetric in o.
-     * 
+     *
      * @param o ontology
      * @param e property
      * @return true for symmetric properties
@@ -1549,7 +1486,7 @@ public class EntitySearcher {
 
     /**
      * Checks if e is declared symmetric in a collection of ontologies.
-     * 
+     *
      * @param ontologies ontologies
      * @param e property
      * @return true for symmetric properties
@@ -1567,7 +1504,7 @@ public class EntitySearcher {
 
     /**
      * Checks if e is declared asymmetric in o.
-     * 
+     *
      * @param o ontology
      * @param e property
      * @return true for asymmetric properties
@@ -1579,7 +1516,7 @@ public class EntitySearcher {
 
     /**
      * Checks if e is declared asymmetric in a collection of ontologies.
-     * 
+     *
      * @param ontologies ontologies
      * @param e property
      * @return true for asymmetric properties
@@ -1597,7 +1534,7 @@ public class EntitySearcher {
 
     /**
      * Checks if e is declared reflexive in o.
-     * 
+     *
      * @param o ontology
      * @param e property
      * @return true for reflexive properties
@@ -1609,7 +1546,7 @@ public class EntitySearcher {
 
     /**
      * Checks if e is declared reflexive in a collection of ontologies.
-     * 
+     *
      * @param ontologies ontologies
      * @param e property
      * @return true for reflexive properties
@@ -1627,7 +1564,7 @@ public class EntitySearcher {
 
     /**
      * Checks if e is declared irreflexive in o.
-     * 
+     *
      * @param o ontology
      * @param e property
      * @return true for irreflexive properties
@@ -1639,7 +1576,7 @@ public class EntitySearcher {
 
     /**
      * Checks if e is declared irreflexive in a collection of ontologies.
-     * 
+     *
      * @param ontologies ontologies
      * @param e property
      * @return true for irreflexive properties
@@ -1657,7 +1594,7 @@ public class EntitySearcher {
 
     /**
      * Checks if e is declared inverse functional in o.
-     * 
+     *
      * @param o ontology
      * @param e property
      * @return true for inverse functional properties
@@ -1669,7 +1606,7 @@ public class EntitySearcher {
 
     /**
      * Checks if e is declared inverse functional in a collection of ontologies.
-     * 
+     *
      * @param ontologies ontologies
      * @param e property
      * @return true for inverse functional properties
@@ -1687,7 +1624,7 @@ public class EntitySearcher {
 
     /**
      * Checks if e is declared functional in o.
-     * 
+     *
      * @param o ontology
      * @param e property
      * @return true for functional object properties
@@ -1699,7 +1636,7 @@ public class EntitySearcher {
 
     /**
      * Checks if e is declared functional in a collection of ontologies.
-     * 
+     *
      * @param ontologies ontologies
      * @param e property
      * @return true for functional object properties
@@ -1717,7 +1654,7 @@ public class EntitySearcher {
 
     /**
      * Checks if e is declared functional in o.
-     * 
+     *
      * @param o ontology
      * @param e property
      * @return true for functional data properties
@@ -1728,7 +1665,7 @@ public class EntitySearcher {
 
     /**
      * Checks if e is declared functional in a collection of ontologies.
-     * 
+     *
      * @param ontologies ontologies
      * @param e property
      * @return true for functional data properties
@@ -1746,7 +1683,7 @@ public class EntitySearcher {
 
     /**
      * Checks if c is defined (is included in equivalent axioms) in o.
-     * 
+     *
      * @param o ontology
      * @param c class
      * @return true for defined classes
@@ -1757,7 +1694,7 @@ public class EntitySearcher {
 
     /**
      * Checks if c is defined (is included in equivalent axioms) in a collection of ontologies.
-     * 
+     *
      * @param ontologies ontologies
      * @param c class
      * @return true for defined classes
@@ -1775,7 +1712,7 @@ public class EntitySearcher {
 
     /**
      * Checks if o contains axiom a, with or without imports closure.
-     * 
+     *
      * @param o ontology
      * @param a axiom
      * @param imports true if imports closure is included
@@ -1789,10 +1726,10 @@ public class EntitySearcher {
 
     /**
      * Checks if any of the ontologies contains axiom a, with or without imports closure.
-     * 
+     *
      * @param ontologies ontologies
      * @param a axiom
-     * @param imports true if imports closure is included @return true if a is contained
+     * @param imports true if imports closure is included
      * @return true if a is contained
      */
     public static boolean containsAxiom(@Nonnull OWLAxiom a,
@@ -1808,7 +1745,7 @@ public class EntitySearcher {
 
     /**
      * Checks if o contains axiom a, with or without imports closure, ignoring annotations.
-     * 
+     *
      * @param o ontology
      * @param a axiom
      * @param imports true if imports closure is included
@@ -1822,10 +1759,10 @@ public class EntitySearcher {
 
     /**
      * Checks if any of the ontologies contains axiom a, with or without imports closure.
-     * 
+     *
      * @param ontologies ontologies
      * @param a axiom
-     * @param imports true if imports closure is included @return true if a is contained
+     * @param imports true if imports closure is included
      * @return true if a is contained
      */
     public static boolean containsAxiomIgnoreAnnotations(@Nonnull OWLAxiom a,
@@ -1841,7 +1778,7 @@ public class EntitySearcher {
 
     /**
      * Get matching axioms for a, ignoring annotations.
-     * 
+     *
      * @param o ontology
      * @param a axiom
      * @param imports true if imports closure is included

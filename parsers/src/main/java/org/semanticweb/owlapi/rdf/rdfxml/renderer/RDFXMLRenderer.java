@@ -54,6 +54,7 @@ import org.semanticweb.owlapi.rdf.RDFRendererBase;
 import org.semanticweb.owlapi.util.AnnotationValueShortFormProvider;
 import org.semanticweb.owlapi.util.ShortFormProvider;
 import org.semanticweb.owlapi.util.VersionInfo;
+import org.semanticweb.owlapi.vocab.OWL2Datatype;
 
 /**
  * @author Matthew Horridge, The University Of Manchester, Bio-Health Informatics Group
@@ -67,6 +68,7 @@ public class RDFXMLRenderer extends RDFRendererBase {
     @Nonnull
     private final OWLDocumentFormat format;
     ShortFormProvider labelMaker;
+    private boolean explicitXsdString;
 
     /**
      * @param ontology ontology
@@ -87,6 +89,8 @@ public class RDFXMLRenderer extends RDFRendererBase {
         super(checkNotNull(ontology, "ontology cannot be null"),
             checkNotNull(format, "format cannot be null"));
         this.format = checkNotNull(format, "format cannot be null");
+        explicitXsdString = Boolean.parseBoolean(
+            format.getParameter("force xsd:string on literals", Boolean.FALSE).toString());
         qnameManager = new RDFXMLNamespaceManager(ontology, format);
         String defaultNamespace = qnameManager.getDefaultNamespace();
         String base = base(defaultNamespace);
@@ -253,7 +257,16 @@ public class RDFXMLRenderer extends RDFRendererBase {
 
     protected void renderList(RDFNode n) throws IOException {
         if (n.isAnonymous()) {
-            render((RDFResourceBlankNode) n, false);
+            if (n.idRequired()) {
+                if (!pending.contains(n)) {
+                    defer(n);
+                }
+                writer.writeStartElement(RDF_DESCRIPTION.getIRI());
+                writer.writeNodeIDAttribute((RDFResourceBlankNode) n);
+                writer.writeEndElement();
+            } else {
+                render((RDFResourceBlankNode) n, false);
+            }
         } else {
             if (n.isLiteral()) {
                 write((RDFLiteral) n);
@@ -279,9 +292,8 @@ public class RDFXMLRenderer extends RDFRendererBase {
     protected void writew(RDFLiteral rdfLiteralNode) throws IOException {
         if (rdfLiteralNode.hasLang()) {
             writer.writeLangAttribute(rdfLiteralNode.getLang());
-        } else if (!rdfLiteralNode.isPlainLiteral()
-        // && !OWL2Datatype.XSD_STRING.getIRI().equals(rdfLiteralNode.getDatatype())
-        ) {
+        } else if (!rdfLiteralNode.isPlainLiteral() && (explicitXsdString
+            || !OWL2Datatype.XSD_STRING.getIRI().equals(rdfLiteralNode.getDatatype()))) {
             writer.writeDatatypeAttribute(rdfLiteralNode.getDatatype());
         }
         writer.writeTextContent(rdfLiteralNode.getLexicalValue());

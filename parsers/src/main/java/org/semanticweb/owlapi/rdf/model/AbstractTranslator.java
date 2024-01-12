@@ -31,6 +31,7 @@ import static org.semanticweb.owlapi.vocab.OWLRDFVocabulary.OWL_CLASS;
 import static org.semanticweb.owlapi.vocab.OWLRDFVocabulary.OWL_COMPLEMENT_OF;
 import static org.semanticweb.owlapi.vocab.OWLRDFVocabulary.OWL_DATATYPE_COMPLEMENT_OF;
 import static org.semanticweb.owlapi.vocab.OWLRDFVocabulary.OWL_DATA_PROPERTY;
+import static org.semanticweb.owlapi.vocab.OWLRDFVocabulary.OWL_DIFFERENT_FROM;
 import static org.semanticweb.owlapi.vocab.OWLRDFVocabulary.OWL_DISJOINT_UNION_OF;
 import static org.semanticweb.owlapi.vocab.OWLRDFVocabulary.OWL_DISJOINT_WITH;
 import static org.semanticweb.owlapi.vocab.OWLRDFVocabulary.OWL_DISTINCT_MEMBERS;
@@ -118,6 +119,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -148,6 +150,7 @@ import org.semanticweb.owlapi.model.OWLDataOneOf;
 import org.semanticweb.owlapi.model.OWLDataProperty;
 import org.semanticweb.owlapi.model.OWLDataPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLDataPropertyDomainAxiom;
+import org.semanticweb.owlapi.model.OWLDataPropertyExpression;
 import org.semanticweb.owlapi.model.OWLDataPropertyRangeAxiom;
 import org.semanticweb.owlapi.model.OWLDataRange;
 import org.semanticweb.owlapi.model.OWLDataSomeValuesFrom;
@@ -195,6 +198,7 @@ import org.semanticweb.owlapi.model.OWLObjectOneOf;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLObjectPropertyDomainAxiom;
+import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
 import org.semanticweb.owlapi.model.OWLObjectPropertyRangeAxiom;
 import org.semanticweb.owlapi.model.OWLObjectSomeValuesFrom;
 import org.semanticweb.owlapi.model.OWLObjectUnionOf;
@@ -236,8 +240,6 @@ import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 import org.semanticweb.owlapi.vocab.XSDVocabulary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.base.Optional;
 
 /**
  * An abstract translator that can produce an RDF graph from an OWLOntology. Subclasses must provide
@@ -572,6 +574,8 @@ public abstract class AbstractTranslator<N extends Serializable, R extends N, P 
             for (OWLEquivalentClassesAxiom ax : sort(axiom.splitToAnnotatedPairs())) {
                 ax.accept(this);
             }
+            processIfNotAnonymous(axiom.getClassExpressionsAsList().stream()
+                .filter(OWLClassExpression::isNamed).map(OWLClassExpression::asOWLClass));
         }
     }
 
@@ -616,6 +620,9 @@ public abstract class AbstractTranslator<N extends Serializable, R extends N, P 
             for (OWLEquivalentObjectPropertiesAxiom ax : sort(axiom.splitToAnnotatedPairs())) {
                 ax.accept(this);
             }
+            processIfNotAnonymous(
+                axiom.getProperties().stream().filter(OWLObjectPropertyExpression::isNamed)
+                    .map(OWLObjectPropertyExpression::asOWLObjectProperty));
         }
     }
 
@@ -703,6 +710,9 @@ public abstract class AbstractTranslator<N extends Serializable, R extends N, P 
             for (OWLEquivalentDataPropertiesAxiom ax : axiom.splitToAnnotatedPairs()) {
                 ax.accept(this);
             }
+            processIfNotAnonymous(
+                axiom.getProperties().stream().filter(OWLDataPropertyExpression::isNamed)
+                    .map(OWLDataPropertyExpression::asOWLDataProperty));
         }
     }
 
@@ -754,15 +764,23 @@ public abstract class AbstractTranslator<N extends Serializable, R extends N, P 
             .forEach(a -> addSingleTripleAxiom(a, a.getIndividualsAsList().get(0),
                 OWL_SAME_AS.getIRI(), a.getIndividualsAsList().get(1)));
         processIfAnonymous(axiom.getIndividuals(), axiom);
+        processIfNotAnonymous(axiom.getIndividualsAsList().stream().filter(OWLIndividual::isNamed)
+            .map(OWLIndividual::asOWLNamedIndividual));
     }
 
     @Override
     public void visit(@Nonnull OWLDifferentIndividualsAxiom axiom) {
-        translateAnonymousNode(axiom);
-        addTriple(axiom, RDF_TYPE.getIRI(), OWL_ALL_DIFFERENT.getIRI());
-        addListTriples(axiom, OWL_DISTINCT_MEMBERS.getIRI(), axiom.getIndividuals());
-        translateAnnotations(axiom);
-        processIfAnonymous(axiom.getIndividuals(), axiom);
+        if (axiom.getIndividuals().size() == 2) {
+            addPairwise(axiom, axiom.getIndividuals(), OWL_DIFFERENT_FROM.getIRI());
+        } else {
+            translateAnonymousNode(axiom);
+            addTriple(axiom, RDF_TYPE.getIRI(), OWL_ALL_DIFFERENT.getIRI());
+            addListTriples(axiom, OWL_DISTINCT_MEMBERS.getIRI(), axiom.getIndividuals());
+            translateAnnotations(axiom);
+            processIfAnonymous(axiom.getIndividuals(), axiom);
+            processIfNotAnonymous(axiom.getIndividualsAsList().stream()
+                .filter(OWLIndividual::isNamed).map(OWLIndividual::asOWLNamedIndividual));
+        }
     }
 
     @Override
@@ -893,9 +911,9 @@ public abstract class AbstractTranslator<N extends Serializable, R extends N, P 
 
     @Override
     public void visit(@Nonnull OWLOntology ontology) {
-        Optional<IRI> ontologyIRI = ontology.getOntologyID().getOntologyIRI();
-        if (ontologyIRI.isPresent()) {
-            storeNodeIfNotPresent(ontology, getResourceNode(ontologyIRI.get()));
+        if (ontology.getOntologyID().getOntologyIRI().isPresent()) {
+            storeNodeIfNotPresent(ontology,
+                getResourceNode(ontology.getOntologyID().getOntologyIRI().get()));
         } else {
             translateAnonymousNode(ontology);
         }
@@ -1096,7 +1114,7 @@ public abstract class AbstractTranslator<N extends Serializable, R extends N, P 
 
     /**
      * Translates an annotation on a given subject. This method implements the TANN(ann, y)
-     * translation in the spec
+     * translation in the specifications.
      * 
      * @param subject The subject of the annotation
      * @param annotation The annotation
@@ -1282,7 +1300,7 @@ public abstract class AbstractTranslator<N extends Serializable, R extends N, P 
                 return (O) getNode(obj);
             }
             if (context[0].equals(s) && context[1].equals(p)) {
-                // An identical axiom triple has been translated earlier, the same rdf node should
+                // An identical axiom triple has been translated earlier, the same RDF node should
                 // be used.
                 // This happens only if two axioms are identical except for annotations and they
                 // both translate to one single triple.
@@ -1353,6 +1371,10 @@ public abstract class AbstractTranslator<N extends Serializable, R extends N, P 
             assert ind != null;
             processIfAnonymous(ind, root);
         }
+    }
+
+    private void processIfNotAnonymous(@Nonnull Stream<OWLEntity> inds) {
+        inds.forEach(graph::addRootIRIs);
     }
 
     private void processIfAnonymous(@Nonnull OWLIndividual ind, @Nullable OWLAxiom root) {

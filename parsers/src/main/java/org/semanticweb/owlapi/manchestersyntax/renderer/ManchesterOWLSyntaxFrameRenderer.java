@@ -133,8 +133,6 @@ import org.semanticweb.owlapi.util.OWLObjectComparator;
 import org.semanticweb.owlapi.util.OntologyIRIShortFormProvider;
 import org.semanticweb.owlapi.util.ShortFormProvider;
 
-import com.google.common.base.Optional;
-
 /**
  * The Class ManchesterOWLSyntaxFrameRenderer.
  * 
@@ -217,6 +215,7 @@ public class ManchesterOWLSyntaxFrameRenderer extends ManchesterOWLSyntaxObjectR
 
     /** The render extensions. */
     private boolean renderExtensions = false;
+    private boolean explicitXsdStrings;
     /** The listeners. */
     @Nonnull
     private final List<RendererListener> listeners = new ArrayList<>();
@@ -236,7 +235,22 @@ public class ManchesterOWLSyntaxFrameRenderer extends ManchesterOWLSyntaxObjectR
      */
     public ManchesterOWLSyntaxFrameRenderer(@Nonnull OWLOntology ontology, @Nonnull Writer writer,
         @Nonnull ShortFormProvider entityShortFormProvider) {
-        this(CollectionFactory.createSet(ontology), writer, entityShortFormProvider);
+        this(ontology, false, writer, entityShortFormProvider);
+    }
+
+    /**
+     * Instantiates a new manchester owl syntax frame renderer.
+     * 
+     * @param ontology the ontology
+     * @param explicitXsdString true if {@code xsd:string} datatype should be explicit in the output
+     * @param writer the writer
+     * @param entityShortFormProvider the entity short form provider
+     */
+    public ManchesterOWLSyntaxFrameRenderer(@Nonnull OWLOntology ontology,
+        boolean explicitXsdString, @Nonnull Writer writer,
+        @Nonnull ShortFormProvider entityShortFormProvider) {
+        this(CollectionFactory.createSet(ontology), explicitXsdString, writer,
+            entityShortFormProvider);
     }
 
     /**
@@ -248,7 +262,21 @@ public class ManchesterOWLSyntaxFrameRenderer extends ManchesterOWLSyntaxObjectR
      */
     public ManchesterOWLSyntaxFrameRenderer(@Nonnull Set<OWLOntology> ontologies, Writer writer,
         @Nonnull ShortFormProvider entityShortFormProvider) {
-        super(writer, entityShortFormProvider);
+        this(ontologies, false, writer, entityShortFormProvider);
+    }
+
+    /**
+     * Instantiates a new manchester owl syntax frame renderer.
+     * 
+     * @param ontologies the ontologies
+     * @param writer the writer
+     * @param explicitXsdString true if {@code xsd:string} datatype should be explicit in the output
+     * @param entityShortFormProvider the entity short form provider
+     */
+    public ManchesterOWLSyntaxFrameRenderer(@Nonnull Set<OWLOntology> ontologies,
+        boolean explicitXsdString, Writer writer,
+        @Nonnull ShortFormProvider entityShortFormProvider) {
+        super(writer, explicitXsdString, entityShortFormProvider);
         this.ontologies = new LinkedHashSet<>(ontologies);
         owlObjectComparator = new OWLObjectComparator(entityShortFormProvider);
     }
@@ -322,7 +350,7 @@ public class ManchesterOWLSyntaxFrameRenderer extends ManchesterOWLSyntaxObjectR
     /**
      * Write ontology.
      * 
-     * @throws OWLRendererException the oWL renderer exception
+     * @throws OWLRendererException the OWL renderer exception
      */
     public void writeOntology() throws OWLRendererException {
         if (ontologies.size() != 1) {
@@ -466,9 +494,8 @@ public class ManchesterOWLSyntaxFrameRenderer extends ManchesterOWLSyntaxObjectR
             writeFullURI(ontology.getOntologyID().getOntologyIRI().get().toString());
             writeNewLine();
             pushTab(indent);
-            Optional<IRI> versionIRI = ontology.getOntologyID().getVersionIRI();
-            if (versionIRI.isPresent()) {
-                writeFullURI(versionIRI.get().toString());
+            if (ontology.getOntologyID().getVersionIRI().isPresent()) {
+                writeFullURI(ontology.getOntologyID().getVersionIRI().get().toString());
             }
             popTab();
         }
@@ -510,12 +537,10 @@ public class ManchesterOWLSyntaxFrameRenderer extends ManchesterOWLSyntaxObjectR
             write(PREFIX.toString());
             write(": : ");
             OWLOntology o = ontologies.iterator().next();
-            Optional<IRI> ontologyIRI = o.getOntologyID().getOntologyIRI();
-            Optional<IRI> documentIRI = o.getOntologyID().getDefaultDocumentIRI();
-            if (ontologyIRI.isPresent()) {
-                writeFullURI(ontologyIRI.get().toString());
-            } else if (documentIRI.isPresent()) {
-                writeFullURI(documentIRI.get().toString());
+            if (o.getOntologyID().getOntologyIRI().isPresent()) {
+                writeFullURI(o.getOntologyID().getOntologyIRI().get().toString());
+            } else if (o.getOntologyID().getDefaultDocumentIRI().isPresent()) {
+                writeFullURI(o.getOntologyID().getDefaultDocumentIRI().get().toString());
             } else {
                 writeFullURI("urn:absoluteiri:defaultvalue#");
             }
@@ -528,9 +553,9 @@ public class ManchesterOWLSyntaxFrameRenderer extends ManchesterOWLSyntaxObjectR
     }
 
     /**
-     * Write full uri.
+     * Write full URI.
      * 
-     * @param uri the uri
+     * @param uri the URI
      */
     public void writeFullURI(String uri) {
         write("<");
@@ -590,7 +615,7 @@ public class ManchesterOWLSyntaxFrameRenderer extends ManchesterOWLSyntaxObjectR
     }
 
     /**
-     * @param cls the cls
+     * @param cls the class
      * @return the sets the
      */
     @Nonnull
@@ -701,7 +726,7 @@ public class ManchesterOWLSyntaxFrameRenderer extends ManchesterOWLSyntaxObjectR
                 SectionMap<Object, OWLAxiom> individuals = new SectionMap<>();
                 for (OWLClassAssertionAxiom ax : sortedCollection(
                     ontology.getClassAssertionAxioms(cls))) {
-                    if (isDisplayed(ax) && (renderExtensions || ax.getIndividual().isAnonymous())) {
+                    if (isDisplayed(ax) && renderExtensions) {
                         individuals.put(ax.getIndividual(), ax);
                         axioms.add(ax);
                     }

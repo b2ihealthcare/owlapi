@@ -109,6 +109,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
 
@@ -187,8 +188,6 @@ import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 import org.semanticweb.owlapi.vocab.SWRLBuiltInsVocabulary;
 import org.semanticweb.owlapi.vocab.XSDVocabulary;
 
-import com.google.common.base.Optional;
-
 /**
  * A parser for the Manchester OWL Syntax. All properties must be defined before they are used. For
  * example, consider the restriction hasPart some Leg. The parser must know in advance whether or
@@ -212,7 +211,7 @@ public class ManchesterOWLSyntaxParserImpl implements ManchesterOWLSyntaxParser 
     @Nonnull
     private Supplier<OWLOntologyLoaderConfiguration> configProvider;
     @Nonnull
-    private Optional<OWLOntologyLoaderConfiguration> config = Optional.absent();
+    private Optional<OWLOntologyLoaderConfiguration> config = Optional.empty();
     protected OWLDataFactory dataFactory;
     private List<Token> tokens;
     private int tokenIndex;
@@ -319,7 +318,7 @@ public class ManchesterOWLSyntaxParserImpl implements ManchesterOWLSyntaxParser 
 
     @Override
     public void setOntologyLoaderConfiguration(OWLOntologyLoaderConfiguration config) {
-        this.config = Optional.fromNullable(config);
+        this.config = Optional.ofNullable(config);
     }
 
     @Override
@@ -2183,10 +2182,18 @@ public class ManchesterOWLSyntaxParserImpl implements ManchesterOWLSyntaxParser 
         return map;
     }
 
-    @Nonnull
     private OWLImportsDeclaration parseImportsDeclaration() {
         consumeToken(IMPORT);
-        return dataFactory.getOWLImportsDeclaration(parseIRI());
+        if (peekToken().startsWith("<")) {
+            return dataFactory.getOWLImportsDeclaration(parseIRI());
+        }
+        IRI iri = getIRI(peekToken());
+        if (iri != null) {
+            consumeToken();
+        } else {
+            throw new ExceptionBuilder().withKeyword("<$IRI$>").build();
+        }
+        return dataFactory.getOWLImportsDeclaration(iri);
     }
 
     @Nonnull
@@ -2385,10 +2392,25 @@ public class ManchesterOWLSyntaxParserImpl implements ManchesterOWLSyntaxParser 
         }
         IRI ontologyIRI = null;
         IRI versionIRI = null;
+        // Next token can be either a full IRI or an abbreviated/simple IRI, for ontology IRI.
+        // The token after that has the same constraints, for version IRI.
+        // Both can be missing, in which case the ontology is anonymous.
+        // If the next token is a keyword, IRI parsing should not be attempted.
         if (peekToken().startsWith("<")) {
             ontologyIRI = parseIRI();
-            if (peekToken().startsWith("<")) {
-                versionIRI = parseIRI();
+
+        } else if (ManchesterOWLSyntax.parse(peekToken()) == null) {
+            ontologyIRI = getIRI(peekToken());
+            if (ontologyIRI != null) {
+                consumeToken();
+            }
+        }
+        if (peekToken().startsWith("<")) {
+            versionIRI = parseIRI();
+        } else if (ManchesterOWLSyntax.parse(peekToken()) == null) {
+            versionIRI = getIRI(peekToken());
+            if (versionIRI != null) {
+                consumeToken();
             }
         }
         Set<OWLAnnotation> annotations = new HashSet<>();
@@ -2396,28 +2418,7 @@ public class ManchesterOWLSyntaxParserImpl implements ManchesterOWLSyntaxParser 
         while (true) {
             String section = peekToken();
             if (IMPORT.matches(section)) {
-                consumeToken();
-                tok = peekToken();
-                Optional<IRI> importedIRI = Optional.absent();
-                if (tok.startsWith("<")) {
-                    importedIRI = Optional.of(parseIRI());
-                } else if (isOntologyName(tok)) {
-                    consumeToken();
-                    OWLOntology ont = getOntology(tok);
-                    if (ont != null) {
-                        importedIRI = ont.getOntologyID().getOntologyIRI();
-                    }
-                } else {
-                    consumeToken();
-                    throw new ExceptionBuilder().withOnto().withKeyword("<$ONTOLOGYYURI$>").build();
-                }
-                if (!importedIRI.isPresent()) {
-                    throw new ExceptionBuilder().withOnto().withKeyword("Imported IRI is null")
-                        .build();
-                }
-                IRI importedOntologyIRI = importedIRI.get();
-                assert importedOntologyIRI != null;
-                imports.add(dataFactory.getOWLImportsDeclaration(importedOntologyIRI));
+                handleImport(imports);
             } else if (ANNOTATIONS.matches(section)) {
                 consumeToken();
                 annotations.addAll(parseAnnotationList());
@@ -2430,6 +2431,30 @@ public class ManchesterOWLSyntaxParserImpl implements ManchesterOWLSyntaxParser 
             }
         }
         return new ManchesterOWLSyntaxOntologyHeader(ontologyIRI, versionIRI, annotations, imports);
+    }
+
+    protected void handleImport(Set<OWLImportsDeclaration> imports) {
+        String tok;
+        consumeToken();
+        tok = peekToken();
+        IRI importedOntologyIRI = null;
+        if (tok.startsWith("<")) {
+            importedOntologyIRI = parseIRI();
+        } else if (isOntologyName(tok)) {
+            consumeToken();
+            OWLOntology ont = getOntology(tok);
+            if (ont != null) {
+                importedOntologyIRI = ont.getOntologyID().getOntologyIRI().orNull();
+            }
+        } else {
+            consumeToken();
+            throw new ExceptionBuilder().withOnto().withKeyword("<$ONTOLOGYYURI$>").build();
+        }
+        if (importedOntologyIRI == null) {
+            throw new ExceptionBuilder().withOnto().withKeyword("Imported IRI is null").build();
+        }
+        assert importedOntologyIRI != null;
+        imports.add(dataFactory.getOWLImportsDeclaration(importedOntologyIRI));
     }
 
     protected class ExceptionBuilder {

@@ -96,10 +96,10 @@ public class OBOFormatWriter {
     }
 
     /**
-     * @param fn     the file name to read in
+     * @param fn the file name to read in
      * @param writer the writer
-     * @throws IOException              Signals that an I/O exception has occurred.
-     * @throws OBOFormatParserException the oBO format parser exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws OBOFormatParserException the OBO format parser exception
      */
     public void write(@Nonnull String fn, @Nonnull BufferedWriter writer) throws IOException {
         if (fn.startsWith("http:")) {
@@ -117,10 +117,10 @@ public class OBOFormatWriter {
     /**
      * Write.
      * 
-     * @param url    the url
+     * @param url the url
      * @param writer the writer
-     * @throws IOException              Signals that an I/O exception has occurred.
-     * @throws OBOFormatParserException the oBO format parser exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws OBOFormatParserException the OBO format parser exception
      */
     public void write(@Nonnull URL url, @Nonnull BufferedWriter writer) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
@@ -130,8 +130,8 @@ public class OBOFormatWriter {
     /**
      * @param reader the reader
      * @param writer the writer
-     * @throws IOException              Signals that an I/O exception has occurred.
-     * @throws OBOFormatParserException the oBO format parser exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws OBOFormatParserException the OBO format parser exception
      */
     public void write(BufferedReader reader, @Nonnull BufferedWriter writer) throws IOException {
         OBOFormatParser parser = new OBOFormatParser();
@@ -140,7 +140,7 @@ public class OBOFormatWriter {
     }
 
     /**
-     * @param doc         the doc
+     * @param doc the doc
      * @param outFilename the out file name
      * @throws IOException Signals that an I/O exception has occurred.
      */
@@ -149,7 +149,7 @@ public class OBOFormatWriter {
     }
 
     /**
-     * @param doc     the doc
+     * @param doc the doc
      * @param outFile the out file
      * @throws IOException Signals that an I/O exception has occurred.
      */
@@ -162,7 +162,7 @@ public class OBOFormatWriter {
     }
 
     /**
-     * @param doc    the doc
+     * @param doc the doc
      * @param writer the writer
      * @throws IOException Signals that an I/O exception has occurred.
      */
@@ -172,8 +172,8 @@ public class OBOFormatWriter {
     }
 
     /**
-     * @param doc          the doc
-     * @param writer       the writer
+     * @param doc the doc
+     * @param writer the writer
      * @param nameProvider the name provider
      * @throws IOException Signals that an I/O exception has occurred.
      */
@@ -232,8 +232,8 @@ public class OBOFormatWriter {
     /**
      * Write header.
      * 
-     * @param frame        the frame
-     * @param writer       the writer
+     * @param frame the frame
+     * @param writer the writer
      * @param nameProvider the name provider
      * @throws IOException Signals that an I/O exception has occurred.
      */
@@ -280,8 +280,8 @@ public class OBOFormatWriter {
     }
 
     /**
-     * @param frame        the frame
-     * @param writer       the writer
+     * @param frame the frame
+     * @param writer the writer
      * @param nameProvider the name provider
      * @throws IOException Signals that an I/O exception has occurred.
      */
@@ -472,9 +472,9 @@ public class OBOFormatWriter {
             first = false;
         }
         Collection<Xref> xrefs = clause.getXrefs();
-        // if the xrefs value is null, then there should *never* be xrefs at
-        // this location
-        // not that the value may be a non-null empty list - here we still want
+        // If the xref list is null, then there should *never* be xref values at
+        // this location.
+        // Note that the value may be a non-null empty list - here we still want
         // to write []
         if (!xrefs.isEmpty()) {
             appendXrefs(sb, xrefs);
@@ -537,37 +537,34 @@ public class OBOFormatWriter {
      * @param writer the writer
      * @throws IOException Signals that an I/O exception has occurred.
      */
-    public static void writePropertyValue(@Nonnull Clause clause, @Nonnull BufferedWriter writer)
-        throws IOException {
+    public static void writePropertyValue(Clause clause, BufferedWriter writer) throws IOException {
         Collection<?> cols = clause.getValues();
         if (cols.size() < 2) {
             LOG.error("The {} has incorrect number of values: {}",
                 OboFormatTag.TAG_PROPERTY_VALUE.getTag(), clause);
             return;
         }
+        Object v = clause.getValue();
+        Object v2 = clause.getValue2();
+        assert v != null;
+        assert v2 != null;
         StringBuilder sb = new StringBuilder();
         sb.append(clause.getTag());
         sb.append(": ");
-        Iterator<?> it = cols.iterator();
-        // write property
-        // TODO replace toString() method
-        String property = it.next().toString();
-        assert property != null;
-        sb.append(escapeOboString(property, EscapeMode.simple));
-        // write value and optional type
-        if (it.hasNext()) {
-            // value
-            sb.append(' ');
-            String val = it.next().toString(); // TODO replace toString() method
+        sb.append(escapeOboString(v.toString(), EscapeMode.simple));
+        sb.append(' ');
+        if (cols.size() == 2) {
+            sb.append(escapeOboString(v2.toString(), EscapeMode.simple));
+        } else if (cols.size() == 3) {
+            Iterator<Object> it = clause.getValues().iterator();
+            it.next();
+            it.next();
+            String v3String = (String) it.next();
             sb.append('"');
-            sb.append(escapeOboString(val, EscapeMode.quotes));
+            sb.append(escapeOboString(v2.toString(), EscapeMode.quotes));
             sb.append('"');
-        }
-        while (it.hasNext()) {
-            // optional type; there should be only one value left in the iterator
             sb.append(' ');
-            String val = it.next().toString(); // TODO replace toString() method
-            sb.append(escapeOboString(val, EscapeMode.simple));
+            sb.append(escapeOboString(v3String, EscapeMode.simple));
         }
         appendQualifiers(sb, clause);
         writeLine(sb, writer);
@@ -588,8 +585,8 @@ public class OBOFormatWriter {
     /**
      * Write.
      * 
-     * @param clause       the clause
-     * @param writer       the writer
+     * @param clause the clause
+     * @param writer the writer
      * @param nameProvider the name provider
      * @throws IOException Signals that an I/O exception has occurred.
      */
@@ -830,9 +827,9 @@ public class OBOFormatWriter {
         /**
          * Compare values.
          * 
-         * @param o1 the o1
-         * @param o2 the o2
-         * @return the int
+         * @param o1 the first object
+         * @param o2 the second
+         * @return comparison value
          */
         @SuppressWarnings("null")
         private static int compareValues(@Nullable Object o1, @Nullable Object o2) {
@@ -858,8 +855,8 @@ public class OBOFormatWriter {
         }
 
         /**
-         * @param obj the obj
-         * @return toString representation
+         * @param obj the object
+         * @return string representation
          */
         @Nullable
         private static String toStringRepresentation(@Nullable Object obj) {
@@ -980,9 +977,9 @@ public class OBOFormatWriter {
         private final OBODoc result;
 
         /**
-         * @param ont                 ontology
+         * @param ont ontology
          * @param defaultOboNamespace default OBO namespace
-         * @param result              result
+         * @param result result
          */
         public OWLOntologyNameProvider(@Nonnull OWLOntology ont, String defaultOboNamespace,
             OBODoc result) {

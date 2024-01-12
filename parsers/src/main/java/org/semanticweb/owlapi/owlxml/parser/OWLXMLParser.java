@@ -13,6 +13,8 @@
 package org.semanticweb.owlapi.owlxml.parser;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
 
 import javax.annotation.Nonnull;
 
@@ -21,6 +23,7 @@ import org.semanticweb.owlapi.formats.OWLXMLDocumentFormatFactory;
 import org.semanticweb.owlapi.io.AbstractOWLParser;
 import org.semanticweb.owlapi.io.OWLOntologyDocumentSource;
 import org.semanticweb.owlapi.io.OWLParserException;
+import org.semanticweb.owlapi.io.XMLUtils;
 import org.semanticweb.owlapi.model.OWLDocumentFormat;
 import org.semanticweb.owlapi.model.OWLDocumentFormatFactory;
 import org.semanticweb.owlapi.model.OWLOntology;
@@ -63,16 +66,19 @@ public class OWLXMLParser extends AbstractOWLParser {
             }
             OWLXMLDocumentFormat format = new OWLXMLDocumentFormat();
             format.copyPrefixesFrom(handler.getPrefixName2PrefixMap());
-            format.setDefaultPrefix(handler.getBase().toString());
+            String base = handler.getBase().toString();
+            // do not override existing default prefix
+            if (base != null && format.getDefaultPrefix() == null) {
+                format.setDefaultPrefix(XMLUtils.iriWithTerminatingHash(base));
+            }
             return format;
         } catch (SAXException e) {
             // General exception
             throw new OWLParserException(e);
         } finally {
-            if (isrc != null && isrc.getByteStream() != null) {
-                isrc.getByteStream().close();
-            } else if (isrc != null && isrc.getCharacterStream() != null) {
-                isrc.getCharacterStream().close();
+            if (isrc != null) {
+                try (InputStream in = isrc.getByteStream(); Reader r = isrc.getCharacterStream()) {
+                }
             }
         }
     }

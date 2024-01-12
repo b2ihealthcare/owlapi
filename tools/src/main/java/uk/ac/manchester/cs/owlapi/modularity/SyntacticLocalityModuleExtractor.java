@@ -216,7 +216,7 @@ public class SyntacticLocalityModuleExtractor implements OntologySegmenter {
      * @param ont the associated ontology
      * @param axs the subset of the ontology as a set of axioms
      * @param moduleType the type of module this extractor will construct
-     * @deprecated use the contructor that takes an IRI rather than an ontology as second argument.
+     * @deprecated use the constructor that takes an IRI rather than an ontology as second argument.
      *             The second argument is used only in logging assertions and can be null.
      */
     @Deprecated
@@ -521,7 +521,7 @@ public class SyntacticLocalityModuleExtractor implements OntologySegmenter {
     }
 
     /**
-     * Minus ontology uri.
+     * Minus ontology IRI.
      * 
      * @param s the s
      * @return the string
@@ -536,7 +536,7 @@ public class SyntacticLocalityModuleExtractor implements OntologySegmenter {
      * Output signature.
      * 
      * @param preamble the preamble
-     * @param sig the sig
+     * @param sig the signature
      * @param verbose the verbose
      */
     void outputSignature(@Nonnull String preamble, @Nonnull Set<OWLEntity> sig, boolean verbose) {
@@ -746,8 +746,8 @@ public class SyntacticLocalityModuleExtractor implements OntologySegmenter {
      * @param subClassLevel the sub class level
      * @param reasoner the reasoner
      * @param verbose the verbose
-     * @return the oWL ontology
-     * @throws OWLOntologyCreationException the oWL ontology creation exception
+     * @return the ontology
+     * @throws OWLOntologyCreationException any ontology creation exception
      */
     @Nonnull
     OWLOntology extractAsOntology(@Nonnull Set<OWLEntity> signature, @Nonnull IRI iri,

@@ -168,8 +168,8 @@ import org.semanticweb.owlapi.model.SWRLObjectPropertyAtom;
 import org.semanticweb.owlapi.model.SWRLRule;
 import org.semanticweb.owlapi.model.SWRLSameIndividualAtom;
 import org.semanticweb.owlapi.model.SWRLVariable;
-import org.semanticweb.owlapi.util.CollectionFactory;
 import org.semanticweb.owlapi.util.ShortFormProvider;
+import org.semanticweb.owlapi.vocab.OWL2Datatype;
 import org.semanticweb.owlapi.vocab.SWRLBuiltInsVocabulary;
 import org.semanticweb.owlapi.vocab.XSDVocabulary;
 
@@ -180,13 +180,26 @@ import org.semanticweb.owlapi.vocab.XSDVocabulary;
 public class ManchesterOWLSyntaxObjectRenderer extends AbstractRenderer
     implements OWLObjectVisitor {
 
+    private boolean explicitXsdString;
+
     /**
      * @param writer writer
      * @param entityShortFormProvider entityShortFormProvider
      */
     public ManchesterOWLSyntaxObjectRenderer(Writer writer,
         ShortFormProvider entityShortFormProvider) {
+        this(writer, false, entityShortFormProvider);
+    }
+
+    /**
+     * @param writer writer
+     * @param explicitXsdString true if {@code xsd:string} datatype should be explicit in the output
+     * @param entityShortFormProvider entityShortFormProvider
+     */
+    public ManchesterOWLSyntaxObjectRenderer(Writer writer, boolean explicitXsdString,
+        ShortFormProvider entityShortFormProvider) {
         super(writer, entityShortFormProvider);
+        this.explicitXsdString = explicitXsdString;
     }
 
     @Nonnull
@@ -369,7 +382,6 @@ public class ManchesterOWLSyntaxObjectRenderer extends AbstractRenderer
     @Override
     public void visit(@Nonnull OWLObjectHasSelf ce) {
         ce.getProperty().accept(this);
-        write(SOME);
         write(SELF);
     }
 
@@ -515,7 +527,8 @@ public class ManchesterOWLSyntaxObjectRenderer extends AbstractRenderer
             if (node.hasLang()) {
                 write("@");
                 write(node.getLang());
-            } else if (!node.isRDFPlainLiteral()) {
+            } else if (!node.isRDFPlainLiteral() && (explicitXsdString
+                || !OWL2Datatype.XSD_STRING.getIRI().equals(node.getDatatype().getIRI()))) {
                 write("^^");
                 node.getDatatype().accept(this);
             }
