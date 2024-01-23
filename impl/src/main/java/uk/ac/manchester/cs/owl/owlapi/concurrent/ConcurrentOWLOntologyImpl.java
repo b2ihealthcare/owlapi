@@ -13,7 +13,7 @@ import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  * Matthew Horridge

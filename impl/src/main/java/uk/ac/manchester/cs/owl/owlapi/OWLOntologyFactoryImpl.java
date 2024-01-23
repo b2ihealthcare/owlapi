@@ -14,7 +14,7 @@ import java.util.Set;
 import java.util.concurrent.locks.ReadWriteLock;
 
 import javax.annotation.Nonnull;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.semanticweb.owlapi.formats.RDFXMLDocumentFormat;
 import org.semanticweb.owlapi.io.OWLOntologyCreationIOException;
