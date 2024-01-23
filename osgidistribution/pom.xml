@@ -144,7 +144,9 @@
 							org.apache.commons.io.comparator;version="2.15.0",
 							org.apache.commons.io.filefilter;version="2.15.0",
 							org.apache.commons.io.input;version="2.15.0",
-							org.apache.commons.io.output;version="2.15.0"
+							org.apache.commons.io.output;version="2.15.0",
+							com.fasterxml.jackson.core;version="2.16.1",
+							com.fasterxml.jackson.core.util;version="2.16.1"
 						</Import-Package>
 					</instructions>
 				</configuration>
