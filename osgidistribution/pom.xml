@@ -176,55 +176,55 @@
 					</instructions>
 				</configuration>
 			</plugin>
-<!--			<plugin>-->
-<!--				<groupId>org.apache.maven.plugins</groupId>-->
-<!--				<artifactId>maven-shade-plugin</artifactId>-->
-<!--				<version>2.4.3</version>-->
-<!--				<executions>-->
-<!--					<execution>-->
-<!--						<phase>package</phase>-->
-<!--						<goals>-->
-<!--							<goal>shade</goal>-->
-<!--						</goals>-->
-<!--						<configuration>-->
-<!--							<artifactSet>-->
-<!--								<includes>-->
-<!--									<include>com.b2international:owlapi-api</include>-->
-<!--									<include>com.b2international:owlapi-apibinding</include>-->
-<!--									<include>com.b2international:owlapi-fixers</include>-->
-<!--									<include>com.b2international:owlapi-impl</include>-->
-<!--									<include>com.b2international:owlapi-oboformat</include>-->
-<!--									<include>com.b2international:owlapi-parsers</include>-->
-<!--									<include>com.b2international:owlapi-rio</include>-->
-<!--									<include>com.b2international:owlapi-compatibility</include>-->
-<!--									<include>com.b2international:owlapi-tools</include>-->
-<!--								</includes>-->
-<!--								<excludes>-->
-<!--									<exclude>org.apache.felix:org.osgi.core</exclude>-->
-<!--									<exclude>org.eclipse.rdf4j:*</exclude>-->
-<!--									<exclude>com.fasterxml.jackson.core:*</exclude>-->
-<!--									<exclude>com.github.jsonld-java:*</exclude>-->
-<!--									<exclude>com.fasterxml.jackson.core:*</exclude>-->
-<!--									<exclude>org.apache.httpcomponents:*</exclude>-->
-<!--									<exclude>commons-codec:commons-codec:*</exclude>-->
-<!--									<exclude>org.slf4j:*</exclude>-->
-<!--									<exclude>com.github.ben-manes.caffeine:*</exclude>-->
-<!--									<exclude>com.google.guava:*</exclude>-->
-<!--									<exclude>com.google.code.findbugs:*</exclude>-->
-<!--									<exclude>org.slf4j:slf4j-api</exclude>-->
-<!--									<exclude>commons-io:*</exclude>-->
-<!--									<exclude>org.tukaani:*</exclude>-->
-<!--									<exclude>com.github.vsonnier:*</exclude>-->
-<!--								</excludes>-->
-<!--							</artifactSet>-->
-<!--							<transformers>-->
-<!--								<transformer-->
-<!--									implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />-->
-<!--							</transformers>-->
-<!--						</configuration>-->
-<!--					</execution>-->
-<!--				</executions>-->
-<!--			</plugin>-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.5.0</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<artifactSet>
+								<includes>
+									<include>${project.groupId}:owlapi-api</include>
+									<include>${project.groupId}:owlapi-apibinding</include>
+									<include>${project.groupId}:owlapi-fixers</include>
+									<include>${project.groupId}:owlapi-impl</include>
+									<include>${project.groupId}:owlapi-oboformat</include>
+									<include>${project.groupId}:owlapi-parsers</include>
+									<include>${project.groupId}:owlapi-rio</include>
+									<include>${project.groupId}:owlapi-compatibility</include>
+									<include>${project.groupId}:owlapi-tools</include>
+								</includes>
+								<excludes>
+									<exclude>org.apache.felix:org.osgi.core</exclude>
+									<exclude>org.eclipse.rdf4j:*</exclude>
+									<exclude>com.fasterxml.jackson.core:*</exclude>
+									<exclude>com.github.jsonld-java:*</exclude>
+									<exclude>com.fasterxml.jackson.core:*</exclude>
+									<exclude>org.apache.httpcomponents:*</exclude>
+									<exclude>commons-codec:commons-codec:*</exclude>
+									<exclude>org.slf4j:*</exclude>
+									<exclude>com.github.ben-manes.caffeine:*</exclude>
+									<exclude>com.google.guava:*</exclude>
+									<exclude>com.google.code.findbugs:*</exclude>
+									<exclude>org.slf4j:slf4j-api</exclude>
+									<exclude>commons-io:*</exclude>
+									<exclude>org.tukaani:*</exclude>
+									<exclude>com.github.vsonnier:*</exclude>
+								</excludes>
+							</artifactSet>
+							<transformers>
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+							</transformers>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		<!--	<plugin>
 				<artifactId>maven-failsafe-plugin</artifactId>
 				<version>2.19.1</version>
@@ -262,14 +262,14 @@
 							<show>public</show>
 							<includeDependencySources>true</includeDependencySources>
 							<dependencySourceIncludes>
-								<dependencySourceInclude>com.b2international:owlapi-api</dependencySourceInclude>
-								<dependencySourceInclude>com.b2international:owlapi-apibinding</dependencySourceInclude>
-								<dependencySourceInclude>com.b2international:owlapi-parsers</dependencySourceInclude>
-								<dependencySourceInclude>com.b2international:owlapi-tools</dependencySourceInclude>
-								<dependencySourceInclude>com.b2international:owlapi-impl</dependencySourceInclude>
-								<dependencySourceInclude>com.b2international:owlapi-oboformat</dependencySourceInclude>
-								<dependencySourceInclude>com.b2international:owlapi-compatibility</dependencySourceInclude>
-								<dependencySourceInclude>com.b2international:owlapi-fixers</dependencySourceInclude>
+								<dependencySourceInclude>${project.groupId}:owlapi-api</dependencySourceInclude>
+								<dependencySourceInclude>${project.groupId}:owlapi-apibinding</dependencySourceInclude>
+								<dependencySourceInclude>${project.groupId}:owlapi-parsers</dependencySourceInclude>
+								<dependencySourceInclude>${project.groupId}:owlapi-tools</dependencySourceInclude>
+								<dependencySourceInclude>${project.groupId}:owlapi-impl</dependencySourceInclude>
+								<dependencySourceInclude>${project.groupId}:owlapi-oboformat</dependencySourceInclude>
+								<dependencySourceInclude>${project.groupId}:owlapi-compatibility</dependencySourceInclude>
+								<dependencySourceInclude>${project.groupId}:owlapi-fixers</dependencySourceInclude>
 							</dependencySourceIncludes>
 						</configuration>
 					</execution>
