@@ -6,7 +6,7 @@
 	<parent>
 		<artifactId>owlapi-parent</artifactId>
 		<groupId>com.b2international.snowowl</groupId>
-		<version>4.5.26.b2i</version>
+		<version>4.5.27.b2i-SNAPSHOT</version>
 	</parent>
 	<artifactId>owlapi-rio</artifactId>
 	<name>OWLAPI :: Sesame Rio module</name>

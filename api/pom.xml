@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>com.b2international.snowowl</groupId>
 		<artifactId>owlapi-parent</artifactId>
-		<version>4.5.26.b2i</version>
+		<version>4.5.27.b2i-SNAPSHOT</version>
 	</parent>
 	<dependencies>
 		<dependency>
